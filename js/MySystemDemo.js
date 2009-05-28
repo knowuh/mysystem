@@ -1,0 +1,87 @@
+var defaultTerminals = function() {
+  return [{
+       "wireConfig": {
+         "drawingMethod": "bezierArrows"
+       },
+       "name": "Drag me to another object's terminal to show energy transfer",
+       "direction": [0, -1],
+       "offsetPosition": {
+       "left": 20,
+       "top": -25
+       },
+       "ddConfig" : {
+           "type": "input",
+           "allowedTypes": ["input", "output"]
+       }
+   },{
+       "wireConfig": {
+           "drawingMethod": "bezierArrows"
+       },
+       "name": "Drag me to another object's terminal to show energy transfer",
+       "direction": [0, 1],
+       "offsetPosition": {
+           "left": 20,
+           "bottom": -25
+       },
+       "ddConfig": {
+           "type": "output",
+           "allowedTypes": ["input", "output"]
+       }  
+   }];
+}
+
+
+var testData = [
+  {
+    name: "Energy Form Label",
+    xtype : "MySystemWireLabel"
+  },
+  {
+    name  : "Water",
+    xtype : "MySystemContainer",
+    image : "./images/water-70.png",
+    icon  : "./images/water-70.png",
+    terminals : defaultTerminals()
+  },
+  {
+    name  : "egg", 
+    image : "./images/egg-transp-70.png",
+    xtype : "MySystemContainer",
+    icon  : "./images/egg-transp-70.png",
+    terminals : defaultTerminals()
+  }
+];
+
+
+
+
+var MySystemDemo = {
+  data : new MySystemData(),
+  /**
+  * @method init
+  * @static
+  */
+  init: function() {
+      try { 
+        console.log('starting up ...');
+        this.data.setData(testData);
+        console.log("data is set");
+        this.editor = new MySystemEditor(this.data);
+        console.log("Editor Started");
+        this.editor.onHelp();
+      }
+      catch (e){
+        console.log("ooopps! " + e)
+      }
+  },
+
+  /**
+  * Execute the module in the "ExecutionFrame" virtual machine
+  * @method run
+  * @static
+  */
+  run: function() {
+      var ef = new ExecutionFrame(this.editor.getValue());
+      ef.run();
+  }
+};
