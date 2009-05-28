@@ -55,6 +55,7 @@
             var pos = YAHOO.util.Dom.getXY(del);
             var layerPos = YAHOO.util.Dom.getXY(layer.el);
             this._MySysEditor.addModule(this._module, [pos[0] - layerPos[0], pos[1] - layerPos[1]]);
+            this._MySysEditor._data.addInstance({module: this._module, position: pos, layer: layer});
         }
     });
 
@@ -65,15 +66,16 @@
  * @constructor
  * @param {Object} options
  */
-    MySystemEditor = function(options) {
+    MySystemEditor = function(data) {
+        this._data = data;
         // set the default options
-        this.setOptions(options);
+        this.setOptions(data);
         
     /**
      * Container DOM element
      * @property el
      */
-        this.el = Dom.get(options.parentEl);
+        this.el = Dom.get(data.parentEl);
 
     /**
      * @property helpPanel
