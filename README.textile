@@ -17,8 +17,7 @@ Which uses "YUI":http://developer.yahoo.com/yui/
 
 h2. Todo
 
-
-# Persist Data:
+# Save Data:
 ## Decouple view from models
 ## Make json call to some remote service 
 ## Make some endpoint for storing data
