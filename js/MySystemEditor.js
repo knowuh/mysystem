@@ -54,8 +54,10 @@
             var del = this.getDragEl();
             var pos = YAHOO.util.Dom.getXY(del);
             var layerPos = YAHOO.util.Dom.getXY(layer.el);
-            this._MySysEditor.addModule(this._module, [pos[0] - layerPos[0], pos[1] - layerPos[1]]);
-            this._MySysEditor._data.addInstance({module: this._module, position: pos, layer: layer});
+            pos[0] = pos[0] - layerPos[0];
+            pos[1] = pos[1] - layerPos[1];
+            this._MySysEditor.addModule(this._module, pos);
+            this._MySysEditor._data.addInstance({module: this._module, position: pos});
         }
     });
 
@@ -110,10 +112,6 @@
 
         // Properties Form
         this.renderPropertiesForm();
-
-        // Load Service
-        this.loadSMD();
-
     };
 
     MySystemEditor.prototype = {
@@ -269,10 +267,9 @@
             });
             newButton.on("click", this.onNew, this, true);
 
-            /* Not working yet
-              var saveButton = new widget.Button({ label:"Save", id:"WiringEditor-saveButton", container: toolbar });
-              saveButton.on("click", this.onSave, this, true);
-            */
+
+            var saveButton = new widget.Button({ label:"Save", id:"WiringEditor-saveButton", container: toolbar });
+            saveButton.on("click", this.onSave, this, true);
 
             var helpButton = new widget.Button({
                 label: "More Info",
@@ -283,55 +280,23 @@
         },
 
 
-       /**
-        * WiringEditor uses a SMD to connect to the backend
-        * @method loadSMD
-        */
-        loadSMD: function() {
-            //    this.service = new YAHOO.rpc.Service(this.options.smdUrl,{
-            //    success: this.onSMDsuccess,
-            //    failure: this.onSMDfailure,
-            //    scope: this
-            // });
-        },
 
         onSMDsuccess: function() {},
         onSMDfailure: function() {},
 
         /**
-        * save the current module
-        * @method saveModule
-        */
-        saveModule: function() {
-            var value = this.getValue();
-            if (value.name == "") {
-                alert("Please choose a name");
-                return;
-            }
-            this.service.saveWiring({
-                name: value.name,
-                working: JSON.stringify(value.working),
-                language: this.options.languageName
-            },
-            {
-                success: this.saveModuleSuccess,
-                failure: this.saveModuleFailure,
-                scope: this
-            });
-        },
-
-
-        /**
-        * saveModule success callback
-        * @method saveModuleSuccess
-        */
-        saveModuleSuccess: function(o) { alert("Saved !"); },
-        saveModuleFailure: function(o) { alert("error while saving! "); },
-
-        /**
         * @method onSave
         */
-        onSave: function() { this.saveModule(); },
+        onSave: function() { this.save(); },
+        
+        /**
+        * save the layer data
+        * @method save
+        * TODO: Actually save something!
+        */
+        save: function() {
+          console.log(this._data.instances.toJSON());  
+        },
 
        /**
         * Create a help panel
