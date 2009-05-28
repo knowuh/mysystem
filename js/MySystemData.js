@@ -1,31 +1,47 @@
 
-
 /**
+ *
  */
-var MySystemData = function () {
-  this.modules = [];
-  this.instances = [];
-  this.dataEndPoint = "http://blah";
-  
-  this.setData = function (data,instances,addTerminals) {
-    console.log("set modules called");
+var MySystemData = Class.create({
+  initialize:function() {
+    this.modules = [];
+    this.instances = [];
+  },
+
+  addModule: function(module,addTerminals) {
     if (addTerminals) {
-      data.each( function(d) {
-        d.terminals =  [this.defaultInTerminal,this.defaultOutTerminal];
-      });
+      module.terminals =  [MySystemData.defaultInTerminal,MySystemData.defaultOutTerminal];    
     }
-    this.modules = data;
+    this.modules.push(module)
+  },
+
+  setModules: function (modules,addTerminals) {
+    this.modules = [];
+    console.log("set modules called");
+    modules.each(function(m){ 
+      this.addModule(m,addTerminals); 
+    }.bind(this));
   },
   
-  this.addInstance = function(instance) {
-    this.instances.push(instance);
-  }
+  setInstances: function(instances) {
+    this.instances = [];
+    instances.each(function(i){
+      this.addInstance(i);
+    }.bind(this))
+  },
   
-  this.saveData = function() {
-    alert("saving data!");
-    // ha!
-  } 
-}
+  addInstance : function(instance) {
+    this.instances.push(instance);
+  },
+  
+  setData: function (modules,instances,addTerminals) {
+    this.setModules(modules,addTerminals);
+    this.setInstances(instances);
+  }
+});
+
+
+
 
 MySystemData.defaultTerminals = function() {
   return [{
