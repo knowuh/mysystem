@@ -1,36 +1,3 @@
-var defaultTerminals = function() {
-  return [{
-       "wireConfig": {
-         "drawingMethod": "bezierArrows"
-       },
-       "name": "Drag me to another object's terminal to show energy transfer",
-       "direction": [0, -1],
-       "offsetPosition": {
-       "left": 20,
-       "top": -25
-       },
-       "ddConfig" : {
-           "type": "input",
-           "allowedTypes": ["input", "output"]
-       }
-   },{
-       "wireConfig": {
-           "drawingMethod": "bezierArrows"
-       },
-       "name": "Drag me to another object's terminal to show energy transfer",
-       "direction": [0, 1],
-       "offsetPosition": {
-           "left": 20,
-           "bottom": -25
-       },
-       "ddConfig": {
-           "type": "output",
-           "allowedTypes": ["input", "output"]
-       }  
-   }];
-}
-
-
 var testData = [
   {
     name: "Energy Form Label",
@@ -41,14 +8,14 @@ var testData = [
     xtype : "MySystemContainer",
     image : "./images/water-70.png",
     icon  : "./images/water-70.png",
-    terminals : defaultTerminals()
+    terminals : MySystemData.defaultTerminals()
   },
   {
     name  : "egg", 
     image : "./images/egg-transp-70.png",
     xtype : "MySystemContainer",
     icon  : "./images/egg-transp-70.png",
-    terminals : defaultTerminals()
+    terminals : MySystemData.defaultTerminals()
   }
 ];
 
