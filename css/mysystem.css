@@ -1,0 +1,30 @@
+div.WireIt-ImageContainer {
+	width: auto; /* Prevent the modules from scratching on the right */
+	height: auto;
+}
+
+div.WireIt-Container div.inputEx-Group div.inputEx-label {
+	width: auto;
+}
+
+div.inputEx-TypeField-PropertiesPanel {
+	z-index: 7;
+}
+
+
+
+div.WireIt-Container.WiringEditor-module-comment div.body {
+	background-color: #EEEE66;
+}
+
+
+div.WireIt-Container.WiringEditor-module-comment div.body textarea {
+	background-color: transparent;
+	font-weight: bold;
+	border: 0;
+}
+
+
+div.ComposedModule {
+	background-color: #DDDDAA;
+}

@@ -1,0 +1,29 @@
+h1. MySystem
+
+Part of the CLEAR project, MySystem is a system diagraming tool. Part of the goal is to be a light-weight javascript
+component to be used inside something like mozSwing (?)
+
+See the basecamp docs for the project description for "CLEAR":http://concordconsortium.basecamphq.com/projects/2939067/project/log
+See Alexes Narratives in "this spreadsheet":http://concordconsortium.basecamphq.com/projects/2939067/file/30061007/CLEAR%20Narrative%20Linking%205_28.xls
+
+
+h2. Dependencies
+
+
+Based on "WireIt":http://http://javascript.neyric.com/wireit/
+Which uses "YUI":http://developer.yahoo.com/yui/
+
+(note that currently all dependent libraries are included in this repo, should probably be fixed up...)
+
+h2. Todo
+
+
+# Persist Data:
+## Decouple view from models
+## Make json call to some remote service 
+## Make some endpoint for storing data
+## Adding users / roles groups to "portal"
+# Subsystems: The ability to add 'sub-modules' inside of modules (nested modules)
+# Clean up dependencies on YUI if possible.
+# restructure this repository
+# ?? more!
