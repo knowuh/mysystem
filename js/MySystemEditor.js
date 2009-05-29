@@ -6,8 +6,8 @@
     var Connect = util.Connect;
     var JSON = lang.JSON;
     var widget = YAHOO.widget;
-    
-  /**
+
+    /**
    * Module Proxy handle the drag/dropping from the module list to the layer
    * @class ModuleProxy
    * @constructor
@@ -24,8 +24,8 @@
     };
 
     YAHOO.extend(MySystemDragAndDropProxy, YAHOO.util.DDProxy, {
-   
-       /**
+
+        /**
         * copy the html and apply selected classes
         * @method startDrag
         */
@@ -37,13 +37,13 @@
             del.className = lel.className;
         },
 
-       /**
+        /**
         * Override default behavior of DDProxy
         * @method endDrag
         */
         endDrag: function(e) {},
 
-       /**
+        /**
         * Add the module to the WiringEditor on drop on layer
         * @method onDragDrop
         */
@@ -69,17 +69,16 @@
  * @param {Object} options
  */
     MySystemEditor = function(data) {
-        this._data = data;
         // set the default options
         this.setOptions(data);
-        
-    /**
+        this._data = data;
+        /**
      * Container DOM element
      * @property el
      */
         this.el = Dom.get(data.parentEl);
 
-    /**
+        /**
      * @property helpPanel
      * @type {YAHOO.widget.Panel}
      */
@@ -91,14 +90,14 @@
         });
         this.helpPanel.render();
 
-    /**
+        /**
      * @property layout
      * @type {YAHOO.widget.Layout}
      */
         this.layout = new widget.Layout(this.el, this.options.layoutOptions);
         this.layout.render();
 
-      /**
+        /**
        * @property layer
        * @type {WireIt.Layer}
        */
@@ -110,8 +109,6 @@
         // Render buttons
         this.renderButtons();
 
-        // Properties Form
-        this.renderPropertiesForm();
     };
 
     MySystemEditor.prototype = {
@@ -131,7 +128,7 @@
             }
 
             this.options.languageName = options.languageName || 'anonymousLanguage';
-            this.options.smdUrl = options.smdUrl || 'WiringEditor.smd';
+            this.options.smdUrl = options.smdUrl || 'WiringEditor.smd'; // eh?
             this.options.propertiesFields = options.propertiesFields;
             this.options.layoutOptions = options.layoutOptions || {
                 units: [
@@ -171,25 +168,22 @@
                 }
                 ]
             };
-
+            
+            // LAYER OPTION DEFAULTS:
             this.options.layerOptions = {};
             var layerOptions = options.layerOptions || {};
             this.options.layerOptions.parentEl = layerOptions.parentEl ? layerOptions.parentEl: Dom.get('center');
             this.options.layerOptions.layerMap = YAHOO.lang.isUndefined(layerOptions.layerMap) ? true: layerOptions.layerMap;
-            this.options.layerOptions.layerMapOptions = layerOptions.layerMapOptions || {
-                parentEl: 'layerMap'
-            };
+            this.options.layerOptions.layerMapOptions = layerOptions.layerMapOptions || { parentEl: 'layerMap' };
+            
         },
 
-      /**
-      * Render the properties form
-      * @method renderPropertiesForm
-      */
-      renderPropertiesForm: function() {
-            // this.propertiesForm = new inputEx.Group({
-            //    parentEl: YAHOO.util.Dom.get('propertiesForm'),
-            //    fields: this.options.propertiesFields
-            // });
+        /**
+        *
+        *
+        **/
+        ondoubleClickInstanceEvent: function(type,module) {
+            alert("I heard that " + module + " was double clicked");
         },
 
         addModuleChoice: function(module) {
@@ -197,31 +191,44 @@
             console.log("found name: " + module.name);
             console.log("found icon: " + module.icon);
             var left = Dom.get('left');
-            var div = WireIt.cn('div', { className: "WiringEditor-module" });
+            var div = WireIt.cn('div', {
+                className: "WiringEditor-module"
+            });
 
             if (module.icon) {
-                var div = WireIt.cn('div', { className: "WiringEditor-icon-module" });
-                div.appendChild(WireIt.cn('img', {src: module.icon }));
+                var div = WireIt.cn('div', {
+                    className: "WiringEditor-icon-module"
+                });
+                div.appendChild(WireIt.cn('img', {
+                    src: module.icon
+                }));
                 console.log("created icon module");
             } else {
-                var div = WireIt.cn('div', { className: "WiringEditor-module" });
+                var div = WireIt.cn('div', {
+                    className: "WiringEditor-module"
+                });
                 div.appendChild(WireIt.cn('span', null, null, module.name));
                 console.log("created WiringEditor module");
             }
-          
+
             var ddProxy = new MySystemDragAndDropProxy(div, this);
             ddProxy._module = module;
             left.appendChild(div);
 
             // Make the layer a drag drop target
-            if (!this.ddTarget) {
-                this.ddTarget = new YAHOO.util.DDTarget(this.layer.el, "module");
-                this.ddTarget._layer = this.layer;
-            }
+            this.setDDLayer(this.layer);
         },
 
+        /**
+        *
+        *
+        **/
+        setDDLayer: function(theLayer) {
+            this.ddTarget = new YAHOO.util.DDTarget(this.layer.el, "module");
+            this.ddTarget._layer = this.layer;
+        },
 
-       /**
+        /**
         * Build the left menu on the left
         * @method buildModulesList
         */
@@ -234,7 +241,7 @@
         },
 
 
-       /**
+        /**
         * add a module at the given pos
         * usually invoked by drag-and-drop callbac
         */
@@ -244,6 +251,7 @@
                 console.log("addModule called for " + module.name)
                 module.position = pos;
                 module.title = module.name;
+                module.layer = this.layer;
                 var container = this.layer.addContainer(module);
                 Dom.addClass(container.el, "WiringEditor-module-" + module.name);
             }
@@ -253,7 +261,7 @@
         },
 
 
-       /**
+        /**
         * Toolbar
         * @method renderButtons
         */
@@ -268,7 +276,11 @@
             newButton.on("click", this.onNew, this, true);
 
 
-            var saveButton = new widget.Button({ label:"Save", id:"WiringEditor-saveButton", container: toolbar });
+            var saveButton = new widget.Button({
+                label: "Save",
+                id: "WiringEditor-saveButton",
+                container: toolbar
+            });
             saveButton.on("click", this.onSave, this, true);
 
             var helpButton = new widget.Button({
@@ -280,29 +292,32 @@
         },
 
 
-
         onSMDsuccess: function() {},
         onSMDfailure: function() {},
 
         /**
         * @method onSave
         */
-        onSave: function() { this.save(); },
-        
+        onSave: function() {
+            this.save();
+        },
+
         /**
         * save the layer data
         * @method save
         * TODO: Actually save something!
         */
         save: function() {
-          console.log(this._data.instances.toJSON());  
+            // console.log(this._data.instances.toJSON());
         },
 
-       /**
+        /**
         * Create a help panel
         * @method onHelp
         */
-        onHelp: function() { this.helpPanel.show(); },
+        onHelp: function() {
+            this.helpPanel.show();
+        },
 
         /**
         * @method onNew
@@ -331,147 +346,6 @@
                 });
             }
         },
-
-
-        /**
-        * @method renderLoadPanel
-        */
-        renderLoadPanel: function() {
-            if (!this.loadPanel) {
-                this.loadPanel = new widget.Panel('WiringEditor-loadPanel', {
-                    fixedcenter: true,
-                    draggable: true,
-                    width: '500px',
-                    visible: false,
-                    modal: true
-                });
-                this.loadPanel.setHeader("Select module");
-                this.loadPanel.setBody("<div id='loadPanelBody'></div>");
-                this.loadPanel.render(document.body);
-            }
-        },
-
-       /**
-        * @method updateLoadPanelList
-        */
-        updateLoadPanelList: function() {
-            var list = WireIt.cn("ul");
-            if (lang.isArray(this.pipes)) {
-                for (var i = 0; i < this.pipes.length; i++) {
-                    var module = this.pipes[i];
-
-                    this.pipesByName[module.name] = module;
-
-                    var li = WireIt.cn('li', null, {
-                        cursor: 'pointer'
-                    },
-                    module.name);
-                    Event.addListener(li, 'click',
-                    function(e, args) {
-                        try {
-                            this.loadPipe(Event.getTarget(e).innerHTML);
-                        }
-                        catch(ex) {
-                            console.log(ex);
-                        }
-                    },
-                    this, true);
-                    list.appendChild(li);
-                }
-            }
-            var panelBody = Dom.get('loadPanelBody');
-            panelBody.innerHTML = "";
-            panelBody.appendChild(list);
-        },
-
-       /**
-        * @method onLoad
-        */
-        onLoad: function() {
-            this.service.listWirings({
-                language: this.options.languageName
-            },
-            {
-                success: function(result) {
-                    this.pipes = result.result;
-                    this.pipesByName = {};
-                    this.renderLoadPanel();
-                    this.updateLoadPanelList();
-                    this.loadPanel.show();
-                },
-                scope: this
-            }
-            );
-
-        },
-
-       /**
-        * @method getPipeByName
-        * @param {String} name Pipe's name
-        * @return {Object} return the evaled json pipe configuration
-        */
-        getPipeByName: function(name) {
-            var n = this.pipes.length,
-            ret;
-            for (var i = 0; i < n; i++) {
-                if (this.pipes[i].name == name) {
-                    // Try to eval working property:
-                    try {
-                        ret = JSON.parse(this.pipes[i].working);
-                        return ret;
-                    }
-                    catch(ex) {
-                        console.log("Unable to eval working json for module " + name);
-                        return null;
-                    }
-                }
-            }
-            return null;
-        },
-
-       /**
-        * @method loadPipe
-        * @param {String} name Pipe name
-        */
-        loadPipe: function(name) {
-            var pipe = this.getPipeByName(name),
-            i;
-
-            // TODO: check if current pipe is saved...
-            this.layer.removeAllContainers();
-
-            this.propertiesForm.setValue(pipe.properties);
-
-            if (lang.isArray(pipe.modules)) {
-
-                // Containers
-                for (i = 0; i < pipe.modules.length; i++) {
-                    var m = pipe.modules[i];
-                    if (this.modulesByName[m.name]) {
-                        var baseContainerConfig = this.modulesByName[m.name].container;
-                        YAHOO.lang.augmentObject(m.config, baseContainerConfig);
-                        m.config.title = m.name;
-                        var container = this.layer.addContainer(m.config);
-                        Dom.addClass(container.el, "WiringEditor-module-" + m.name);
-                        container.setValue(m.value);
-                    }
-                    else {
-                        throw new Error("WiringEditor: module '" + m.name + "' not found !");
-                    }
-                }
-
-                // Wires
-                if (lang.isArray(pipe.wires)) {
-                    for (i = 0; i < pipe.wires.length; i++) {
-                        // On doit chercher dans la liste des terminaux de chacun des modules l'index des terminaux...
-                        this.layer.addWire(pipe.wires[i]);
-                    }
-                }
-            }
-
-            this.loadPanel.hide();
-        },
-
 
         /**
         * This method return a wiring within the given vocabulary described by the modules list

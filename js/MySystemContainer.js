@@ -1,5 +1,3 @@
-
-
 /**
  * Module-Type represented by an image
  * @class ImageContainer
@@ -12,20 +10,22 @@ MySystemContainer = function(options, layer) {
    MySystemContainer.superclass.constructor.call(this, options, layer);
    this.name = options.name || "MySystem Container";
    this.icon = options.icon;
-   this.dClick = options.dClick || function () { console.log("double clicked (default handler)"); };
 };
 
 YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   lastClick : 0,  
   doubleClickMS : 200,
-
   time : function () {
     d = new Date();
     return d.getTime();
   },
   
   /**
-   * Called when the user made a mouse down on the container and sets the focus to this container (only if within a Layer)
+   * Called when the user made a mouse down on the container and sets 
+   * the focus to this container (only if within a Layer)
+   *
+   * Tries to determine a double-click event.
+   *
    * @method onMouseDown
    */
   onMouseDown: function() {
@@ -44,15 +44,15 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
         this.layer.focusedContainer = this;
       }
     }
-  },  
-  
-  onDblClick : function() {
-    console.log("dbl-click captain");
-    if (this.dClick) {
-      this.dClick();
-    }
-  } 
+  }, 
+   
+  onDblClick: function() {
+    console.log("dbl-click");
+    this.doubleClick();
+    MySystemContainer.openEditorFor.fire(this);
+  }
 });
+MySystemContainer.openEditorFor = new YAHOO.util.CustomEvent("OpenEditorFor");
 
 
 

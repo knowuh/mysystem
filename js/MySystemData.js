@@ -10,7 +10,7 @@ var MySystemData = Class.create({
 
   addModule: function(module,addTerminals) {
     if (addTerminals) {
-      module.terminals =  [MySystemData.defaultInTerminal,MySystemData.defaultOutTerminal];    
+      module.terminals = MySystemData.defaultTerminals();   
     }
     this.modules.push(module)
   },
@@ -39,8 +39,6 @@ var MySystemData = Class.create({
     this.setInstances(instances);
   }
 });
-
-
 
 
 MySystemData.defaultTerminals = function() {

@@ -1,8 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>MySystem Pre-Prototype Demo</title>
+	<title>MySystem Pre-Prototype</title>
+	
 	<link rel="icon" href="res/favicon.ico" type="image/png" />
   <link rel="SHORTCUT ICON" href="res/favicon.ico" type="image/png" />
 
@@ -17,6 +19,7 @@
   <link rel="stylesheet" type="text/css" href="css/WireIt.css" />
   <link rel="stylesheet" type="text/css" href="css/WireItEditor.css" />
   <link rel="stylesheet" type="text/css" href="css/mysystem.css" />
+
 
   <!-- YUI -->
   <script type="text/javascript" src="lib/prototype.js"></script>
@@ -43,23 +46,22 @@
 
   <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
 
+
   <script type="text/javascript" src="js/MySystemWireLabel.js"></script>
   <script type="text/javascript" src="js/MySystemContainer.js"></script>
   <script type="text/javascript" src="js/MySystemData.js"></script>
   <script type="text/javascript" src="js/MySystemEditor.js"></script>
   <script type="text/javascript" src="js/MySystemDemo.js"></script>
 
-
   <!-- this is honestly not being used yet, because we are not evaluating JS -->
   <!-- script type="text/javascript" src="ExecutionFrame.js"></script -->
-
-  <script>
-  YAHOO.util.Event.onDOMReady( MySystemDemo.init, MySystemDemo, true);
-  </script>
-
 </head>
 
 <body class="yui-skin-sam">
+
+  <script>
+    YAHOO.util.Event.onDOMReady(MySystemDemo.init, MySystemDemo, true);
+  </script>
 
 	<div id="top">
 		<div class="logo">MySystem Demo</a></div>

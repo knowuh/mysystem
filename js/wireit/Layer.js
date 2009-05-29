@@ -120,13 +120,14 @@ WireIt.Layer.prototype = {
     * @method render
     */
    render: function() {
-   
       this.el = WireIt.cn('div', {className: this.options.className} );
-   
       this.options.parentEl.appendChild(this.el);
    },
 
-
+   hide: function() {
+     this.options.parentEl.removeChild(this.el);
+   },
+   
    /**
     * Create all the containers passed as options
     * @method initContainers
@@ -275,7 +276,6 @@ WireIt.Layer.prototype = {
     * @return {Obj} layer configuration
     */
    getWiring: function() {
-   
       var i;
       var obj = {containers: [], wires: []};
    
@@ -292,7 +292,6 @@ WireIt.Layer.prototype = {
          };
          obj.wires.push(wireObj);
       }
-   
       return obj;
    },
 
