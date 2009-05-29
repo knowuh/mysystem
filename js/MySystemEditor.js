@@ -103,7 +103,9 @@ var glayer = { name: "foo" };
        * @property layer
        * @type {WireIt.Layer}
        */
-        this.layer = new WireIt.Layer(this.options.layerOptions);
+        this.rootLayer = new WireIt.Layer(this.options.layerOptions);
+        this.layerStack = [this.rootLayer];
+        this.layer = this.rootLayer;
         glayer = this.layer;
 
         // Render module list
@@ -181,21 +183,94 @@ var glayer = { name: "foo" };
             this.options.layerOptions.parentEl = layerOptions.parentEl ? layerOptions.parentEl: Dom.get('center');
             this.options.layerOptions.layerMap = YAHOO.lang.isUndefined(layerOptions.layerMap) ? true: layerOptions.layerMap;
             this.options.layerOptions.layerMapOptions = layerOptions.layerMapOptions || { parentEl: 'layerMap' };
-            
+            MySystemContainer.openEditorFor.subscribe(this.onOpenEditorFor,this,true);
         },
 
         /**
         *
         *
         **/
-        ondoubleClickInstanceEvent: function(type,module) {
-            alert("I heard that " + module + " was double clicked");
+        onOpenEditorFor: function(type,args) {
+            module = args[0];
+            if (module.subSystem == null) {
+              // create a new layer
+              module.subSystem = new WireIt.Layer(this.rootLayer.options);
+              // bind it to a dom element:
+              
+              // slate it for drag and drop listening:
+            }
+            this.changeLayer(module.subSystem);
+        },
+        
+        changeLayer: function(newLayer) {
+          // todo: search for layer in stack?
+          console.log("opening layer " + newLayer);
+          
+          // if this layer is 'new' we just push it.
+          // and add event listeners.
+          var index = this.layerStack.indexOf(newLayer);
+          if(index < 0) {
+            // add the layer to the stack:
+            this.layerStack.push(newLayer);
+            // add listener to layer.layerMap
+            Event.addListener(newLayer.layerMap.element, 'mouseup', function (e,args) {
+               Event.stopEvent(e);
+               this.setLayer(newLayer);
+            }, this, true);
+          }
+        
+          // otherwise we remove all the layers up-til that one:
+          else {
+            var l = null;
+            while(l = this.layerStack.pop() != newLayer) {
+              try {
+                // remove listener on layerMap element
+                Event.removeListener(l.layerMap.element, 'mouseup');
+                // remove the layers layerMap from the dom:
+                l.layerMap.options.parentEl.removeChild(l.layerMap.element)
+              }
+              catch (e) {
+                console.log("error removing layer: " + e);
+              }
+            }
+          }
+          this.setLayer(newLayer)
         },
 
+        previousLayer: function() {
+          try {
+            var nextLayer = this.layerStack.pop();
+            if (nextLayer) {
+              this.setLayer(nextLayer);
+            }
+          }
+          catch (e) {
+            console.log('no more layers to pop');
+          }
+        },
+        
+        setLayer:function(newLayer) {
+          var lastLayer = this.layer;
+          var parentDom = lastLayer.options.parentEl;
+          this.layer = newLayer;
+          lastLayer.el.hide();
+          this.layer.el.show();
+          parentDom.replaceChild(this.layer.el,lastLayer.el);
+          this.setDDLayer(newLayer);   
+        },
+        
+     
+        /**
+        *
+        *
+        **/
+        setDDLayer: function(theLayer) {
+            this.ddTarget = new YAHOO.util.DDTarget(this.layer.el, "module");
+            this.ddTarget._layer = this.layer;
+        },
+        
         addModuleChoice: function(module) {
-            console.log("found " + module);
             console.log("found name: " + module.name);
-            console.log("found icon: " + module.icon);
             var left = Dom.get('left');
             var div = WireIt.cn('div', {
                 className: "WiringEditor-module"
@@ -225,14 +300,6 @@ var glayer = { name: "foo" };
             this.setDDLayer(this.layer);
         },
 
-        /**
-        *
-        *
-        **/
-        setDDLayer: function(theLayer) {
-            this.ddTarget = new YAHOO.util.DDTarget(this.layer.el, "module");
-            this.ddTarget._layer = this.layer;
-        },
 
         /**
         * Build the left menu on the left

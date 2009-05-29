@@ -82,7 +82,7 @@ WireIt.Layer = function(options) {
    this.initWires();
    
    if(this.options.layerMap) { 
-      new WireIt.LayerMap(this, this.options.layerMapOptions);
+      this.layerMap = new WireIt.LayerMap(this, this.options.layerMapOptions);
    }
    
 };
@@ -124,10 +124,6 @@ WireIt.Layer.prototype = {
       this.options.parentEl.appendChild(this.el);
    },
 
-   hide: function() {
-     this.options.parentEl.removeChild(this.el);
-   },
-   
    /**
     * Create all the containers passed as options
     * @method initContainers
