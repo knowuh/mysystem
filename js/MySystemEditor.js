@@ -177,29 +177,57 @@
             this.options.layerOptions.parentEl = layerOptions.parentEl ? layerOptions.parentEl: Dom.get('center');
             this.options.layerOptions.layerMap = YAHOO.lang.isUndefined(layerOptions.layerMap) ? true: layerOptions.layerMap;
             this.options.layerOptions.layerMapOptions = layerOptions.layerMapOptions || { parentEl: 'layerMap' };
-            MySystemContainer.openEditorFor.subscribe(this.onOpenEditorFor,this)
+            MySystemContainer.openEditorFor.subscribe(this.onOpenEditorFor,this,true);
         },
 
         /**
         *
         *
         **/
-        onOpenEditorFor: function(type,module,binding) {
-            alert("I heard that " + module + " was double clicked");
-            if (module.subsystem == null) {
+        onOpenEditorFor: function(type,args) {
+            module = args[0];
+            if (module.subSystem == null) {
               // create a new layer
-              module.subsystem = new WireIt.Layer(binding.rootLayer.options);
+              module.subSystem = new WireIt.Layer(this.rootLayer.options);
               // bind it to a dom element:
               
               // slate it for drag and drop listening:
             }
-            binding.changeLayer(module.subsystem);
+            this.changeLayer(module.subSystem);
         },
         
         changeLayer: function(newLayer) {
           // todo: search for layer in stack?
           console.log("opening layer " + newLayer);
-          this.layerStack.push(this.layer);
+          
+          // if this layer is 'new' we just push it.
+          // and add event listeners.
+          var index = this.layerStack.indexOf(newLayer);
+          if(index < 0) {
+            // add the layer to the stack:
+            this.layerStack.push(newLayer);
+            // add listener to layer.layerMap
+            Event.addListener(newLayer.layerMap.element, 'mouseup', function (e,args) {
+               Event.stopEvent(e);
+               this.setLayer(newLayer);
+            }, this, true);
+          }
+        
+          // otherwise we remove all the layers up-til that one:
+          else {
+            var l = null;
+            while(l = this.layerStack.pop() != newLayer) {
+              try {
+                // remove listener on layerMap element
+                Event.removeListener(l.layerMap.element, 'mouseup');
+                // remove the layers layerMap from the dom:
+                l.layerMap.options.parentEl.removeChild(l.layerMap.element)
+              }
+              catch (e) {
+                console.log("error removing layer: " + e);
+              }
+            }
+          }
           this.setLayer(newLayer)
         },
 
@@ -225,6 +253,7 @@
           this.setDDLayer(newLayer);   
         },
         
+     
         /**
         *
         *
@@ -235,9 +264,7 @@
         },
         
         addModuleChoice: function(module) {
-            console.log("found " + module);
             console.log("found name: " + module.name);
-            console.log("found icon: " + module.icon);
             var left = Dom.get('left');
             var div = WireIt.cn('div', {
                 className: "WiringEditor-module"

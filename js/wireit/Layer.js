@@ -82,7 +82,7 @@ WireIt.Layer = function(options) {
    this.initWires();
    
    if(this.options.layerMap) { 
-      new WireIt.LayerMap(this, this.options.layerMapOptions);
+      this.layerMap = new WireIt.LayerMap(this, this.options.layerMapOptions);
    }
    
 };
