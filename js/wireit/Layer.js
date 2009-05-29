@@ -287,8 +287,8 @@ WireIt.Layer.prototype = {
          var wire = this.wires[i];
       
          var wireObj = { 
-            src: {moduleId: WireIt.indexOf(wire.terminal1.container, this.containers), terminal: wire.terminal1.name }, 
-            tgt: {moduleId: WireIt.indexOf(wire.terminal2.container, this.containers), terminal: wire.terminal2.name }
+            src: {moduleId: WireIt.indexOf(wire.terminal1.container, this.containers), terminal: wire.terminal1.options.name }, 
+            tgt: {moduleId: WireIt.indexOf(wire.terminal2.container, this.containers), terminal: wire.terminal2.options.name }
          };
          obj.wires.push(wireObj);
       }
@@ -301,15 +301,18 @@ WireIt.Layer.prototype = {
     * @param {Object} wiring layer configuration
     */
    setWiring: function(wiring) {
+	  console.log("removing all containers");
       this.removeAllContainers();
       
       if(YAHOO.lang.isArray(wiring.containers)) {
+    	  console.log("got containers array");
          for(var i = 0 ; i < wiring.containers.length ; i++) {
             this.addContainer(wiring.containers[i]);
          }
       }
       if(YAHOO.lang.isArray(wiring.wires)) {
          for(var i = 0 ; i < wiring.wires.length ; i++) {
+        	console.log("got wires array");
             this.addWire(wiring.wires[i]);
          }
        }
