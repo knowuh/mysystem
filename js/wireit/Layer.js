@@ -124,10 +124,6 @@ WireIt.Layer.prototype = {
       this.options.parentEl.appendChild(this.el);
    },
 
-   hide: function() {
-     this.options.parentEl.removeChild(this.el);
-   },
-   
    /**
     * Create all the containers passed as options
     * @method initContainers

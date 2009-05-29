@@ -101,7 +101,9 @@
        * @property layer
        * @type {WireIt.Layer}
        */
-        this.layer = new WireIt.Layer(this.options.layerOptions);
+        this.rootLayer = new WireIt.Layer(this.options.layerOptions);
+        this.layerStack = [this.rootLayer];
+        this.layer = this.rootLayer;
 
         // Render module list
         this.buildModulesList();
@@ -175,17 +177,63 @@
             this.options.layerOptions.parentEl = layerOptions.parentEl ? layerOptions.parentEl: Dom.get('center');
             this.options.layerOptions.layerMap = YAHOO.lang.isUndefined(layerOptions.layerMap) ? true: layerOptions.layerMap;
             this.options.layerOptions.layerMapOptions = layerOptions.layerMapOptions || { parentEl: 'layerMap' };
-            
+            MySystemContainer.openEditorFor.subscribe(this.onOpenEditorFor,this)
         },
 
         /**
         *
         *
         **/
-        ondoubleClickInstanceEvent: function(type,module) {
+        onOpenEditorFor: function(type,module,binding) {
             alert("I heard that " + module + " was double clicked");
+            if (module.subsystem == null) {
+              // create a new layer
+              module.subsystem = new WireIt.Layer(binding.rootLayer.options);
+              // bind it to a dom element:
+              
+              // slate it for drag and drop listening:
+            }
+            binding.changeLayer(module.subsystem);
+        },
+        
+        changeLayer: function(newLayer) {
+          // todo: search for layer in stack?
+          console.log("opening layer " + newLayer);
+          this.layerStack.push(this.layer);
+          this.setLayer(newLayer)
         },
 
+        previousLayer: function() {
+          try {
+            var nextLayer = this.layerStack.pop();
+            if (nextLayer) {
+              this.setLayer(nextLayer);
+            }
+          }
+          catch (e) {
+            console.log('no more layers to pop');
+          }
+        },
+        
+        setLayer:function(newLayer) {
+          var lastLayer = this.layer;
+          var parentDom = lastLayer.options.parentEl;
+          this.layer = newLayer;
+          lastLayer.el.hide();
+          this.layer.el.show();
+          parentDom.replaceChild(this.layer.el,lastLayer.el);
+          this.setDDLayer(newLayer);   
+        },
+        
+        /**
+        *
+        *
+        **/
+        setDDLayer: function(theLayer) {
+            this.ddTarget = new YAHOO.util.DDTarget(this.layer.el, "module");
+            this.ddTarget._layer = this.layer;
+        },
+        
         addModuleChoice: function(module) {
             console.log("found " + module);
             console.log("found name: " + module.name);
@@ -219,14 +267,6 @@
             this.setDDLayer(this.layer);
         },
 
-        /**
-        *
-        *
-        **/
-        setDDLayer: function(theLayer) {
-            this.ddTarget = new YAHOO.util.DDTarget(this.layer.el, "module");
-            this.ddTarget._layer = this.layer;
-        },
 
         /**
         * Build the left menu on the left

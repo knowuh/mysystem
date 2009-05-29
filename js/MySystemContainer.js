@@ -10,6 +10,7 @@ MySystemContainer = function(options, layer) {
    MySystemContainer.superclass.constructor.call(this, options, layer);
    this.name = options.name || "MySystem Container";
    this.icon = options.icon;
+   this.subSystem = null;
 };
 
 YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
@@ -48,7 +49,6 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
    
   onDblClick: function() {
     console.log("dbl-click");
-    this.doubleClick();
     MySystemContainer.openEditorFor.fire(this);
   }
 });
