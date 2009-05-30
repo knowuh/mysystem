@@ -101,10 +101,10 @@
        * @property layer
        * @type {WireIt.Layer}
        */
+        this.layerStack = [];
         this.rootLayer = new WireIt.Layer(this.options.layerOptions);
-        this.layerStack = [this.rootLayer];
-        this.layer = this.rootLayer;
-
+        this.changeLayer(this.rootLayer);
+        
         // Render module list
         this.buildModulesList();
 
@@ -187,64 +187,62 @@
         onOpenEditorFor: function(type,args) {
             module = args[0];
             if (module.subSystem == null) {
-              // create a new layer
               module.subSystem = new WireIt.Layer(this.rootLayer.options);
-              // bind it to a dom element:
-              
-              // slate it for drag and drop listening:
             }
             this.changeLayer(module.subSystem);
         },
         
+        
+        removeLayerMap: function(newLayer) {
+          console.log("removing layerMap " + newLayer);
+          try {
+            // remove listener on layerMap element
+            Event.removeListener(newLayer.layerMap.element, 'mouseup');
+            // remove the layers layerMap from the dom:
+            newLayer.layerMap.options.parentEl.removeChild(newLayer.layerMap.element);
+          }
+          catch (e) {
+            console.log("error removing layer: " + e);
+          }
+        },
+        
+        
+        addLayerMap: function(newLayer) {
+          console.log("creating layerMap " + newLayer);
+          this.layerStack.push(newLayer);
+          // add listener to layer.layerMap
+          Event.addListener(newLayer.layerMap.element, 'mouseup', function (e,args) {
+             Event.stopEvent(e);
+             this.changeLayer(newLayer);
+          }, this, true);
+        },
+        
+        
         changeLayer: function(newLayer) {
-          // todo: search for layer in stack?
-          console.log("opening layer " + newLayer);
           
           // if this layer is 'new' we just push it.
           // and add event listeners.
           var index = this.layerStack.indexOf(newLayer);
           if(index < 0) {
-            // add the layer to the stack:
-            this.layerStack.push(newLayer);
-            // add listener to layer.layerMap
-            Event.addListener(newLayer.layerMap.element, 'mouseup', function (e,args) {
-               Event.stopEvent(e);
-               this.setLayer(newLayer);
-            }, this, true);
+            this.addLayerMap(newLayer);
           }
-        
-          // otherwise we remove all the layers up-til that one:
+          // otherwise we remove all the layers under this one (search the tree?)
           else {
+            console.log('trying to remove some layers');
             var l = null;
-            while(l = this.layerStack.pop() != newLayer) {
-              try {
-                // remove listener on layerMap element
-                Event.removeListener(l.layerMap.element, 'mouseup');
-                // remove the layers layerMap from the dom:
-                l.layerMap.options.parentEl.removeChild(l.layerMap.element)
-              }
-              catch (e) {
-                console.log("error removing layer: " + e);
-              }
+            for(var i = index+1; i < this.layerStack.size();i++) {
+              l = this.layerStack[i];
+              this.layerStack[i] = null;
+              this.removeLayerMap(l);
             }
+            // get rid of null elements:
+            this.layerStack = this.layerStack.compact();
           }
           this.setLayer(newLayer)
         },
-
-        previousLayer: function() {
-          try {
-            var nextLayer = this.layerStack.pop();
-            if (nextLayer) {
-              this.setLayer(nextLayer);
-            }
-          }
-          catch (e) {
-            console.log('no more layers to pop');
-          }
-        },
         
         setLayer:function(newLayer) {
-          var lastLayer = this.layer;
+          var lastLayer = this.layer || this.rootLayer;
           var parentDom = lastLayer.options.parentEl;
           this.layer = newLayer;
           lastLayer.el.hide();
