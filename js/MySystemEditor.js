@@ -1,3 +1,6 @@
+// TODO This is for debugging. REMOVE it later.
+var glayer = { name: "foo" };
+
 (function() {
     var util = YAHOO.util;
     var lang = YAHOO.lang;
@@ -60,7 +63,6 @@
             this._MySysEditor._data.addInstance({module: this._module, position: pos});
         }
     });
-
 
 /**
  * The MySystemEditor class provides a full page interface 
@@ -131,6 +133,9 @@
 
             this.options.languageName = options.languageName || 'anonymousLanguage';
             this.options.smdUrl = options.smdUrl || 'WiringEditor.smd'; // eh?
+            
+            // FIXME: This url should be determined by whatever outside authoring system is wrapping the editor
+            this.options.dataUrl = "http://mysystem.local/webdav/msystem.txt";
             this.options.propertiesFields = options.propertiesFields;
             this.options.layoutOptions = options.layoutOptions || {
                 units: [
@@ -313,7 +318,7 @@
         addModule: function(module, pos) {
             try {
                 //var containerConfig = module.container;
-                console.log("addModule called for " + module.name)
+                console.log("addModule called for " + module.name);
                 module.position = pos;
                 module.title = module.name;
                 module.layer = this.layer;
@@ -340,6 +345,12 @@
             });
             newButton.on("click", this.onNew, this, true);
 
+            var loadButton = new widget.Button({
+                label: "Load",
+                id: "WiringEditor-loadButton",
+                container: toolbar
+            });
+            loadButton.on("click", this.onLoad, this, true);
 
             var saveButton = new widget.Button({
                 label: "Save",
@@ -357,13 +368,14 @@
         },
 
 
-        onSMDsuccess: function() {},
-        onSMDfailure: function() {},
+        onSMDsuccess: function() { alert("Save successful."); },
+        onSMDfailure: function() { alert("Save failed."); },
 
         /**
         * @method onSave
         */
         onSave: function() {
+        	console.log("Save clicked");
             this.save();
         },
 
@@ -373,8 +385,39 @@
         * TODO: Actually save something!
         */
         save: function() {
-            // console.log(this._data.instances.toJSON());
+        	console.log([this.layer.getWiring()].toJSON());
+
+        	var xmlhttp = HTTP.newRequest();
+        	xmlhttp.open('PUT', this.options.dataUrl, false);
+        	xmlhttp.send([this.layer.getWiring()].toJSON());
+        	
+//        	callback = { 
+//              	  success: function(o) { alert("Successful save!"); }, 
+//                    failure: function(o) { alert("Successful save!"); },
+//                    scope: this
+//                  };
+        	alert("Response: " + xmlhttp.responseText);
+        	// YAHOO.util.Connect.asyncRequest('POST', this.options.dataUrl, callback, [this.layer.getWiring()].toJSON() )
         },
+        
+        /**
+         * @method onSave
+         */
+         onLoad: function() {
+         	console.log("Load clicked");
+             this.load();
+         },
+         
+         load: function() {
+        	 console.log("loading...");
+         	callback = function(text) {
+	         	obj = eval(text);
+	         	console.log("got object: " + obj[0].containers[0]);
+	         	glayer.setWiring(obj[0]);
+	         	console.log("done loading.");
+         	};
+         	HTTP.getText(this.options.dataUrl, callback);
+         },
 
         /**
         * Create a help panel

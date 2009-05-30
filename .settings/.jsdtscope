@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="wireit/util/|wireit/util/inputex/|wireit/" kind="src" path="js"/>
+	<classpathentry excluding="util/|util/inputex/" kind="src" path="js/wireit"/>
+	<classpathentry excluding="inputex/" kind="src" path="js/wireit/util"/>
+	<classpathentry kind="src" path="js/wireit/util/inputex"/>
+	<classpathentry excluding="yui/calendar/|yui/yuiloader/|yui/datasource/|yui/button/|yui/editor/|yui/yuiloader-dom-event/|yui/charts/|yui/utilities/|yui/get/|yui/yahoo-dom-event/|yui/logger/|yui/uploader/|yui/stylesheet/|yui/tabview/|yui/menu/|yui/selector/|yui/autocomplete/|yui/imageloader/|yui/imagecropper/|yui/animation/|yui/event/|yui/cookie/|yui/carousel/|yui/yahoo/|yui/profiler/|yui/json/|yui/paginator/|yui/colorpicker/|yui/layout/|yui/history/|yui/datatable/|yui/dom/|yui/yuitest/|yui/connection/|yui/treeview/|yui/resize/|yui/profilerviewer/|yui/element/|yui/slider/|yui/container/|yui/dragdrop/" kind="src" path="lib"/>
+	<classpathentry kind="src" path="lib/yui/animation"/>
+	<classpathentry kind="src" path="lib/yui/autocomplete"/>
+	<classpathentry kind="src" path="lib/yui/button"/>
+	<classpathentry kind="src" path="lib/yui/calendar"/>
+	<classpathentry kind="src" path="lib/yui/carousel"/>
+	<classpathentry kind="src" path="lib/yui/charts"/>
+	<classpathentry kind="src" path="lib/yui/colorpicker"/>
+	<classpathentry kind="src" path="lib/yui/connection"/>
+	<classpathentry kind="src" path="lib/yui/container"/>
+	<classpathentry kind="src" path="lib/yui/cookie"/>
+	<classpathentry kind="src" path="lib/yui/datasource"/>
+	<classpathentry kind="src" path="lib/yui/datatable"/>
+	<classpathentry kind="src" path="lib/yui/dom"/>
+	<classpathentry kind="src" path="lib/yui/dragdrop"/>
+	<classpathentry kind="src" path="lib/yui/editor"/>
+	<classpathentry kind="src" path="lib/yui/element"/>
+	<classpathentry kind="src" path="lib/yui/event"/>
+	<classpathentry kind="src" path="lib/yui/get"/>
+	<classpathentry kind="src" path="lib/yui/history"/>
+	<classpathentry kind="src" path="lib/yui/imagecropper"/>
+	<classpathentry kind="src" path="lib/yui/imageloader"/>
+	<classpathentry kind="src" path="lib/yui/json"/>
+	<classpathentry kind="src" path="lib/yui/layout"/>
+	<classpathentry kind="src" path="lib/yui/logger"/>
+	<classpathentry kind="src" path="lib/yui/menu"/>
+	<classpathentry kind="src" path="lib/yui/paginator"/>
+	<classpathentry kind="src" path="lib/yui/profiler"/>
+	<classpathentry kind="src" path="lib/yui/profilerviewer"/>
+	<classpathentry kind="src" path="lib/yui/resize"/>
+	<classpathentry kind="src" path="lib/yui/selector"/>
+	<classpathentry kind="src" path="lib/yui/slider"/>
+	<classpathentry kind="src" path="lib/yui/stylesheet"/>
+	<classpathentry kind="src" path="lib/yui/tabview"/>
+	<classpathentry kind="src" path="lib/yui/treeview"/>
+	<classpathentry kind="src" path="lib/yui/uploader"/>
+	<classpathentry kind="src" path="lib/yui/utilities"/>
+	<classpathentry kind="src" path="lib/yui/yahoo"/>
+	<classpathentry kind="src" path="lib/yui/yahoo-dom-event"/>
+	<classpathentry kind="src" path="lib/yui/yuiloader"/>
+	<classpathentry kind="src" path="lib/yui/yuiloader-dom-event"/>
+	<classpathentry kind="src" path="lib/yui/yuitest"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
+</classpath>

@@ -1,3 +1,6 @@
+// TODO this is for debugging. REMOVE it later
+var gterm = {name: "foo"};
+
 (function() {
    var util = YAHOO.util;
    var Dom = util.Dom;
@@ -400,6 +403,16 @@ WireIt.Container.prototype = {
          obj.position[0] += this.layer.el.scrollLeft;
          obj.position[1] += this.layer.el.scrollTop;
       }
+      
+      console.log("there are " + this.terminals.length + " terminals");
+      obj.terminals = [];
+      for (var i = 0; i < this.terminals.length; i++) {
+    	  term = this.terminals[i];
+    	  gterm = term;
+    	  console.log("adding terminal: " + term.options.name);
+    	  obj.terminals.push({name: term.options.name});
+      }
+      
    
       // xtype
       if(this.options.xtype) {
