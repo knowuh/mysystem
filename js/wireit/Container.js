@@ -390,38 +390,19 @@ WireIt.Container.prototype = {
     * @method getConfig
     */
    getConfig: function() {
-      var obj = {};
-   
       // Position
-      obj.position = Dom.getXY(this.el);
+      this.options.position = Dom.getXY(this.el);
       if(this.layer) {
          // remove the layer position to the container position
          var layerPos = Dom.getXY(this.layer.el);
-         obj.position[0] -= layerPos[0];
-         obj.position[1] -= layerPos[1];
+         this.options.position[0] -= layerPos[0];
+         this.options.position[1] -= layerPos[1];
          // add the scroll position of the layer to the container position
-         obj.position[0] += this.layer.el.scrollLeft;
-         obj.position[1] += this.layer.el.scrollTop;
-      }
-      
-      console.log("there are " + this.terminals.length + " terminals");
-      obj.terminals = [];
-      for (var i = 0; i < this.terminals.length; i++) {
-    	  term = this.terminals[i];
-    	  gterm = term;
-    	  console.log("adding terminal: " + term.options.name);
-    	  obj.terminals.push(term.options);
-//    	  obj.terminals.push({name: term.options.name});
-      }
-      
-   
-      // xtype
-      if(this.options.xtype) {
-         obj.xtype = this.options.xtype;
+         this.options.position[0] += this.layer.el.scrollLeft;
+         this.options.position[1] += this.layer.el.scrollTop;
       }
    
       return this.options;
-//      return obj;
    },
    
    /**
