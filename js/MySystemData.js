@@ -46,7 +46,7 @@ MySystemData.defaultTerminals = function() {
        "wireConfig": {
          "drawingMethod": "bezierArrows"
        },
-       "name": "Drag me to another object's terminal to show energy transfer",
+       "name": "Terminal1",
        "direction": [0, -1],
        "offsetPosition": {
        "left": 20,
@@ -60,7 +60,7 @@ MySystemData.defaultTerminals = function() {
        "wireConfig": {
            "drawingMethod": "bezierArrows"
        },
-       "name": "Drag me to another object's terminal to show energy transfer",
+       "name": "Terminal2",
        "direction": [0, 1],
        "offsetPosition": {
            "left": 20,

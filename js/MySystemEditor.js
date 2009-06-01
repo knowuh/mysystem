@@ -103,8 +103,10 @@ var glayer = { name: "foo" };
        * @property layer
        * @type {WireIt.Layer}
        */
+        console.log("Setting up layer stack, root layer, etc.")
         this.layerStack = [];
         this.rootLayer = new WireIt.Layer(this.options.layerOptions);
+        this.glayer = this.rootLayer
         this.changeLayer(this.rootLayer);
         
         // Render module list
@@ -248,11 +250,15 @@ var glayer = { name: "foo" };
         
         setLayer:function(newLayer) {
           var lastLayer = this.layer || this.rootLayer;
-          var parentDom = lastLayer.options.parentEl;
+          if (newLayer != this.rootLayer) {
+        	  console.log("new layer is not root layer");
+        	  var parentDom = lastLayer.options.parentEl;
+              lastLayer.el.hide();
+              parentDom.replaceChild(this.layer.el,lastLayer.el);
+          }
           this.layer = newLayer;
-          lastLayer.el.hide();
+          glayer = newLayer;
           this.layer.el.show();
-          parentDom.replaceChild(this.layer.el,lastLayer.el);
           this.setDDLayer(newLayer);   
         },
         
@@ -385,11 +391,11 @@ var glayer = { name: "foo" };
         * TODO: Actually save something!
         */
         save: function() {
-        	console.log([this.layer.getWiring()].toJSON());
+        	console.log([this.rootLayer.getWiring()].toJSON());
 
         	var xmlhttp = HTTP.newRequest();
         	xmlhttp.open('PUT', this.options.dataUrl, false);
-        	xmlhttp.send([this.layer.getWiring()].toJSON());
+        	xmlhttp.send([this.rootLayer.getWiring()].toJSON());
         	
 //        	callback = { 
 //              	  success: function(o) { alert("Successful save!"); }, 
@@ -409,14 +415,15 @@ var glayer = { name: "foo" };
          },
          
          load: function() {
-        	 console.log("loading...");
-         	callback = function(text) {
-	         	obj = eval(text);
+        	console.log("loading...\nrootLayer: " + this.rootLayer);
+        	
+         	var callback = function(text, context) {
+	         	var obj = eval(text);
 	         	console.log("got object: " + obj[0].containers[0]);
-	         	glayer.setWiring(obj[0]);
+	         	context.rootLayer.setWiring(obj[0]);
 	         	console.log("done loading.");
          	};
-         	HTTP.getText(this.options.dataUrl, callback);
+         	HTTP.getText(this.options.dataUrl, this, callback);
          },
 
         /**

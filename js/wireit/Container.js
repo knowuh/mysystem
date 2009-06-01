@@ -410,7 +410,8 @@ WireIt.Container.prototype = {
     	  term = this.terminals[i];
     	  gterm = term;
     	  console.log("adding terminal: " + term.options.name);
-    	  obj.terminals.push({name: term.options.name});
+    	  obj.terminals.push(term.options);
+//    	  obj.terminals.push({name: term.options.name});
       }
       
    
@@ -419,7 +420,8 @@ WireIt.Container.prototype = {
          obj.xtype = this.options.xtype;
       }
    
-      return obj;
+      return this.options;
+//      return obj;
    },
    
    /**

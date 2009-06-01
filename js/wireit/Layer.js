@@ -158,7 +158,7 @@ WireIt.Layer.prototype = {
    
       var terminal1 = this.containers[src.moduleId].getTerminal(src.terminal);
       var terminal2 = this.containers[tgt.moduleId].getTerminal(tgt.terminal);
-      var wire = new type( terminal1, terminal2, this.el, wireConfig);
+      var wire = new type( terminal1, terminal2, this.el, wireConfig.options);
       wire.redraw();
    
       return wire;
@@ -284,7 +284,8 @@ WireIt.Layer.prototype = {
       
          var wireObj = { 
             src: {moduleId: WireIt.indexOf(wire.terminal1.container, this.containers), terminal: wire.terminal1.options.name }, 
-            tgt: {moduleId: WireIt.indexOf(wire.terminal2.container, this.containers), terminal: wire.terminal2.options.name }
+            tgt: {moduleId: WireIt.indexOf(wire.terminal2.container, this.containers), terminal: wire.terminal2.options.name },
+            options: wire.options
          };
          obj.wires.push(wireObj);
       }
