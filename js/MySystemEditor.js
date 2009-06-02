@@ -138,7 +138,7 @@
             this.options.smdUrl = options.smdUrl || 'WiringEditor.smd'; // eh?
             
             // FIXME: This url should be determined by whatever outside authoring system is wrapping the editor
-            this.options.dataUrl = "http://mysystem.local/webdav/mysystem.json";
+            this.options.dataDir = "/models";
             this.options.propertiesFields = options.propertiesFields;
             this.options.layoutOptions = options.layoutOptions || {
                 units: [
@@ -412,18 +412,20 @@
         */
         save: function() {
         	console.log([this.rootLayer.getWiring()].toJSON());
+        	
+        	var postUrl = this.options.dataDir;
+        	if (this.options.modelId != null) {
+        		postUrl += "/" + this.options.modelId;
+        	}
 
         	var xmlhttp = HTTP.newRequest();
-        	xmlhttp.open('PUT', this.options.dataUrl, false);
+        	xmlhttp.open('PUT', this.options.dataDir, false);
         	xmlhttp.send([this.rootLayer.getWiring()].toJSON());
         	
-//        	callback = { 
-//              	  success: function(o) { alert("Successful save!"); }, 
-//                    failure: function(o) { alert("Successful save!"); },
-//                    scope: this
-//                  };
-        	alert("Response: " + xmlhttp.responseText);
-        	// YAHOO.util.Connect.asyncRequest('POST', this.options.dataUrl, callback, [this.layer.getWiring()].toJSON() )
+        	if (this.options.modelId == null) {
+        	  this.options.modelId = eval(xmlhttp.responseText).key;
+        	}
+        	alert("Your model was saved with the ID: " + this.options.modelId);
         },
         
         /**
@@ -443,7 +445,10 @@
 	         	context.rootLayer.setWiring(obj[0]);
 	         	console.log("done loading.");
          	};
-         	HTTP.getText(this.options.dataUrl, this, callback);
+         	
+         	this.options.modelId = prompt("Enter the model ID for the model you wish to load: ", this.options.modelId);
+         	
+         	HTTP.getText(this.options.dataUrl + "/" + this.options.modelId, this, callback);
          },
 
         /**
