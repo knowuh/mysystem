@@ -65,6 +65,11 @@
 
   <script>
     YAHOO.util.Event.onDOMReady(MySystemDemo.init, MySystemDemo, true);
+    document.observe('dom:loaded',function() {
+      $('prop_hider').observe('click',function() {
+        $('prop_form').toggle();
+      })
+    });
   </script>
 
 	<div id="top">
@@ -80,8 +85,14 @@
 	</div>
 	
 	<div id="right">
-		<h2 id="prop_container">Properties</h2>
-		<div id="prop_form"></div>
+		<h2 id="prop_hider">Show / Hide Properties</h2>
+		  <div id="prop_form" display="hidden">
+		    <h3><span id="prop_name"></span></h3>
+		    <hr>
+		    <form id="prop_form_form">
+  		    <div id="prop_fields"></div>
+  		  </form>
+		  </div>
 		<h2>Minimap</h2>
 		<div id="layerMap"></div>
 		<div style="font-size: 14px; padding: 10px 10px 0px 10px;"><b>MySystem Pre-prototype Demo</b></div>

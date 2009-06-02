@@ -74,6 +74,7 @@ var glayer = { name: "foo" };
         // set the default options
         this.setOptions(data);
         this._data = data;
+        this.propEditor = new MySystemPropEditor({});
         /**
      * Container DOM element
      * @property el
@@ -182,18 +183,31 @@ var glayer = { name: "foo" };
             this.options.layerOptions.parentEl = layerOptions.parentEl ? layerOptions.parentEl: Dom.get('center');
             this.options.layerOptions.layerMap = YAHOO.lang.isUndefined(layerOptions.layerMap) ? true: layerOptions.layerMap;
             this.options.layerOptions.layerMapOptions = layerOptions.layerMapOptions || { parentEl: 'layerMap' };
-            MySystemContainer.openEditorFor.subscribe(this.onOpenEditorFor,this,true);
+            
+            MySystemContainer.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
+            MySystemContainer.openContextFor.subscribe(this.onOpenContextFor,this,true);
         },
 
         /**
-        *
+        * Open the properties editor for this container
         *
         **/
-        onOpenEditorFor: function(type,args) {
+        onOpenPropEditorFor: function(type,args) {
             module = args[0];
             if (module.subSystem == null) {
-              module.subSystem = new WireIt.Layer(this.rootLayer.options);
+              this.propEditor.show(module);
+              // module.subSystem = new WireIt.Layer(this.rootLayer.options);
             }
+            else {
+              this.changeLayer(module.subSystem);
+            }
+        },
+        
+        /**
+        * Open a new layer for this container
+        *
+        **/
+        onOpenContextFor: function(type,args) {
             this.changeLayer(module.subSystem);
         },
         
@@ -224,7 +238,6 @@ var glayer = { name: "foo" };
         
         
         changeLayer: function(newLayer) {
-          
           // if this layer is 'new' we just push it.
           // and add event listeners.
           var index = this.layerStack.indexOf(newLayer);
@@ -322,7 +335,7 @@ var glayer = { name: "foo" };
                 module.position = pos;
                 module.title = module.name;
                 module.layer = this.layer;
-                var container = this.layer.addContainer(module);
+                var container = this.layer.addContainer(module);                    
                 Dom.addClass(container.el, "WiringEditor-module-" + module.name);
             }
             catch(ex) {

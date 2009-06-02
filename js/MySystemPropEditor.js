@@ -6,59 +6,47 @@
  * @param {Object} options
  * @param {WireIt.Layer} layer
  */
-MySystemPropEditor = function(node, options) {
-   this.node = node;
+MySystemPropEditor = function(options) {
    this.domID = options.domID || "prop_editor";
-   this.bodyTmpl = new Template('<form name="form_for_#{name} id="form_for_#{name}>#{fields}<br/><input type="submit" name="save" value="save" id="save_button"></form>')
-   this.fieldTmpl = new Template('<label for="#{name}"></label>#{name}<input type="text" name="#{name}" value="#{value}" id="#{name}">');
-   this.headTmpl = new Template('prop editor for #{name}');
-   this.footTmpl = new Template('end for #{name}')
+   this.formName = options.formName || "prop_form_form";
 };
 
 MySystemPropEditor.prototype = {
-  setProps: function() {
-      console.log("modal thingy closed");
-  },
-  
-  doTemplate: function() {
-    this.panel.setHeader(this.headTmpl.evaluate({name: this.node.name}));
-    this.panel.setFooter(this.footTmpl.evaluate({name: this.node.name}));
-    var nameField = this.fieldTmpl.evaluate({name: "name", value: this.node.name});
-    var energyField = this.fieldTmpl.evaluate({name: "energy", value: (this.node.energy || 10)});
-    var fields = nameField + "<br/>" + energyField;
-    this.panel.setBody  (this.bodyTmpl.evaluate({name: "name", value: this.node.name, fields: fields}));
-  },
-  
-  
-  show: function() {
-    if (!this.panel) {
-      console.log("making a new panel")
-      this.panel = new YAHOO.widget.Panel(this.domID, {
-        fixedcenter: true,
-        draggable: true,
-        visible: false,
-        close: false,
-        modal: true
-      });
-    }
-    this.doTemplate();
-    this.panel.hideMaskEvent.subscribe(this.setProps,this,true);
-    this.panel.render("props");
-    this.panel.show();
-
-    var saveButton = $('save_button');
-    console.log(saveButton.inspect());
-    saveButton.observe('click', function(e) {
-          e.stop();
-          console.log("you clicked it!");
-          this.node.name = $F('name');
-          this.node.energy = $F('energy');
-          this.panel.destroy();
-          this.panel = null;
-          saveButton.stopObserving();
+  updateFields: function() {
+    var subsTmpl = new Template ('<label for="has_sub">sub systems?</label><input type="checkbox" name="has_sub" value="#{value}" id="has_sub">')
+    var fieldTmpl = new Template('<label for="#{name}">#{name}</label><input type="text" name="#{name}" value="#{value}" id="#{name}">');
+    var fields = [];
+    fields.push (fieldTmpl.evaluate({name: "name", value: this.node.name}));
+    fields.push (subsTmpl.evaluate({value: (this.node.subSystem ? 1 : 0)}));
+    $H(this.node.fields).keys().each(function (name) {
+      fields.push (fieldTmpl.evaluate({name: name, value: this.node.fields[name]}));
     }.bind(this));
+    var fieldText = fields.join("<br/>")
+    $('prop_name').update("properties for " + this.node.name);
+    $('prop_fields').update(fieldText);
+  },
+  save_values: function() {
+    console.log("prop value changed! for " +this.node.name);
+    var theForm = $(this.formName);
+    this.node.name = $F('name');
+    this.node.energy = $F('energy');
+    var fieldNames = $H(this.node.fields).keys();
+    theForm.getInputs(['text'][fieldNames]).each(function (fe) {
+      var name = fe.name;
+      this.node.fields[name] = fe.value;
+    }.bind(this));
+    this.node.subSystem = $F('has_sub');
+  },
+  show: function(node) {
+    if(this.form_observer !=null) {
+      this.form_observer.stop();
+      this.form_observer = null;
+    }
+    this.node = node;
+    this.updateFields();
+    this.form_observer = new Form.Observer($(this.formName),0.3,this.save_values.bind(this));
+    $('prop_form').show();
   }
-  
 }
 
 
