@@ -423,7 +423,7 @@
         	xmlhttp.send([this.rootLayer.getWiring()].toJSON());
         	
         	if (this.options.modelId == null) {
-        	  this.options.modelId = eval(xmlhttp.responseText).key;
+        	  this.options.modelId = eval(xmlhttp.responseText);
         	}
         	alert("Your model was saved with the ID: " + this.options.modelId);
         },
