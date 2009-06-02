@@ -227,11 +227,11 @@ var glayer = { name: "foo" };
           }
         },
         
-        
         addLayerMap: function(newLayer) {
-          console.log("creating layerMap " + newLayer);
+          console.log("creating layerMap " + newLayer.layerMap);
           this.layerStack.push(newLayer);
-          // add listener to layer.layerMap
+          newLayer.layerMap.options.parentEl.appendChild(newLayer.layerMap.element);
+          // add listener to layer.layerMap                    
           Event.addListener(newLayer.layerMap.element, 'mouseup', function (e,args) {
              Event.stopEvent(e);
              this.changeLayer(newLayer);
