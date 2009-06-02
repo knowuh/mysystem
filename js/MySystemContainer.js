@@ -11,6 +11,7 @@ MySystemContainer = function(options, layer) {
    this.name = options.name || "MySystem Container";
    this.icon = options.icon;
    this.fields = options.fields || {'energy': 10};
+   this.has_sub = false;
    this.subSystem = null;
    this.propEditor = null;
    this.openEditorFor = 
@@ -21,26 +22,18 @@ MySystemContainer = function(options, layer) {
 
 
 YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
-  // show some fields for editing..
-  // openPropertyEditor: function() {
-  //   if(this.propEditor != null) {
-  //     this.propEditor.show(this);
-  //   }
-  //   else {
-  //     console.log('no prop editor for me..')
-  //   }
-  // },
   onMouseUp: function(source) {
     MySystemContainer.openPropEditorFor.fire(this);
   },
   
   onDblClick: function(source) {
-    if (this.subsystem) {
+    if (this.has_sub) {
       MySystemContainer.openContextFor.fire(this);
     }
   }
-
 });
+
+// register some events for others to subscribe to:
 MySystemContainer.openPropEditorFor  = new YAHOO.util.CustomEvent("OpenEditorFor");
 MySystemContainer.openContextFor = new YAHOO.util.CustomEvent("openContextFor");
 

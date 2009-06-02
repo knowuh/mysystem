@@ -195,14 +195,8 @@ var glayer = { name: "foo" };
         *
         **/
         onOpenPropEditorFor: function(type,args) {
-            module = args[0];
-            if (module.subSystem == null) {
-              this.propEditor.show(module);
-              // module.subSystem = new WireIt.Layer(this.rootLayer.options);
-            }
-            else {
-              this.changeLayer(module.subSystem);
-            }
+          module = args[0];
+          this.propEditor.show(module);
         },
         
         /**
@@ -210,7 +204,13 @@ var glayer = { name: "foo" };
         *
         **/
         onOpenContextFor: function(type,args) {
-            this.changeLayer(module.subSystem);
+            module = args[0];
+            if (module.has_sub) {
+              if (!module.subSystem) {
+               module.subSystem = new WireIt.Layer(this.rootLayer.options);
+              }
+              this.changeLayer(module.subSystem);
+            }
         },
         
         

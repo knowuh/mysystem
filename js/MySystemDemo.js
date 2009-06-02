@@ -4,10 +4,10 @@ var testData = [
     xtype: "MySystemWireLabel"
   },
   {
-    name: "Water",
+    name: "world",
     xtype: "MySystemContainer",
-    image: "./images/water-70.png",
-    icon: "./images/water-70.png"
+    image: "./images/world-transp.png",
+    icon: "./images/world-transp.png"
   },
   {
     name: "egg", 
@@ -25,11 +25,8 @@ var MySystemDemo = {
   */
   init: function() {
       try {  
-        console.log('starting up ...');
         this.data.setData(testData,[],true);
-        console.log("data is set");
         this.editor = new MySystemEditor(this.data);
-        console.log("Editor Started");
         // this.editor.onHelp();
       }
       catch (e){
