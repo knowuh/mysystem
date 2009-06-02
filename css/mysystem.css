@@ -43,3 +43,24 @@ input {
   margin: 5px;
   text-align: left:
 }
+
+div.inputBox {
+  display: block;
+  clear: both;
+  margin: 2px;
+  float: left;
+  width: 100%;
+  clear: both;
+}
+
+#prop_form {
+ display: block;
+ clear: both;
+ width: 90%;
+ padding: 10px;
+ margin: 10px;
+ border: 1px solid #3366CC;
+ float: left;
+}
+
+}
