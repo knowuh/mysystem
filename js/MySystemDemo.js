@@ -30,7 +30,7 @@ var MySystemDemo = {
         // this.editor.onHelp();
       }
       catch (e){
-        console.log("ooopps! " + e)
+        // console.log("ooopps! " + e)
       }
   },
   

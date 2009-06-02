@@ -385,7 +385,7 @@ WireIt.WiringEditor.prototype = {
                 this.loadPipe(Event.getTarget(e).innerHTML);
              }
              catch(ex) {
-                // console.log(ex);
+                console.log(ex);
              }
           }, this, true);
           list.appendChild(li);
@@ -430,7 +430,7 @@ WireIt.WiringEditor.prototype = {
              return ret;
           }
           catch(ex) {
-             // console.log("Unable to eval working json for module "+name);
+             console.log("Unable to eval working json for module "+name);
              return null;
           }
        }

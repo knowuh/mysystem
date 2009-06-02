@@ -370,7 +370,7 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
          w.redraw();
       }
       /*else {
-         // console.log("Cannot connect to this terminal: nMaxWires = ", ddTargets[0].terminal.options.nMaxWires);
+         console.log("Cannot connect to this terminal: nMaxWires = ", ddTargets[0].terminal.options.nMaxWires);
       }*/
       
    },
