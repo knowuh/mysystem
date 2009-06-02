@@ -5,7 +5,7 @@
 var MySystemData = Class.create({
   initialize:function() {
     this.modules = [];
-    this.instances = [];
+  this.instances = [];
   },
 
   addModule: function(module,addTerminals) {

@@ -1,7 +1,7 @@
 var gSubSys = {};
 
 /**
- * Module-Type represented by an image
+ * MySystem Container. Has an image. and double_click beahvor.
  * @class ImageContainer
  * @extends WireIt.Container
  * @constructor
@@ -12,6 +12,8 @@ MySystemContainer = function(options, layer) {
    MySystemContainer.superclass.constructor.call(this, options, layer);
    this.name = options.name || "MySystem Container";
    this.icon = options.icon;
+   this.fields = options.fields || {'energy': 10};
+   this.has_sub = false;
    this.subSystem = null;
    if (options.subsystem != null) {
 	   console.log("initializing subsystem");
@@ -22,15 +24,23 @@ MySystemContainer = function(options, layer) {
 	   gSubSys = this.subSystem;
    }
    this.options.xtype = "MySystemContainer";
+   this.propEditor = null;
    this.openEditorFor = 
-   // Adds a handler for mousedown so we can notice the layer
+   // Adds a handler for mousedown so we can change layers in our editor
    YAHOO.util.Event.addListener(this.el, "dblclick", this.onDblClick, this, true);
+   YAHOO.util.Event.addListener(this.el, "mouseup", this.onMouseUp, this, true);   
 };
 
+
 YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
+  onMouseUp: function(source) {
+    MySystemContainer.openPropEditorFor.fire(this);
+  },
+  
   onDblClick: function(source) {
-    console.log("dbl-click for " + this.name + " " + source.name + source);
-    MySystemContainer.openEditorFor.fire(this);
+    if (this.has_sub) {
+      MySystemContainer.openContextFor.fire(this);
+    }
   },
   
   getConfig: function() {
@@ -42,10 +52,10 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
 	  return this.options;
   }
 });
-MySystemContainer.openEditorFor = new YAHOO.util.CustomEvent("OpenEditorFor");
 
-
-
+// register some events for others to subscribe to:
+MySystemContainer.openPropEditorFor  = new YAHOO.util.CustomEvent("OpenEditorFor");
+MySystemContainer.openContextFor = new YAHOO.util.CustomEvent("openContextFor");
 
 
 

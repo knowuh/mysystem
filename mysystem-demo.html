@@ -47,12 +47,14 @@
   <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
 
 
+  <script type="text/javascript" src="js/MySystemPropEditor.js"></script>
   <script type="text/javascript" src="js/MySystemWireLabel.js"></script>
   <script type="text/javascript" src="js/MySystemContainer.js"></script>
   <script type="text/javascript" src="js/MySystemData.js"></script>
   <script type="text/javascript" src="js/MySystemEditor.js"></script>
   <script type="text/javascript" src="js/MySystemDemo.js"></script>
 
+  
   <!-- this is honestly not being used yet, because we are not evaluating JS -->
   <!-- script type="text/javascript" src="ExecutionFrame.js"></script -->
   
@@ -63,6 +65,11 @@
 
   <script>
     YAHOO.util.Event.onDOMReady(MySystemDemo.init, MySystemDemo, true);
+    document.observe('dom:loaded',function() {
+      $('prop_hider').observe('click',function() {
+        $('prop_form').toggle();
+      })
+    });
   </script>
 
 	<div id="top">
@@ -78,8 +85,14 @@
 	</div>
 	
 	<div id="right">
-		<h2>Properties</h2>
-		<div id="propertiesForm"></div>
+		<h2 id="prop_hider">Show / Hide Properties</h2>
+		  <div id="prop_form" display="hidden">
+		    <h3><span id="prop_name"></span></h3>
+		    <hr>
+		    <form id="prop_form_form">
+  		    <div id="prop_fields"></div>
+  		  </form>
+		  </div>
 		<h2>Minimap</h2>
 		<div id="layerMap"></div>
 		<div style="font-size: 14px; padding: 10px 10px 0px 10px;"><b>MySystem Pre-prototype Demo</b></div>
@@ -108,6 +121,10 @@
 	</div>
 
 	<div id="center">
+	</div>
+	
+	<div id="props">
+	  <!-- modal floating property editor for nodes (AKA modules, AKA containers...) -->
 	</div>
 
 	<div id="helpPanel">

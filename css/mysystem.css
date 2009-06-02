@@ -28,3 +28,18 @@ div.WireIt-Container.WiringEditor-module-comment div.body textarea {
 div.ComposedModule {
 	background-color: #DDDDAA;
 }
+
+label {
+  text-align: right;
+  height: auto;
+  width: 25%;
+  float: left;
+  clear: left;
+  margin: 5px;
+  color: #3366CC;
+}
+
+input {
+  margin: 5px;
+  text-align: left:
+}
