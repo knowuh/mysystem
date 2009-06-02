@@ -391,16 +391,16 @@ WireIt.Container.prototype = {
     */
    getConfig: function() {
       // Position
-      this.options.position = Dom.getXY(this.el);
-      if(this.layer) {
-         // remove the layer position to the container position
-         var layerPos = Dom.getXY(this.layer.el);
-         this.options.position[0] -= layerPos[0];
-         this.options.position[1] -= layerPos[1];
-         // add the scroll position of the layer to the container position
-         this.options.position[0] += this.layer.el.scrollLeft;
-         this.options.position[1] += this.layer.el.scrollTop;
-      }
+//      this.options.position = Dom.getXY(this.el);
+//      if(this.layer) {
+//         // remove the layer position to the container position
+//         var layerPos = Dom.getXY(this.layer.el);
+//         this.options.position[0] -= layerPos[0];
+//         this.options.position[1] -= layerPos[1];
+//         // add the scroll position of the layer to the container position
+//         this.options.position[0] += this.layer.el.scrollLeft;
+//         this.options.position[1] += this.layer.el.scrollTop;
+//      }
    
       return this.options;
    },
