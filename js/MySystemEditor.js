@@ -138,7 +138,7 @@
             this.options.smdUrl = options.smdUrl || 'WiringEditor.smd'; // eh?
             
             // FIXME: This url should be determined by whatever outside authoring system is wrapping the editor
-            this.options.dataUrl = "http://mysystem.local/webdav/mysystem.json";
+            this.options.dataUrl = "/models";
             this.options.propertiesFields = options.propertiesFields;
             this.options.layoutOptions = options.layoutOptions || {
                 units: [
