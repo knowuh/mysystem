@@ -1,5 +1,5 @@
 // TODO This is for debugging. REMOVE it later.
-var glayer = { name: "foo" };
+
 
 (function() {
     var util = YAHOO.util;
@@ -60,6 +60,7 @@ var glayer = { name: "foo" };
             pos[0] = pos[0] - layerPos[0];
             pos[1] = pos[1] - layerPos[1];
             this._MySysEditor.addModule(this._module, pos);
+            this._MySysEditor.hidePropEditor();
             this._MySysEditor._data.addInstance({module: this._module, position: pos});
         }
     });
@@ -74,6 +75,7 @@ var glayer = { name: "foo" };
         // set the default options
         this.setOptions(data);
         this._data = data;
+        this.numLayers = 0;
         this.propEditor = new MySystemPropEditor({});
         /**
      * Container DOM element
@@ -81,7 +83,7 @@ var glayer = { name: "foo" };
      */
         this.el = Dom.get(data.parentEl);
 
-        /**
+    /**
      * @property helpPanel
      * @type {YAHOO.widget.Panel}
      */
@@ -107,7 +109,7 @@ var glayer = { name: "foo" };
         console.log("Setting up layer stack, root layer, etc.")
         this.layerStack = [];
         this.rootLayer = new WireIt.Layer(this.options.layerOptions);
-        this.glayer = this.rootLayer
+        this.rootLayer.options.layerNumber = 0;
         this.changeLayer(this.rootLayer);
         
         // Render module list
@@ -115,7 +117,6 @@ var glayer = { name: "foo" };
 
         // Render buttons
         this.renderButtons();
-
     };
 
     MySystemEditor.prototype = {
@@ -206,13 +207,16 @@ var glayer = { name: "foo" };
         onOpenContextFor: function(type,args) {
             module = args[0];
             if (module.has_sub) {
-              if (!module.subSystem) {
-               module.subSystem = new WireIt.Layer(this.rootLayer.options);
+              if (module.subSystem == null) {
+               console.log("Creating a new subsystem for a module: " + module.name);
+               this.numLayers = this.numLayers + 1;
+               var newOpts = Object.clone(this.rootLayer.options);
+               module.subSystem = new WireIt.Layer(newOpts);
+               module.subSystem.options.layerNumber = this.numLayers;
               }
               this.changeLayer(module.subSystem);
             }
         },
-        
         
         removeLayerMap: function(newLayer) {
           console.log("removing layerMap " + newLayer);
@@ -227,21 +231,21 @@ var glayer = { name: "foo" };
           }
         },
         
-        
         addLayerMap: function(newLayer) {
-          console.log("creating layerMap " + newLayer);
+          console.log("creating layerMap " + newLayer.layerMap);
           this.layerStack.push(newLayer);
-          // add listener to layer.layerMap
+          newLayer.layerMap.options.parentEl.appendChild(newLayer.layerMap.element);
+          // add listener to layer.layerMap                    
           Event.addListener(newLayer.layerMap.element, 'mouseup', function (e,args) {
              Event.stopEvent(e);
              this.changeLayer(newLayer);
           }, this, true);
         },
         
-        
         changeLayer: function(newLayer) {
           // if this layer is 'new' we just push it.
           // and add event listeners.
+          console.log("changing to layer number: " + newLayer.options.layerNumber);
           var index = this.layerStack.indexOf(newLayer);
           if(index < 0) {
             this.addLayerMap(newLayer);
@@ -261,18 +265,22 @@ var glayer = { name: "foo" };
           this.setLayer(newLayer)
         },
         
+        
         setLayer:function(newLayer) {
-          var lastLayer = this.layer || this.rootLayer;
-          if (newLayer != this.rootLayer) {
-        	  console.log("new layer is not root layer");
-        	  var parentDom = lastLayer.options.parentEl;
-              lastLayer.el.hide();
-              parentDom.replaceChild(this.layer.el,lastLayer.el);
-          }
+          if (this.layer == null) { this.layer = this.rootLayer;}
+          console.log("Hiding layer number: " + this.layer.options.layerNumber);
+      	  var parentDom = this.layer.options.parentEl;
+          parentDom.replaceChild(newLayer.el,this.layer.el);
+          this.layer.el.hide();
           this.layer = newLayer;
-          glayer = newLayer;
           this.layer.el.show();
-          this.setDDLayer(newLayer);   
+          this.setDDLayer(this.layer);   
+          this.hidePropEditor();
+
+        },
+        
+        hidePropEditor: function() {
+          $('prop_form').hide();
         },
         
      
