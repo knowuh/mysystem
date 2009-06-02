@@ -60,7 +60,6 @@
             pos[0] = pos[0] - layerPos[0];
             pos[1] = pos[1] - layerPos[1];
             this._MySysEditor.addModule(this._module, pos);
-            this._MySysEditor.hidePropEditor();
             this._MySysEditor._data.addInstance({module: this._module, position: pos});
         }
     });
