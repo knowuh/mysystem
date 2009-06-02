@@ -14,11 +14,11 @@ MySystemContainer = function(options, layer) {
    this.has_sub = options.has_sub || false;
    this.subSystem =  null;
    if (options.subsystem_options != null) {
-	   console.log("initializing subsystem");
+	   // console.log("initializing subsystem");
 	   this.subSystem = new WireIt.Layer(options.subsystem_options);
-	   console.log("Successfully initialized layer");
+	   // console.log("Successfully initialized layer");
 	   this.subSystem.setWiring(options.subsystem_wiring);
-	   console.log("successfully set wiring");
+	   // console.log("successfully set wiring");
    }
    this.options.xtype = "MySystemContainer";
    this.propEditor = null;
@@ -46,7 +46,7 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
 	  this.options.fields = this.fields;
 	  this.options.has_sub = this.has_sub;
 	  if (this.subSystem != null) {
-		  console.log("saving subsystem config");
+		  // console.log("saving subsystem config");
 		  this.options.subsystem_options = this.subSystem.options;
 		  this.options.subsystem_wiring = this.subSystem.getWiring();
 	  }

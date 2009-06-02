@@ -26,7 +26,7 @@ MySystemPropEditor.prototype = {
     $('prop_fields').update(fieldText);
   },
   save_values: function() {
-    console.log("prop value changed! for " +this.node.name);
+    // console.log("prop value changed! for " +this.node.name);
     var theForm = $(this.formName);
     this.node.name = $F('name');
     this.node.energy = $F('energy');
@@ -36,7 +36,7 @@ MySystemPropEditor.prototype = {
       this.node.fields[name] = fe.value;
     }.bind(this));
     this.node.has_sub = $F('has_sub')
-    console.log($F('has_sub'));
+    // console.log($F('has_sub'));
   },
   show: function(node) {
     if(this.form_observer !=null) {
