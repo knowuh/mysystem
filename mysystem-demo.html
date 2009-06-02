@@ -20,15 +20,35 @@
   <link rel="stylesheet" type="text/css" href="css/WireItEditor.css" />
   <link rel="stylesheet" type="text/css" href="css/mysystem.css" />
 
-
-  <!-- YUI -->
+  <!-- Prototype -->
   <script type="text/javascript" src="lib/prototype.js"></script>
-  <script type="text/javascript" src="lib/yui/utilities/utilities.js"></script>
-  <script type="text/javascript" src="lib/yui/resize/resize-min.js"></script>
-  <script type="text/javascript" src="lib/yui/layout/layout-min.js"></script>
-  <script type="text/javascript" src="lib/yui/container/container-min.js"></script>
-  <script type="text/javascript" src="lib/yui/json/json-min.js"></script>
-  <script type="text/javascript" src="lib/yui/button/button-min.js"></script>
+  
+  <!--Include YUI Loader: -->
+  <script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader-min.js"></script>
+
+  <!--Use YUI Loader to bring in your other dependencies: -->
+  <script type="text/javascript">
+  // Instantiate and configure YUI Loader:
+  (function() {
+  	var loader = new YAHOO.util.YUILoader({
+  		base: "",
+  		require: ["animation","autocomplete","base","button","container","containercore","cookie","datatable","dom","dragdrop","element","event","fonts","get","grids","imagecropper","imageloader","json","layout","menu","reset","reset-fonts","reset-fonts-grids","resize","selector","stylesheet","utilities","yahoo","yahoo-dom-event","yuiloader","yuiloader-dom-event"],
+  		loadOptional: true,
+  		combine: true,
+  		filter: "MIN",
+  		allowRollup: true,
+  		onSuccess: function() {
+  			//you can make use of all requested YUI modules
+  			//here.
+  		}
+  	});
+
+  // Load the files using the insert() method.
+  loader.insert();
+  })();
+  </script>
+
+
 
   <!-- WireIt -->
   <!--[if IE]><script type="text/javascript" src="lib/excanvas.js"></script><![endif]-->
@@ -43,7 +63,6 @@
   <script type="text/javascript" src="js/wireit/Layer.js"></script>
   <script type="text/javascript" src="js/wireit/util/inputex/FormContainer-beta.js"></script>
   <script type="text/javascript" src="js/wireit/LayerMap.js"></script>
-
   <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
 
 
