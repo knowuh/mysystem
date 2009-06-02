@@ -1,5 +1,3 @@
-var gSubSys = {};
-
 /**
  * MySystem Container. Has an image. and double_click beahvor.
  * @class ImageContainer
@@ -13,15 +11,14 @@ MySystemContainer = function(options, layer) {
    this.name = options.name || "MySystem Container";
    this.icon = options.icon;
    this.fields = options.fields || {'energy': 10};
-   this.has_sub = false;
-   this.subSystem = null;
-   if (options.subsystem != null) {
-	   console.log("initializing subsystem");
-	   this.subSystem = new WireIt.Layer(this.options);
-	   console.log("Successfully initialized layer");
-	   this.subSystem.setWiring(options.subsystem);
-	   console.log("successfully set wiring");
-	   gSubSys = this.subSystem;
+   this.has_sub = options.has_sub || false;
+   this.subSystem =  null;
+   if (options.subsystem_options != null) {
+	   // console.log("initializing subsystem");
+	   this.subSystem = new WireIt.Layer(options.subsystem_options);
+	   // console.log("Successfully initialized layer");
+	   this.subSystem.setWiring(options.subsystem_wiring);
+	   // console.log("successfully set wiring");
    }
    this.options.xtype = "MySystemContainer";
    this.propEditor = null;
@@ -44,10 +41,14 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   },
   
   getConfig: function() {
-	  MySystemContainer.superclass.getConfig.call();
+	  var super_options = MySystemContainer.superclass.getConfig.call();
+	  this.options.name = this.name;
+	  this.options.fields = this.fields;
+	  this.options.has_sub = this.has_sub;
 	  if (this.subSystem != null) {
-		  console.log("saving subsystem config");
-		  this.options.subsystem = this.subSystem.getWiring();
+		  // console.log("saving subsystem config");
+		  this.options.subsystem_options = this.subSystem.options;
+		  this.options.subsystem_wiring = this.subSystem.getWiring();
 	  }
 	  return this.options;
   }
