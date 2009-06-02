@@ -298,18 +298,18 @@ WireIt.Layer.prototype = {
     * @param {Object} wiring layer configuration
     */
    setWiring: function(wiring) {
-	  console.log("removing all containers");
+	  // console.log("removing all containers");
       this.removeAllContainers();
       
       if(YAHOO.lang.isArray(wiring.containers)) {
-    	  console.log("got containers array");
+    	  // console.log("got containers array");
          for(var i = 0 ; i < wiring.containers.length ; i++) {
             this.addContainer(wiring.containers[i]);
          }
       }
       if(YAHOO.lang.isArray(wiring.wires)) {
          for(var i = 0 ; i < wiring.wires.length ; i++) {
-        	console.log("got wires array");
+        	// console.log("got wires array");
             this.addWire(wiring.wires[i]);
          }
        }
