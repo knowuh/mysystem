@@ -401,8 +401,8 @@
         * @method onSave
         */
         onSave: function() {
-        	// console.log("Save clicked");
-            this.save();
+         // console.log("Save clicked");
+          this.save();
         },
 
         /**
@@ -411,7 +411,7 @@
         * TODO: Actually save something!
         */
         save: function() {
-        	console.log([this.rootLayer.getWiring()].toJSON());
+        // 	console.log([this.rootLayer.getWiring()].toJSON());
         	
         	var postUrl = this.options.dataDir;
         	if (this.options.modelId != null) {
@@ -419,11 +419,11 @@
         	}
 
         	var xmlhttp = HTTP.newRequest();
-        	xmlhttp.open('PUT', this.options.dataDir, false);
+        	xmlhttp.open('PUT', postUrl, false);
         	xmlhttp.send([this.rootLayer.getWiring()].toJSON());
         	
         	if (this.options.modelId == null) {
-        	  this.options.modelId = eval(xmlhttp.responseText);
+            this.options.modelId  = eval(xmlhttp.responseText);
         	}
         	alert("Your model was saved with the ID: " + this.options.modelId);
         },
