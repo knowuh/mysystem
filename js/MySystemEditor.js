@@ -448,7 +448,7 @@
          	
          	this.options.modelId = prompt("Enter the model ID for the model you wish to load: ", this.options.modelId);
          	
-         	HTTP.getText(this.options.dataUrl + "/" + this.options.modelId, this, callback);
+         	HTTP.getText(this.options.dataDir + "/" + this.options.modelId, this, callback);
          },
 
         /**
