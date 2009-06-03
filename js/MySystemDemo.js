@@ -14,6 +14,30 @@ var testData = [
     image: "./images/egg-transp-70.png",
     xtype: "MySystemContainer",
     icon: "./images/egg-transp-70.png"
+  },
+  {
+    name: "burner", 
+    image: "./images/burner-transp-70.png",
+    xtype: "MySystemContainer",
+    icon: "./images/burner-transp-70.png"
+  },
+  {
+    name: "pot", 
+    image: "./images/pot-70.png",
+    xtype: "MySystemContainer",
+    icon: "./images/pot-70.png"
+  },
+  {
+    name: "power-plant", 
+    image: "./images/power-plant-70.png",
+    xtype: "MySystemContainer",
+    icon: "./images/power-plant-70.png"
+  },
+  {
+    name: "water", 
+    image: "./images/water-70.png",
+    xtype: "MySystemContainer",
+    icon: "./images/water-70.png"
   }
 ];
 
