@@ -10,7 +10,7 @@ MySystemContainer = function(options, layer) {
    MySystemContainer.superclass.constructor.call(this, options, layer);
    this.title = options.name || "MySystem Container";
    this.icon = options.icon;
-   this.fields = options.fields || {'energy': 10};
+   this.options.fields = options.fields || {'name': options.name, 'energy': 10};
    this.has_sub = options.has_sub || false;
    this.subSystem =  null;
    if (options.subsystem_options != null) {
@@ -22,7 +22,7 @@ MySystemContainer = function(options, layer) {
    }
    this.options.xtype = "MySystemContainer";
    this.propEditor = null;
-   this.openEditorFor = 
+
    // Adds a handler for mousedown so we can change layers in our editor
    YAHOO.util.Event.addListener(this.el, "dblclick", this.onDblClick, this, true);
    YAHOO.util.Event.addListener(this.el, "mouseup", this.onMouseUp, this, true);   
@@ -67,12 +67,16 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
       this_el.insert(title_el);
       title_el.update(this.title);
     }
+    
+  },
+  updateFields: function() {
+    console.log($H(this.options.fields).inspect());
+    this.setTitle(this.options.fields.name);
   },
   
   getConfig: function() {
 	  var super_options = MySystemContainer.superclass.getConfig.call();
 	  this.options.name = this.title;
-	  this.options.fields = this.fields;
 	  this.options.has_sub = this.has_sub;
 	  if (this.subSystem != null) {
 		  // console.log("saving subsystem config");

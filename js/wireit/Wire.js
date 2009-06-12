@@ -38,7 +38,10 @@ WireIt.Wire = function( terminal1, terminal2, parentEl, options) {
    
    // Create the canvas element and append it to parentEl
    WireIt.Wire.superclass.constructor.call(this, this.parentEl);
-   
+  
+    // enable text features:
+
+  
    // CSS classname
    YAHOO.util.Dom.addClass(this.element, this.options.className);
    
@@ -80,7 +83,10 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       this.options.borderwidth = options.borderwidth || 1;
       this.options.color = options.color || 'rgb(173, 216, 230)';
       this.options.bordercolor = options.bordercolor || '#0000ff';
-      this.fields = this.options;
+      this.options.fields = {
+       'name': 'untitled',
+       'width': this.options.width 
+      };
    },
    
    /**
@@ -165,6 +171,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       this.SetCanvasRegion(min[0],min[1],lw,lh);
    
       var ctxt = this.getContext();
+      
       for(var i = 0 ; i<bezierPoints.length ; i++){
          bezierPoints[i][0] = bezierPoints[i][0]-min[0];
          bezierPoints[i][1] = bezierPoints[i][1]-min[1];
@@ -293,6 +300,20 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       ctxt.moveTo(bezierPoints[0][0],bezierPoints[0][1]);
       ctxt.bezierCurveTo(bezierPoints[1][0],bezierPoints[1][1],bezierPoints[2][0],bezierPoints[2][1],bezierPoints[3][0],bezierPoints[3][1]+arrowLength/2*this.terminal2.options.direction[1]);
       ctxt.stroke();
+      
+      // lets draw the text:
+      if (this.options.fields.name) {
+        var center = {x:0,y:0};
+        var x1 = bezierPoints[0][0] < bezierPoints[3][0] ? bezierPoints[0][0] : bezierPoints[3][0];
+        var x2 = bezierPoints[0][0] < bezierPoints[3][0] ? bezierPoints[3][0] : bezierPoints[0][0];
+        var y1 = bezierPoints[0][1] < bezierPoints[3][1] ? bezierPoints[0][1] : bezierPoints[3][1];
+        var y2 = bezierPoints[0][1] < bezierPoints[3][1] ? bezierPoints[3][1] : bezierPoints[0][1];
+        
+        center.x =  x1 + x2 / 2;
+        center.y =  y1 + y2 / 2;  
+        CanvasTextFunctions.enable(ctxt);
+        ctxt.drawTextCenter("sans", 18, center.x, center.y, this.options.fields.name);
+      }
 
 	//Variables from drawArrows
 	//var t1 = p1;
@@ -569,7 +590,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @return {Boolean} true if the wire is at x,y
     */
    wireDrawnAt: function(x,y) {
-      var ctxt = this.getContext();
+     var ctxt = this.getContext();
 	   var imgData = ctxt.getImageData(x,y,1,1);
 	   var pixel = imgData.data;
 	   return !( pixel[0] == 0 && pixel[1] == 0 && pixel[2] == 0 && pixel[3] == 0 );
@@ -601,7 +622,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
 	   else {
 	      if(this.mouseInState) {
 	         this.mouseInState=false;
-			   this.onWireOut(x,y);
+	         this.onWireOut(x,y);
 	      }
 	   }
       
@@ -616,6 +637,20 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     */
    onWireMove: function(x,y) {
       // console.log("onWireMove",x,y);
+   },
+   
+   updateFields: function() {
+     var new_width = parseInt(this.options.fields.width);
+     if ((new_width!= NaN) && new_width > 0 && new_width < 50) {
+       this.options.width = new_width;
+       this.options.fields.width = new_width;
+       console.log("set width to " + this.options.fields.width)
+     }
+     else {
+       this.options.fields.width = this.options.width;
+     }
+     this.options.name = this.options.fields.name;
+     this.redraw();
    },
    
    /**
@@ -668,12 +703,14 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @param {Integer} y top position of the mouse (relative to the canvas)
     */
    onWireClick: function(x,y) {
- 	   // console.log("onWireClick",x,y);
-		wd = this.options.width;
-		nwd = wd + 2;
-		this.options.width = nwd;
-		this.redraw();
-		// console.log("New Wire Width = ", nwd);
+     WireIt.Wire.openPropEditorFor.fire(this);
+     this.redraw;
+    //       // console.log("onWireClick",x,y);
+    // wd = this.options.width;
+    // nwd = wd + 2;
+    // this.options.width = nwd;
+    // this.redraw();
+    // // console.log("New Wire Width = ", nwd);
    },
 
    onWireDblClick: function(x,y) {
