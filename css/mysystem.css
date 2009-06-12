@@ -68,4 +68,78 @@ div.title {
  float: left;
 }
 
+
+#palette {
+  display: block;
+  width: auto;
+  height: auto;
+  float: left;
+  clear: both;
+  text-align: center;
+  background-color: white;
+  border: 1px solid black;
+  margin: 2px;
+  padding: 2px;
 }
+
+.color1 {
+  display: block;
+  width: 20px;
+  height: 20px;
+  float: left;
+  clear: none;
+  background-color: #490A3D;
+  border: 1px solid gray;
+  margin: 2px;
+  padding: 0px;
+}
+
+.color2 {
+  display: block;
+  width: 20px;
+  height: 20px;
+  float: left;
+  clear: none;
+  background-color: #BD1550;
+  border: 1px solid gray;
+  margin: 2px;
+  padding: 0px;
+}
+.color3 {
+  display: block;
+  width: 20px;
+  height: 20px;
+  float: left;
+  clear: none;
+  background-color: #E97F02;
+  border: 1px solid gray;
+  margin: 2px;
+  padding: 0px;
+}
+.color4 {
+  display: block;
+  width: 20px;
+  height: 20px;
+  float: left;
+  clear: none;
+  background-color: #F8CA00;
+  border: 1px solid gray;
+  margin: 2px;
+  padding: 0px;
+}
+.color5 {
+  display: block;
+  width: 20px;
+  height: 20px;
+  float: left;
+  clear: none;
+  background-color: #8A9B0F;
+  border: 1px solid gray;
+  margin: 2px;
+  padding: 0px;
+}
+.selected {
+  border: 2px solid black;
+}
+
+

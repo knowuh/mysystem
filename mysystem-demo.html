@@ -79,13 +79,27 @@
 	
 	<div id="right">
 		  <div id="prop_form" display="hidden">
-		    <h3><span id="prop_name"></span></h3>
-		    <form id="prop_form_form">
-  		    <div id="prop_fields"></div>
-  		  </form>
+  		    <h3><span id="prop_name"></span></h3>
+  		    <form id="prop_form_form">
+    		    <div id="prop_fields"></div>
+    		  <div id="palette">
+    		    <h2>wire color:</h2>
+    		    <div>
+      		    <div is="color1" class="color1"></div>
+      		    <div id="color2" class="color2 selected"></div>
+      		    <div id="color3" class="color3"></div>
+      		    <div id="color4" class="color4"></div>
+      		    <div id="color5" class="color5"></div>
+      		  </div>
+    		  </div>
+    		    <input id="color" type="hidden" name="color" value="#FFAAAA">
+    		</form>
 		  </div>
-		<h2>Minimap</h2>
-		<div id="layerMap"></div>
+		  <br/>
+		
+		<div id="layerMap">
+		  <h2>Minimap</h2>
+		</div>
 		<div style="font-size: 14px; padding: 10px 10px 0px 10px;"><b>MySystem Pre-prototype Demo</b></div>
 		<div id="Explanation" style="padding: 10px 10px 10px 20px; font-size: 12px">
 			<p>To try the demo out,

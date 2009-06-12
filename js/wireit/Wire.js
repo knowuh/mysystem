@@ -81,11 +81,12 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       this.options.bordercap = options.bordercap || 'round';
       this.options.width = options.width || 3;
       this.options.borderwidth = options.borderwidth || 1;
-      this.options.color = options.color || 'rgb(173, 216, 230)';
+      this.options.color = options.color || '#3366CC';
       this.options.bordercolor = options.bordercolor || '#0000ff';
       this.options.fields = {
-       'name': 'untitled',
-       'width': this.options.width 
+       'name': 'flow',
+       'width': this.options.width,
+       'color': this.options.color
       };
    },
    
@@ -302,6 +303,8 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       ctxt.stroke();
       
       // lets draw the text:
+      // TODO: Move elsewheere
+      // TODO: Find a point closer to the curve, instead middlepoint of terminals.
       if (this.options.fields.name) {
         var center = {x:0,y:0};
         var x1 = bezierPoints[0][0] < bezierPoints[3][0] ? bezierPoints[0][0] : bezierPoints[3][0];
@@ -311,8 +314,11 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
         
         center.x =  x1 + x2 / 2;
         center.y =  y1 + y2 / 2;  
+        var lastFillStyle = ctxt.fillStyle;
+        ctxt.fillStyle = this.options.bordercolor;
         CanvasTextFunctions.enable(ctxt);
         ctxt.drawTextCenter("sans", 18, center.x, center.y, this.options.fields.name);
+        ctxt.fillStyle = lastFillStyle;
       }
 
 	//Variables from drawArrows
@@ -644,12 +650,12 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
      if ((new_width!= NaN) && new_width > 0 && new_width < 50) {
        this.options.width = new_width;
        this.options.fields.width = new_width;
-       console.log("set width to " + this.options.fields.width)
      }
      else {
        this.options.fields.width = this.options.width;
      }
      this.options.name = this.options.fields.name;
+     this.options.color = this.options.fields.color;
      this.redraw();
    },
    
@@ -661,7 +667,8 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @param {Integer} y top position of the mouse (relative to the canvas)
     */
    onWireIn: function(x,y) {
-      this.options.color = 'rgb(255, 0, 0)';
+      this.options.last_color = this.options.color;
+      this.options.color = "#FF0000";
       this.redraw();
    },
    
@@ -673,7 +680,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @param {Integer} y top position of the mouse (relative to the canvas)
     */
    onWireOut: function(x,y) {
-      this.options.color = 'rgb(173, 216, 230)';
+      this.options.color = this.options.last_color || "#FF00000";
       this.redraw();
    },
    
