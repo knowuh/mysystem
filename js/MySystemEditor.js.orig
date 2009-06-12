@@ -188,8 +188,6 @@
             
             MySystemContainer.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
             MySystemContainer.openContextFor.subscribe(this.onOpenContextFor,this,true);
-            
-            WireIt.Wire.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
         },
 
         /**
@@ -350,8 +348,7 @@
                 module.position = pos;
                 module.title = module.name;
                 module.layer = this.layer;
-                var container = this.layer.addContainer(module); 
-                container.setTitle(module.title);
+                var container = this.layer.addContainer(module);                    
                 Dom.addClass(container.el, "WiringEditor-module-" + module.name);
             }
             catch(ex) {
@@ -426,7 +423,11 @@
         	xmlhttp.send([this.rootLayer.getWiring()].toJSON());
         	
         	if (this.options.modelId == null) {
-            this.options.modelId  = eval(xmlhttp.responseText);
+<<<<<<< HEAD:js/MySystemEditor.js
+        	  this.options.modelId = xmlhttp.responseText;
+=======
+        	  this.options.modelId = eval(xmlhttp.responseText);
+>>>>>>> a806c8f5627384c5ec1309aa8b881c5c20d0614d:js/MySystemEditor.js
         	}
         	alert("Your model was saved with the ID: " + this.options.modelId);
         },

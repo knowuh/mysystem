@@ -8,7 +8,7 @@
  */
 MySystemContainer = function(options, layer) {
    MySystemContainer.superclass.constructor.call(this, options, layer);
-   this.name = options.name || "MySystem Container";
+   this.title = options.name || "MySystem Container";
    this.icon = options.icon;
    this.fields = options.fields || {'energy': 10};
    this.has_sub = options.has_sub || false;
@@ -40,9 +40,38 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     }
   },
   
+  setTitle: function(newTitle) {
+    if(newTitle) {
+      var this_el = this.el
+      var title_el = $(this_el).down('.title')
+      this.title = newTitle;
+      this.options.name = this.title;
+      if(!title_el) {
+        title_el = this.createTitle()
+        this_el.insert(title_el);
+      }
+      title_el.update(this.title);
+    }
+  },
+  createTitle: function() {
+    return new Element('div', { 
+      class: 'title' 
+    });
+  },
+  render: function() {
+    MySystemContainer.superclass.render.call(this);
+    var this_el = this.el
+    var title_el = $(this_el).down('.title') 
+    if(!title_el) {
+      title_el = this.createTitle()
+      this_el.insert(title_el);
+      title_el.update(this.title);
+    }
+  },
+  
   getConfig: function() {
 	  var super_options = MySystemContainer.superclass.getConfig.call();
-	  this.options.name = this.name;
+	  this.options.name = this.title;
 	  this.options.fields = this.fields;
 	  this.options.has_sub = this.has_sub;
 	  if (this.subSystem != null) {

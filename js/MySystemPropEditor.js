@@ -16,19 +16,19 @@ MySystemPropEditor.prototype = {
     var subsTmpl = new Template ('<div class="inputBox"><label for="has_sub">sub systems?</label><input type="checkbox" #{checked} name="has_sub" value="1" id="has_sub"></div>')
     var fieldTmpl = new Template('<div class="inputBox"><label for="#{name}">#{name}</label><input type="text" name="#{name}" value="#{value}" id="#{name}"></div>');
     var fields = [];
-    fields.push (fieldTmpl.evaluate({name: "name", value: this.node.name}));
+    fields.push (fieldTmpl.evaluate({name: "name", value: this.node.title}));
     $H(this.node.fields).keys().each(function (name) {
       fields.push (fieldTmpl.evaluate({name: name, value: this.node.fields[name]}));
     }.bind(this));
     fields.push (subsTmpl.evaluate({checked: (this.node.has_sub ? 'checked="true"' : '')}));
     var fieldText = fields.join("<br/>")
-    $('prop_name').update("properties for " + this.node.name);
+    $('prop_name').update("properties for " + this.node.title);
     $('prop_fields').update(fieldText);
   },
   save_values: function() {
     // console.log("prop value changed! for " +this.node.name);
     var theForm = $(this.formName);
-    this.node.name = $F('name');
+    this.node.setTitle($F('name'));
     this.node.energy = $F('energy');
     var fieldNames = $H(this.node.fields).keys();
     theForm.getInputs('text',[fieldNames]).each(function (fe) {

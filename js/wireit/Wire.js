@@ -1,3 +1,4 @@
+
 /**
  * The wire widget that uses a canvas to render
  * @class Wire
@@ -79,6 +80,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       this.options.borderwidth = options.borderwidth || 1;
       this.options.color = options.color || 'rgb(173, 216, 230)';
       this.options.bordercolor = options.bordercolor || '#0000ff';
+      this.fields = this.options;
    },
    
    /**
@@ -676,12 +678,12 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
 
    onWireDblClick: function(x,y) {
  	   // console.log("onWireDblClick",x,y);
-		this.options.width = 3;
+		// this.options.width = 3;
+    WireIt.Wire.openPropEditorFor.fire(this);
 		this.redraw;
    }
-   
-	
-
-
 });
 
+
+// register some events for others to subscribe to:
+WireIt.Wire.openPropEditorFor  = new YAHOO.util.CustomEvent("OpenWireEditorFor");

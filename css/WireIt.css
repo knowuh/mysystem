@@ -48,6 +48,7 @@ div.WireIt-Terminal-dropinvite {
  * Containers
  */
 div.WireIt-Container {
+  display: block;
    position: absolute;
  	z-index: 5;
  	opacity: 0.8;

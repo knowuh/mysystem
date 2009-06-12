@@ -2,7 +2,7 @@ div.WireIt-ImageContainer {
 	width: auto; /* Prevent the modules from scratching on the right */
 	height: auto;
 }
-
+// huh?
 div.WireIt-Container div.inputEx-Group div.inputEx-label {
 	width: auto;
 }
@@ -11,12 +11,9 @@ div.inputEx-TypeField-PropertiesPanel {
 	z-index: 7;
 }
 
-
-
 div.WireIt-Container.WiringEditor-module-comment div.body {
 	background-color: #EEEE66;
 }
-
 
 div.WireIt-Container.WiringEditor-module-comment div.body textarea {
 	background-color: transparent;
@@ -51,6 +48,14 @@ div.inputBox {
   float: left;
   width: 100%;
   clear: both;
+}
+
+div.title {
+  display: block;  
+  position: relative;
+  font-size: 18px;
+  float: left;
+  z-order: 10;
 }
 
 #prop_form {
