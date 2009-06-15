@@ -1,3 +1,18 @@
+// monkey patch string...
+String.prototype.parseColor = function() {  
+  var color = '#';  
+  if(this.slice(0,4) == 'rgb(') {  
+    var cols = this.slice(4,this.length-1).split(',');  
+    var i=0; do { color += parseInt(cols[i]).toColorPart() } while (++i<3);  
+  } else {  
+    if(this.slice(0,1) == '#') {  
+      if(this.length==4) for(var i=1;i<4;i++) color += (this.charAt(i) + this.charAt(i)).toLowerCase();
+
+      if(this.length==7) color = this.toLowerCase();  
+    }  
+  }  
+  return(color.length==7 ? color : (arguments[0] || this));  
+}
 
 /**
  * The wire widget that uses a canvas to render
@@ -81,12 +96,12 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       this.options.bordercap = options.bordercap || 'round';
       this.options.width = options.width || 3;
       this.options.borderwidth = options.borderwidth || 1;
-      this.options.color = options.color || '#3366CC';
+      this.options.color = options.color || '#BD1550';
       this.options.bordercolor = options.bordercolor || '#0000ff';
       this.options.fields = {
        'name': 'flow',
        'width': this.options.width,
-       'color': this.options.color
+       'color': 'color2'
       };
    },
    
@@ -667,7 +682,11 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
        this.options.fields.width = this.options.width;
      }
      this.options.name = this.options.fields.name;
-     this.options.color = this.options.fields.color;
+     // try selecting by dom_id 
+     if ($(this.options.fields.color)) {
+       var color = $(this.options.fields.color).getStyle('background-color').parseColor("#00000");
+       this.options.color = color;
+     }
      this.redraw();
    },
    

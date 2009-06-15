@@ -82,7 +82,7 @@ div.title {
   padding: 2px;
 }
 
-.color1 {
+#color1 {
   display: block;
   width: 20px;
   height: 20px;
@@ -94,7 +94,7 @@ div.title {
   padding: 0px;
 }
 
-.color2 {
+#color2 {
   display: block;
   width: 20px;
   height: 20px;
@@ -105,7 +105,7 @@ div.title {
   margin: 2px;
   padding: 0px;
 }
-.color3 {
+#color3 {
   display: block;
   width: 20px;
   height: 20px;
@@ -116,7 +116,7 @@ div.title {
   margin: 2px;
   padding: 0px;
 }
-.color4 {
+#color4 {
   display: block;
   width: 20px;
   height: 20px;
@@ -127,7 +127,7 @@ div.title {
   margin: 2px;
   padding: 0px;
 }
-.color5 {
+#color5 {
   display: block;
   width: 20px;
   height: 20px;
@@ -139,7 +139,7 @@ div.title {
   padding: 0px;
 }
 .selected {
-  border: 2px solid black;
+  border: 2px solid black !important;
 }
 
 
