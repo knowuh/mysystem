@@ -19,6 +19,8 @@ MySystemContainer = function(options, layer) {
 	   // console.log("Successfully initialized layer");
 	   this.subSystem.setWiring(options.subsystem_wiring);
 	   // console.log("successfully set wiring");
+     // tell the editor about the new layer.
+	   MySystemContainer.openContextFor.fire(this);
    }
    this.options.xtype = "MySystemContainer";
    this.propEditor = null;
@@ -83,7 +85,8 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
 		  this.options.subsystem_options = this.subSystem.options;
 		  this.options.subsystem_wiring = this.subSystem.getWiring();
 	  }
-	  return this.options;
+	  // use prototype merge to respolve options.
+	  return $H(super_options).merge($H(this.options));
   }
 });
 
