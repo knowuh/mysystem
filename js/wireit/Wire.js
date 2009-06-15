@@ -306,18 +306,30 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       // TODO: Move elsewheere
       // TODO: Find a point closer to the curve, instead middlepoint of terminals.
       if (this.options.fields.name) {
-        var center = {x:0,y:0};
-        var x1 = bezierPoints[0][0] < bezierPoints[3][0] ? bezierPoints[0][0] : bezierPoints[3][0];
-        var x2 = bezierPoints[0][0] < bezierPoints[3][0] ? bezierPoints[3][0] : bezierPoints[0][0];
-        var y1 = bezierPoints[0][1] < bezierPoints[3][1] ? bezierPoints[0][1] : bezierPoints[3][1];
-        var y2 = bezierPoints[0][1] < bezierPoints[3][1] ? bezierPoints[3][1] : bezierPoints[0][1];
-        
-        center.x =  x1 + x2 / 2;
-        center.y =  y1 + y2 / 2;  
-        var lastFillStyle = ctxt.fillStyle;
-        ctxt.fillStyle = this.options.bordercolor;
         CanvasTextFunctions.enable(ctxt);
-        ctxt.drawTextCenter("sans", 18, center.x, center.y, this.options.fields.name);
+        var center = {x:0,y:0};
+        var x1 = bezierPoints[0][0];
+        var x2 = bezierPoints[3][0];
+        var y1 = bezierPoints[0][1];
+        var y2 = bezierPoints[3][1]
+        
+        var fontSize=14;
+        center.x =  (x1 + x2) / 2;
+        center.y =  ((y1 + y2) / 2) + (60 * this.terminal2.options.direction[1]);
+        var padding = 8;
+        var hp = padding/2;
+        var tWidth = ctxt.measureText("sans", fontSize,this.options.fields.name) + padding;
+        var desc = ctxt.fontDescent("sans",fontSize) + hp;
+        var asc = ctxt.fontAscent("sans",fontSize) + hp;
+        var tHeight = desc+asc;
+        
+        var lastFillStyle = ctxt.fillStyle;
+        ctxt.fillStyle = "rgba(255,255,255,0.85)";
+        ctxt.fillRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
+        
+        ctxt.fillStyle = this.options.bordercolor;
+        ctxt.strokeRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
+        ctxt.drawTextCenter("sans", fontSize, center.x-hp, center.y-hp, this.options.fields.name);
         ctxt.fillStyle = lastFillStyle;
       }
 
