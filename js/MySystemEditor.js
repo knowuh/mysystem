@@ -188,7 +188,7 @@
             
             MySystemContainer.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
             MySystemContainer.openContextFor.subscribe(this.onOpenContextFor,this,true);
-            
+            WireIt.Container.eventAddWire.subscribe(this.onOpenPropEditorFor,this,true);
             WireIt.Wire.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
         },
 
