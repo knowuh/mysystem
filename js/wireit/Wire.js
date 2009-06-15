@@ -339,13 +339,20 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
         var tHeight = desc+asc;
         
         var lastFillStyle = ctxt.fillStyle;
+        var lastWidth = ctxt.lineWidth;
+        var lastStrokeStyle = ctxt.strokeStyle;
+        
+        ctxt.lineWidth=1;
         ctxt.fillStyle = "rgba(255,255,255,0.85)";
         ctxt.fillRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
         
-        ctxt.fillStyle = this.options.bordercolor;
+        ctxt.fillStyle = this.options.color;
         ctxt.strokeRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
         ctxt.drawTextCenter("sans", fontSize, center.x-hp, center.y-hp, this.options.fields.name);
+        
         ctxt.fillStyle = lastFillStyle;
+        ctxt.lineWidth = lastWidth;
+        ctxt.strokeStyle = lastStrokeStyle;
       }
 
 	//Variables from drawArrows
