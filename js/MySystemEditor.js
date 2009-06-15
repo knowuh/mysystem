@@ -101,15 +101,9 @@
         this.layout = new widget.Layout(this.el, this.options.layoutOptions);
         this.layout.render();
 
-        /**
-       * @property layer
-       * @type {WireIt.Layer}
-       */
-        // console.log("Setting up layer stack, root layer, etc.")
-        this.layerStack = [];
-        this.rootLayer = new WireIt.Layer(this.options.layerOptions);
-        this.rootLayer.options.layerNumber = 0;
-        this.changeLayer(this.rootLayer);
+
+        // create new layer-map.
+        this.resetLayers();
         
         // Render module list
         this.buildModulesList();
@@ -192,6 +186,22 @@
             WireIt.Wire.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
         },
 
+        resetLayers: function() {
+          if (this.layerStack && this.layerStack.size > 0) {
+            for(var i = 0; i < this.layerStack.size();i++) {
+              l = this.layerStack[i];
+              this.layerStack[i] = null;
+              this.removeLayerMap(l);
+            }
+          }
+          this.numLayers = 0;
+          // console.log("Setting up layer stack, root layer, etc.")
+          this.layerStack = [];
+          this.rootLayer = new WireIt.Layer(this.options.layerOptions);
+          this.rootLayer.options.layerNumber = 0;
+          this.changeLayer(this.rootLayer);
+         },
+         
         /**
         * Open the properties editor for this container
         *
@@ -445,6 +455,7 @@
          	var callback = function(text, context) {
 	         	var obj = eval(text);
 	         	// console.log("got object: " + obj[0].containers[0]);
+	         	context.resetLayers();
 	         	context.rootLayer.setWiring(obj[0]);
 	         	// console.log("done loading.");
          	};
