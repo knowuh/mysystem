@@ -300,13 +300,13 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       }
 
       // Draw the border
-      ctxt.lineCap = this.options.bordercap;
-      ctxt.strokeStyle = this.options.bordercolor;
-      ctxt.lineWidth = this.options.width+this.options.borderwidth*2;
-      ctxt.beginPath();
-      ctxt.moveTo(bezierPoints[0][0],bezierPoints[0][1]);
-      ctxt.bezierCurveTo(bezierPoints[1][0],bezierPoints[1][1],bezierPoints[2][0],bezierPoints[2][1],bezierPoints[3][0],bezierPoints[3][1]+arrowLength/2*this.terminal2.options.direction[1]);
-      ctxt.stroke();
+      // ctxt.lineCap = this.options.bordercap;
+      // ctxt.strokeStyle = this.options.bordercolor;
+      // ctxt.lineWidth = this.options.width+this.options.borderwidth*2;
+      // ctxt.beginPath();
+      // ctxt.moveTo(bezierPoints[0][0],bezierPoints[0][1]);
+      // ctxt.bezierCurveTo(bezierPoints[1][0],bezierPoints[1][1],bezierPoints[2][0],bezierPoints[2][1],bezierPoints[3][0],bezierPoints[3][1]+arrowLength/2*this.terminal2.options.direction[1]);
+      // ctxt.stroke();
 
       // Draw the inner bezier curve
       ctxt.lineCap = this.options.cap;
@@ -418,15 +418,15 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
    	ctxt.lineTo(x2,y2);
    	ctxt.fill();
 
-   	//triangle border	
-   	ctxt.strokeStyle = this.options.bordercolor;
-   	ctxt.lineWidth = this.options.borderwidth;
-   	ctxt.beginPath();
-   	ctxt.moveTo(t2[0],t2[1]);
-   	ctxt.lineTo(x1,y1);
-   	ctxt.lineTo(x2,y2);
-   	ctxt.lineTo(t2[0],t2[1]);
-   	ctxt.stroke();
+    // //triangle border  
+    // ctxt.strokeStyle = this.options.bordercolor;
+    // ctxt.lineWidth = this.options.borderwidth;
+    // ctxt.beginPath();
+    // ctxt.moveTo(t2[0],t2[1]);
+    // ctxt.lineTo(x1,y1);
+    // ctxt.lineTo(x2,y2);
+    // ctxt.lineTo(t2[0],t2[1]);
+    // ctxt.stroke();
 
    },
 
