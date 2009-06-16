@@ -51,8 +51,8 @@ div.WireIt-Container {
   display: block;
    position: absolute;
  	z-index: 5;
- 	opacity: 0.8;
- 	filter: alpha(opacity = 80);
+ 	opacity: 1;
+ 	filter: alpha(opacity = 100);
    border: 0; /* Changing this value causes positioning issues */
    font-size: 8pt;
 }
@@ -122,14 +122,23 @@ div.WireIt-Container-focused {
 /**
  * ImageContainer
  */
-
 div.WireIt-ImageContainer div.body {	
-	width: 128px;
-	height: 60px;
+	width: 80px;
+	height: 80px;
 	background-color: transparent;
 	background-repeat: no-repeat;
-	border: 0;
+	text-align: center;
+	border: 2px solid transparent;
+	padding: 2px;
 	cursor: move;
+}
+
+div.WireIt-ImageContainer div.body:hover {
+  border: 2px solid #DDD;
+}
+
+div.WireIt-ImageContainer div.body div.selected {
+  border: 2px solid #888;
 }
 
 div.WireIt-ImageContainer div.WireIt-Container-closebutton {
