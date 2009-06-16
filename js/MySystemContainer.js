@@ -57,7 +57,7 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   },
   createTitle: function() {
     return new Element('div', { 
-      class: 'title' 
+      'class': 'title' 
     });
   },
   render: function() {
