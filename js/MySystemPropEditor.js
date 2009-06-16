@@ -26,7 +26,12 @@ MySystemPropEditor.prototype = {
     }.bind(this));
     fields.push (subsTmpl.evaluate({checked: (this.node.has_sub ? 'checked="true"' : '')}));
     var fieldText = fields.join("<br/>")
-    $('prop_name').update("properties for " + this.node.title);
+    if (this.node.title) {
+      $('prop_name').update("properties for " + this.node.title);
+    }
+    else {
+      $('prop_name').update("properties for wire");
+    }
     $('prop_fields').update(fieldText);
   },
   save_values: function() {
@@ -35,7 +40,7 @@ MySystemPropEditor.prototype = {
     theForm.getInputs('text').each(function (fe) {
       this.node.options.fields[fe.name] = fe.value;
     }.bind(this));
-    console.log("set color "+ this.selected_color);
+    debug("set color "+ this.selected_color);
     if (this.node.options.fields.color) {
       this.node.options.fields.color = this.selected_color;
     }
@@ -78,6 +83,16 @@ MySystemPropEditor.prototype = {
     }
     else {
       $('palette').hide();
+    }
+    if (this.node.options.icon) {
+      if($('icon_spot')) {
+        $('icon_spot').update('<img src="' + this.node.options.icon + '" alt="icon" class="icon"/></br>');
+      }
+    }
+    else {
+      if($('icon_spot')) {
+        $('icon_spot').update('');
+      }
     }
   }
   
