@@ -60,7 +60,6 @@
             pos[0] = pos[0] - layerPos[0];
             pos[1] = pos[1] - layerPos[1];
             this._MySysEditor.addModule(this._module, pos);
-            this._MySysEditor._data.addInstance({module: this._module, position: pos});
         }
     });
 
@@ -100,10 +99,6 @@
      */
         this.layout = new widget.Layout(this.el, this.options.layoutOptions);
         this.layout.render();
-
-
-        // create new layer-map.
-        this.resetLayers();
         
         // Render module list
         this.buildModulesList();
@@ -184,22 +179,26 @@
             MySystemContainer.openContextFor.subscribe(this.onOpenContextFor,this,true);
             WireIt.Container.eventAddWire.subscribe(this.onOpenPropEditorFor,this,true);
             WireIt.Wire.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
+            // create new layer-map.
+            this.resetLayers();
         },
 
         resetLayers: function() {
           if (this.layerStack && this.layerStack.size > 0) {
             for(var i = 0; i < this.layerStack.size();i++) {
-              var l = this.layerStack[i];
-              this.layerStack[i] = null;
-              this.removeLayerMap(l);
+              this.removeLayer(this.layerStack[i]);
             }
           }
+          if (this.layer) {
+            this.removeLayer(this.layer);
+          }
+          
+          if (this.rootLayer) {
+            this.removeLayer(this.rootLayer);
+          }
           this.numLayers = 0;
-          // debug("Setting up layer stack, root layer, etc.")
           this.layerStack = [];
-          this.rootLayer = new WireIt.Layer(this.options.layerOptions);
-          this.rootLayer.options.layerNumber = 0;
-          this.layer = this.rootLayer;
+          this.rootLayer = this.addLayer();
           this.changeLayer(this.rootLayer);
          },
          
@@ -220,33 +219,34 @@
             module = args[0];
             if (module.has_sub) {
               if (module.subSystem == null) {
-               // debug("Creating a new subsystem for a module: " + module.name);
-               this.numLayers = this.numLayers + 1;
-               var newOpts = Object.clone(this.rootLayer.options);
-               module.subSystem = new WireIt.Layer(newOpts);
-               module.subSystem.options.layerNumber = this.numLayers;
+                module.subSystem = this.addLayer();
               }
               this.changeLayer(module.subSystem);
             }
         },
-        
+
         removeLayerMap: function(newLayer) {
-          // debug("removing layerMap " + newLayer);
           try {
-            // remove listener on layerMap element
             Event.removeListener(newLayer.layerMap.element, 'mouseup');
-            // remove the layers layerMap from the dom:
             newLayer.layerMap.options.parentEl.removeChild(newLayer.layerMap.element);
-            newLayer.removeAllContainers();
-            newlayer = null;
+            if (this.layerStack.indexOf(newLayer)) {
+              this.layerStack[this.layerStack.indexOf(newLayer)]= null;
+            }
           }
           catch (e) {
-            // debug("error removing layer: " + e);
+            debug("error removing layer: " + e);
           }
         },
         
+        removeLayer: function(newLayer) {
+          this.numLayers = this.numLayers - 1;
+          this.removeLayerMap(newLayer);
+          newLayer.removeAllContainers();
+          newLayer = null;
+          return null;
+        },
+
         addLayerMap: function(newLayer) {
-          // debug("creating layerMap " + newLayer.layerMap);
           this.layerStack.push(newLayer);
           newLayer.layerMap.options.parentEl.appendChild(newLayer.layerMap.element);
           // add listener to layer.layerMap                    
@@ -256,33 +256,33 @@
           }, this, true);
         },
         
+      addLayer: function() {
+          this.numLayers = this.numLayers + 1;
+          var newOpts = Object.clone(this.options.layerOptions);
+          newOpts.layerNumber = this.numLayers;
+          var newLayer = new WireIt.Layer(newOpts);
+          this.addLayerMap(newLayer);
+          return newLayer;
+        },
+        
         changeLayer: function(newLayer) {
-          // if this layer is 'new' we just push it.
-          // and add event listeners.
-          // debug("changing to layer number: " + newLayer.options.layerNumber);
           var index = this.layerStack.indexOf(newLayer);
           if(index < 0) {
             this.addLayerMap(newLayer);
           }
           // otherwise we remove all the layers under this one (search the tree?)
           else {
-            // debug('trying to remove some layers');
-            var l = null;
             for(var i = index+1; i < this.layerStack.size();i++) {
-              l = this.layerStack[i];
-              this.layerStack[i] = null;
-              this.removeLayerMap(l);
-            }
-            // get rid of null elements:
+              this.removeLayerMap(this.layerStack[i]);
+            }              
+            // after we have deleted things, we compact it:
             this.layerStack = this.layerStack.compact();
           }
           this.setLayer(newLayer)
         },
         
-        
         setLayer:function(newLayer) {
           if (this.layer == null) { this.layer = this.rootLayer;}
-          // debug("Hiding layer number: " + this.layer.options.layerNumber);
       	  var parentDom = this.layer.options.parentEl;
           parentDom.replaceChild(newLayer.el,this.layer.el);
           this.layer.el.hide();
@@ -290,14 +290,12 @@
           this.layer.el.show();
           this.setDDLayer(this.layer);   
           this.hidePropEditor();
-
         },
         
         hidePropEditor: function() {
           $('prop_form').hide();
         },
         
-     
         /**
         *
         *
@@ -365,6 +363,7 @@
                 module.layer = this.layer;
                 var container = this.layer.addContainer(module); 
                 container.setTitle(module.title);
+                container.options.position = pos;
                 Dom.addClass(container.el, "WiringEditor-module-" + module.name);
             }
             catch(ex) {
@@ -482,7 +481,7 @@
         onNew: function() {
             if (confirm("Are you sure you want to erase your diagram and start fresh?")) {
                 this.layer.removeAllContainers();
-                this.propertiesForm.clear();
+                this.resetLayers();
             }
         },
 

@@ -25,9 +25,19 @@ MySystemContainer = function(options, layer) {
    this.options.xtype = "MySystemContainer";
    this.propEditor = null;
 
+   if (this.options.position) {
+     debug($(this.options.position).inspect());
+     $(this.el).setStyle({
+       position: 'absolute',
+       left: this.options.position[0],
+       top: this.options.position[1]
+     });
+     
+    }
    // Adds a handler for mousedown so we can change layers in our editor
    YAHOO.util.Event.addListener(this.el, "dblclick", this.onDblClick, this, true);
-   YAHOO.util.Event.addListener(this.el, "mouseup", this.onMouseUp, this, true);   
+   YAHOO.util.Event.addListener(this.el, "mouseup", this.onMouseUp, this, true);
+   this.setTitle(this.options.fields.name);
 };
 
 
@@ -85,6 +95,8 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
 		  this.options.subsystem_options = this.subSystem.options;
 		  this.options.subsystem_wiring = this.subSystem.getWiring();
 	  }
+	  this.options.position[0] = this.el.getStyle('left');
+	  this.options.position[1] = this.el.getStyle('top');
 	  // use prototype merge to respolve options.
 	  return $H(super_options).merge($H(this.options));
   }

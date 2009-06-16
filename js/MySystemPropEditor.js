@@ -33,6 +33,10 @@ MySystemPropEditor.prototype = {
       $('prop_name').update("properties for wire");
     }
     $('prop_fields').update(fieldText);
+    //try to activate the name field.
+    if ($('name')) {
+      $('name').activate();
+    }
   },
   save_values: function() {
     var theForm = $(this.formName);
@@ -59,6 +63,17 @@ MySystemPropEditor.prototype = {
       this.form_observer = null;
       $('palette').stopObserving('click');
     }
+    
+    // deselect the last node:
+    if (this.node) {
+      if ($(this.node.bodyEl)) {
+        $(this.node.bodyEl).removeClassName('selected');
+      }
+      if (this.node.options.selected) {
+        this.node.options.selected=false;
+        this.node.redraw();
+      }
+    }
     this.node = node;
     this.updateFields();
 
@@ -80,9 +95,11 @@ MySystemPropEditor.prototype = {
         this.selected_color = element.identify();
         this.save_values();
       }.bind(this));
+      this.node.options.selected=true;
     }
     else {
       $('palette').hide();
+      $(this.node.bodyEl).addClassName('selected');
     }
     if (this.node.options.icon) {
       if($('icon_spot')) {
