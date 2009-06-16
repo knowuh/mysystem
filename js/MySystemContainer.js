@@ -14,11 +14,11 @@ MySystemContainer = function(options, layer) {
    this.has_sub = options.has_sub || false;
    this.subSystem =  null;
    if (options.subsystem_options != null) {
-	   // console.log("initializing subsystem");
+	   // debug(("initializing subsystem");
 	   this.subSystem = new WireIt.Layer(options.subsystem_options);
-	   // console.log("Successfully initialized layer");
+	   // debug(("Successfully initialized layer");
 	   this.subSystem.setWiring(options.subsystem_wiring);
-	   // console.log("successfully set wiring");
+	   // debug(("successfully set wiring");
      // tell the editor about the new layer.
 	   MySystemContainer.openContextFor.fire(this);
    }
@@ -72,7 +72,7 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     
   },
   updateFields: function() {
-    console.log($H(this.options.fields).inspect());
+    debug(($H(this.options.fields).inspect()));
     this.setTitle(this.options.fields.name);
   },
   
@@ -81,7 +81,7 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
 	  this.options.name = this.title;
 	  this.options.has_sub = this.has_sub;
 	  if (this.subSystem != null) {
-		  // console.log("saving subsystem config");
+		  // debug(("saving subsystem config");
 		  this.options.subsystem_options = this.subSystem.options;
 		  this.options.subsystem_wiring = this.subSystem.getWiring();
 	  }

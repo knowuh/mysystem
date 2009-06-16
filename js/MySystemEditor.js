@@ -189,16 +189,17 @@
         resetLayers: function() {
           if (this.layerStack && this.layerStack.size > 0) {
             for(var i = 0; i < this.layerStack.size();i++) {
-              l = this.layerStack[i];
+              var l = this.layerStack[i];
               this.layerStack[i] = null;
               this.removeLayerMap(l);
             }
           }
           this.numLayers = 0;
-          // console.log("Setting up layer stack, root layer, etc.")
+          // debug("Setting up layer stack, root layer, etc.")
           this.layerStack = [];
           this.rootLayer = new WireIt.Layer(this.options.layerOptions);
           this.rootLayer.options.layerNumber = 0;
+          this.layer = this.rootLayer;
           this.changeLayer(this.rootLayer);
          },
          
@@ -219,7 +220,7 @@
             module = args[0];
             if (module.has_sub) {
               if (module.subSystem == null) {
-               // console.log("Creating a new subsystem for a module: " + module.name);
+               // debug("Creating a new subsystem for a module: " + module.name);
                this.numLayers = this.numLayers + 1;
                var newOpts = Object.clone(this.rootLayer.options);
                module.subSystem = new WireIt.Layer(newOpts);
@@ -230,20 +231,22 @@
         },
         
         removeLayerMap: function(newLayer) {
-          // console.log("removing layerMap " + newLayer);
+          // debug("removing layerMap " + newLayer);
           try {
             // remove listener on layerMap element
             Event.removeListener(newLayer.layerMap.element, 'mouseup');
             // remove the layers layerMap from the dom:
             newLayer.layerMap.options.parentEl.removeChild(newLayer.layerMap.element);
+            newLayer.removeAllContainers();
+            newlayer = null;
           }
           catch (e) {
-            // console.log("error removing layer: " + e);
+            // debug("error removing layer: " + e);
           }
         },
         
         addLayerMap: function(newLayer) {
-          // console.log("creating layerMap " + newLayer.layerMap);
+          // debug("creating layerMap " + newLayer.layerMap);
           this.layerStack.push(newLayer);
           newLayer.layerMap.options.parentEl.appendChild(newLayer.layerMap.element);
           // add listener to layer.layerMap                    
@@ -256,14 +259,14 @@
         changeLayer: function(newLayer) {
           // if this layer is 'new' we just push it.
           // and add event listeners.
-          // console.log("changing to layer number: " + newLayer.options.layerNumber);
+          // debug("changing to layer number: " + newLayer.options.layerNumber);
           var index = this.layerStack.indexOf(newLayer);
           if(index < 0) {
             this.addLayerMap(newLayer);
           }
           // otherwise we remove all the layers under this one (search the tree?)
           else {
-            // console.log('trying to remove some layers');
+            // debug('trying to remove some layers');
             var l = null;
             for(var i = index+1; i < this.layerStack.size();i++) {
               l = this.layerStack[i];
@@ -279,7 +282,7 @@
         
         setLayer:function(newLayer) {
           if (this.layer == null) { this.layer = this.rootLayer;}
-          // console.log("Hiding layer number: " + this.layer.options.layerNumber);
+          // debug("Hiding layer number: " + this.layer.options.layerNumber);
       	  var parentDom = this.layer.options.parentEl;
           parentDom.replaceChild(newLayer.el,this.layer.el);
           this.layer.el.hide();
@@ -305,7 +308,7 @@
         },
         
         addModuleChoice: function(module) {
-            // console.log("found name: " + module.name);
+            // debug("found name: " + module.name);
             var left = Dom.get('left');
             var div = WireIt.cn('div', {
                 className: "WiringEditor-module"
@@ -318,13 +321,13 @@
                 div.appendChild(WireIt.cn('img', {
                     src: module.icon
                 }));
-                // console.log("created icon module");
+                // debug("created icon module");
             } else {
                 var div = WireIt.cn('div', {
                     className: "WiringEditor-module"
                 });
                 div.appendChild(WireIt.cn('span', null, null, module.name));
-                // console.log("created WiringEditor module");
+                // debug("created WiringEditor module");
             }
 
             var ddProxy = new MySystemDragAndDropProxy(div, this);
@@ -356,7 +359,7 @@
         addModule: function(module, pos) {
             try {
                 //var containerConfig = module.container;
-                // console.log("addModule called for " + module.name);
+                // debug("addModule called for " + module.name);
                 module.position = pos;
                 module.title = module.name;
                 module.layer = this.layer;
@@ -365,7 +368,7 @@
                 Dom.addClass(container.el, "WiringEditor-module-" + module.name);
             }
             catch(ex) {
-                // console.log("Error Layer.addContainer", ex.message);
+                // debug("Error Layer.addContainer", ex.message);
             }
         },
 
@@ -414,7 +417,7 @@
         * @method onSave
         */
         onSave: function() {
-         // console.log("Save clicked");
+         // debug("Save clicked");
           this.save();
         },
 
@@ -424,7 +427,7 @@
         * TODO: Actually save something!
         */
         save: function() {
-        // 	console.log([this.rootLayer.getWiring()].toJSON());
+        // 	debug([this.rootLayer.getWiring()].toJSON());
         	
         	var postUrl = this.options.dataDir;
         	if (this.options.modelId != null) {
@@ -445,19 +448,19 @@
          * @method onSave
          */
          onLoad: function() {
-         	// console.log("Load clicked");
+         	// debug("Load clicked");
              this.load();
          },
          
          load: function() {
-        	// console.log("loading...\nrootLayer: " + this.rootLayer);
+        	// debug("loading...\nrootLayer: " + this.rootLayer);
         	
          	var callback = function(text, context) {
 	         	var obj = eval(text);
-	         	// console.log("got object: " + obj[0].containers[0]);
+	         	// debug("got object: " + obj[0].containers[0]);
 	         	context.resetLayers();
 	         	context.rootLayer.setWiring(obj[0]);
-	         	// console.log("done loading.");
+	         	// debug("done loading.");
          	};
          	
          	this.options.modelId = prompt("Enter the model ID for the model you wish to load: ", this.options.modelId);

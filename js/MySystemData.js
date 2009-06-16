@@ -17,7 +17,7 @@ var MySystemData = Class.create({
 
   setModules: function (modules,addTerminals) {
     this.modules = [];
-    // console.log("set modules called");
+    // debug("set modules called");
     modules.each(function(m){ 
       this.addModule(m,addTerminals); 
     }.bind(this));

@@ -1,3 +1,5 @@
+
+ 
 var testData = [
   {
     name: "Energy Form Label",
@@ -54,7 +56,7 @@ var MySystemDemo = {
         // this.editor.onHelp();
       }
       catch (e){
-        // console.log("ooopps! " + e)
+        // debug("ooopps! " + e)
       }
   },
   

@@ -14,11 +14,11 @@ LabeledWire = function(options, layer) {
    this.has_sub = options.has_sub || false;
    this.subSystem =  null;
    if (options.subsystem_options != null) {
-	   // console.log("initializing subsystem");
+	   // debug("initializing subsystem");
 	   this.subSystem = new WireIt.Layer(options.subsystem_options);
-	   // console.log("Successfully initialized layer");
+	   // debug("Successfully initialized layer");
 	   this.subSystem.setWiring(options.subsystem_wiring);
-	   // console.log("successfully set wiring");
+	   // debug("successfully set wiring");
    }
    this.options.xtype = "MySystemContainer";
    this.propEditor = null;
