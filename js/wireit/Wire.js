@@ -232,10 +232,12 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @method drawBezierArrows
     */
    drawBezierArrows: function() {
+     var ctxt = this.getContext();
+     CanvasTextFunctions.enable(ctxt);
      // return if we don't have both our terminals...
      if (null == this.terminal1 || null == this.terminal2) {
        // TODO: This should not be happening, and it was not happening before...
-       debug("I have failed you....");
+       debug("Missing terminal for WireIt Wire: " + this);
        return;
      }
 	  //From drawArrows function
@@ -298,7 +300,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
 
       this.SetCanvasRegion(min[0],min[1],lw,lh);
 
-      var ctxt = this.getContext();
+      
       for(var i = 0 ; i<bezierPoints.length ; i++){
          bezierPoints[i][0] = bezierPoints[i][0]-min[0];
          bezierPoints[i][1] = bezierPoints[i][1]-min[1];
@@ -757,6 +759,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @param {Integer} y top position of the mouse (relative to the canvas)
     */
    onWireClick: function(x,y) {
+     debug('clicked');
      WireIt.Wire.openPropEditorFor.fire(this);
      this.redraw;
     //       // console.log("onWireClick",x,y);
@@ -768,7 +771,8 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
    },
 
    onWireDblClick: function(x,y) {
- 	   // console.log("onWireDblClick",x,y);
+ 	  debug('dbl-clicked');
+ 	  // console.log("onWireDblClick",x,y);
 		// this.options.width = 3;
     WireIt.Wire.openPropEditorFor.fire(this);
 		this.redraw;

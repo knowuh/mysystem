@@ -73,7 +73,7 @@
         // set the default options
         this.setOptions(data);
         this._data = data;
-        this.numLayers = 0;
+        this.numLayers = 1;
         this.propEditor = new MySystemPropEditor({});
         /**
      * Container DOM element
@@ -177,7 +177,6 @@
             
             MySystemContainer.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
             MySystemContainer.openContextFor.subscribe(this.onOpenContextFor,this,true);
-            WireIt.Container.eventAddWire.subscribe(this.onOpenPropEditorFor,this,true);
             WireIt.Wire.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
             // create new layer-map.
             this.resetLayers();
@@ -279,17 +278,51 @@
             this.layerStack = this.layerStack.compact();
           }
           this.setLayer(newLayer)
+          this.updateLayerInfo();
         },
         
         setLayer:function(newLayer) {
+          // kind of a hack, clean any bad wiring from the layer before we continue:
+          this.cleanWiring(newLayer);
           if (this.layer == null) { this.layer = this.rootLayer;}
       	  var parentDom = this.layer.options.parentEl;
           parentDom.replaceChild(newLayer.el,this.layer.el);
           this.layer.el.hide();
+          
+          //this.layer.el.update(this.layer.options.layerNumber);//whats that going to do?
           this.layer = newLayer;
           this.layer.el.show();
           this.setDDLayer(this.layer);   
           this.hidePropEditor();
+        },
+        cleanWiring: function(newLayer) {
+          var i = 0;
+          var size = newLayer.wires.length;
+          var wire = null;
+          var removed = 0;
+          for (i=0; i <size; i++) {
+            wire = newLayer.wires[i];
+            if((!(wire.terminal1)) ||!(wire.terminal2)) {
+              newLayer.wires[i] = null;
+              removed +=1;
+            }
+          }
+          if (removed > 0) {
+            debug("removed " + removed + " wires");
+            debug("array size pre: " + size);
+            // WireIt.compact(newLayer.wires);
+            newLayer.wires = newLayer.wires.compact();
+            debug("array size post: " + newLayer.wires.length);
+          }
+        },
+        
+        updateLayerInfo: function() {
+          var layerInfo = "<h3>current layer: " + this.layer.options.layerNumber +"</h3><ul>layer stack:";
+          $A(this.layerStack).each( function(layer){
+            layerInfo += "<li>" + layer.options.layerNumber + "</li>";
+          });
+          layerInfo += "</li>";
+          $('layer_info').update(layerInfo);
         },
         
         hidePropEditor: function() {
@@ -435,6 +468,9 @@
 
         	var xmlhttp = HTTP.newRequest();
         	xmlhttp.open('PUT', postUrl, false);
+        	
+        	var json = [this.rootLayer.getWiring()].toJSON();
+        	debug("===================================\n" + json);
         	xmlhttp.send([this.rootLayer.getWiring()].toJSON());
         	
         	if (this.options.modelId == null) {
@@ -455,6 +491,7 @@
         	// debug("loading...\nrootLayer: " + this.rootLayer);
         	
          	var callback = function(text, context) {
+         	 debug("===================================\n" + text);
 	         	var obj = eval(text);
 	         	// debug("got object: " + obj[0].containers[0]);
 	         	context.resetLayers();

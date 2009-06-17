@@ -1,6 +1,3 @@
-// TODO this is for debugging. REMOVE it later
-var gterm = {name: "foo"};
-
 (function() {
    var util = YAHOO.util;
    var Dom = util.Dom;
@@ -60,7 +57,7 @@ WireIt.Container = function(options, layer) {
     * You can register this event with myTerminal.eventAddWire.subscribe(function(e,params) { var wire=params[0];}, scope);
     * @event eventAddWire
     */
-   this.eventAddWire = WireIt.Container.eventAddWire;
+   this.eventAddWire = new YAHOO.util.CustomEvent("eventAddWire");;
    
    /**
     * Event that is fired when a wire is removed
@@ -345,6 +342,8 @@ WireIt.Container.prototype = {
       if( WireIt.indexOf(wire, this.wires) == -1 ) {
          this.wires.push(wire);
          this.eventAddWire.fire(wire);
+         //TODO: Move me to monkey patched code:
+         WireIt.Wire.openPropEditorFor.fire(wire);
       } 
    },
 
@@ -436,4 +435,3 @@ WireIt.Container.prototype = {
 };
 
 })();
-WireIt.Container.eventAddWire = new YAHOO.util.CustomEvent("eventAddWire");
