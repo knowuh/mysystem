@@ -1,42 +1,94 @@
-
- 
 var testData = [
   {
-    name: "Energy Form Label",
+    name: "Label",
     xtype: "MySystemWireLabel"
   },
   {
-    name: "world",
+    name: "World",
     xtype: "MySystemContainer",
     image: "./images/world-transp.png",
     icon: "./images/world-transp.png"
   },
   {
-    name: "egg", 
+    name: "Turkey", 
+    image: "./images/turkey-transp.png",
+    xtype: "MySystemContainer",
+    icon: "./images/turkey-transp.png"
+  },
+  {
+    name: "Tomato", 
+    image: "./images/tomato.png",
+    xtype: "MySystemContainer",
+    icon: "./images/tomato.png"
+  },
+  {
+    name: "Sun", 
+    image: "./images/sun.png",
+    xtype: "MySystemContainer",
+    icon: "./images/sun.png"
+  },
+  {
+    name: "Person Standing", 
+    image: "./images/standing-person.png",
+    xtype: "MySystemContainer",
+    icon: "./images/standing-person.png"
+  },
+  {
+    name: "Person Running", 
+    image: "./images/running-person.png",
+    xtype: "MySystemContainer",
+    icon: "./images/running-person.png"
+  },
+  {
+    name: "Oven", 
+    image: "./images/oven.png",
+    xtype: "MySystemContainer",
+    icon: "./images/oven.png"
+  },
+  {
+    name: "Molecule", 
+    image: "./images/molecule-transp.png",
+    xtype: "MySystemContainer",
+    icon: "./images/molecule-transp.png"
+  },
+  {
+    name: "Wheat", 
+    image: "./images/wheat.png",
+    xtype: "MySystemContainer",
+    icon: "./images/wheat.png"
+  },
+  {
+    name: "Sandwich", 
+    image: "./images/sandwich.png",
+    xtype: "MySystemContainer",
+    icon: "./images/sandwich.png"
+  },
+  {
+    name: "Egg", 
     image: "./images/egg-transp-70.png",
     xtype: "MySystemContainer",
     icon: "./images/egg-transp-70.png"
   },
   {
-    name: "burner", 
+    name: "Burner", 
     image: "./images/burner-transp-70.png",
     xtype: "MySystemContainer",
     icon: "./images/burner-transp-70.png"
   },
   {
-    name: "pot", 
+    name: "Pot", 
     image: "./images/pot-70.png",
     xtype: "MySystemContainer",
     icon: "./images/pot-70.png"
   },
   {
-    name: "power-plant", 
+    name: "Power-plant", 
     image: "./images/power-plant-70.png",
     xtype: "MySystemContainer",
     icon: "./images/power-plant-70.png"
   },
   {
-    name: "water", 
+    name: "Water", 
     image: "./images/water-70.png",
     xtype: "MySystemContainer",
     icon: "./images/water-70.png"
