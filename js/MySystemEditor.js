@@ -317,12 +317,12 @@
         },
         
         updateLayerInfo: function() {
-          var layerInfo = "<h3>current layer: " + this.layer.options.layerNumber +"</h3><ul>layer stack:";
-          $A(this.layerStack).each( function(layer){
-            layerInfo += "<li>" + layer.options.layerNumber + "</li>";
-          });
-          layerInfo += "</li>";
-          $('layer_info').update(layerInfo);
+          // var layerInfo = "<h3>current layer: " + this.layer.options.layerNumber +"</h3><ul>layer stack:";
+          // $A(this.layerStack).each( function(layer){
+          //   layerInfo += "<li>" + layer.options.layerNumber + "</li>";
+          // });
+          // layerInfo += "</li>";
+          // $('layer_info').update(layerInfo);
         },
         
         hidePropEditor: function() {
