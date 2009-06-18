@@ -64,6 +64,12 @@ var testData = [
     icon: "./images/sandwich.png"
   },
   {
+    name: "Label", 
+    image: "./images/label-placeholder-image.png",
+    xtype: "MySystemContainer",
+    icon: "./images/label-icon.png"
+  },
+  {
     name: "Egg", 
     image: "./images/egg-transp-70.png",
     xtype: "MySystemContainer",
@@ -94,6 +100,7 @@ var testData = [
     icon: "./images/water-70.png"
   }
 ];
+
 
 var MySystemDemo = {
   data : new MySystemData(),
