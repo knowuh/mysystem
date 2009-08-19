@@ -46,6 +46,7 @@
   <script type="text/javascript" src="js/wireit/LayerMap.js"></script>
   <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
 
+  <script type="text/javascript" src="js/uuid.js"></script>
   <script type="text/javascript" src="js/MySystemUtil.js"></script>
   <script type="text/javascript" src="js/MySystemPropEditor.js"></script>
   <script type="text/javascript" src="js/MySystemWireLabel.js"></script>
@@ -62,7 +63,17 @@
 <body class="yui-skin-sam">
 
   <script>
-    YAHOO.util.Event.onDOMReady(MySystemDemo.init, MySystemDemo, true);
+    document.observe("dom:loaded", function() {
+      // don't load data, and also generate a new saving key
+      results = MySystemDemo.init_learner(null,null); 
+      // don't load data, but provide a saving key: (when would we do that?)
+      // results = MySystemDemo.init_learner(null,"pre-generated-key");            
+      // load data, and save with new key
+      // results = MySystemDemo.init_learner("pre-generated-key",null)
+      // load and save to the same system:
+      results = MySystemDemo.init_learner("pre-generated-key","pre-generated-key")      
+      alert("new key " + results);
+    });
   </script>
 
 	<div id="top">
