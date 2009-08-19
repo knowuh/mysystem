@@ -1,11 +1,9 @@
 
 /**
- * MySystem Container. Has an image. and double_click beahvor.
- * @class ImageContainer
- * @extends WireIt.Container
+ * MySystemPropEditor
+ * @class MySystemPropEditor
  * @constructor
  * @param {Object} options
- * @param {WireIt.Layer} layer
  */
 MySystemPropEditor = function(options) {
    this.domID = options.domID || "prop_editor";
