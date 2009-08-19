@@ -64,14 +64,14 @@
 
   <script>
     document.observe("dom:loaded", function() {
-      // don't load data, and also generate a new saving key
-      results = MySystemDemo.init_learner(null,null); 
       // don't load data, but provide a saving key: (when would we do that?)
       // results = MySystemDemo.init_learner(null,"pre-generated-key");            
       // load data, and save with new key
       // results = MySystemDemo.init_learner("pre-generated-key",null)
       // load and save to the same system:
-      results = MySystemDemo.init_learner("pre-generated-key","pre-generated-key")      
+      //results = MySystemDemo.init_learner("pre-generated-key","pre-generated-key")
+      // don't load data, and also generate a new saving key
+      results = MySystemDemo.init_learner(null,null);
       alert("new key " + results);
     });
   </script>
