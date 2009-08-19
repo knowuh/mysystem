@@ -118,8 +118,32 @@ var MySystemDemo = {
         // debug("ooopps! " + e)
       }
   },
-  
 
+  init_author: function(read_key,write_key) {
+    this.init();
+    return this.setKeys(read_key,write_key);
+  },
+  
+  init_learner: function(read_key,write_key) {
+    this.init();
+    return this.setKeys(read_key,write_key);
+  },
+
+  setKeys: function(read,write) {
+    if (read) {
+      this.editor.options.modelId = read
+      this.editor.load(read);
+    }
+    
+    if (write) {}
+    // generate a new write-key if we don't have on
+    else {
+      write = new UUID().toString();
+    }
+    // set the write-key
+    this.editor.options.modelId = write;
+    return write;
+  },
   /**
   * Execute the module in the "ExecutionFrame" virtual machine
   * @method run
