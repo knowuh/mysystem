@@ -11,8 +11,8 @@
     var widget = YAHOO.widget;
 
     /**
-   * Module Proxy handle the drag/dropping from the module list to the layer
-   * @class ModuleProxy
+   * Proxy to handle the drag/dropping from the module list to the layer
+   * @class MySystemDragAndDropProxy
    * @constructor
    * @param {HTMLElement} el
    * @param {MySystemEditor} WiringEditor
@@ -75,16 +75,17 @@
         this._data = data;
         this.numLayers = 1;
         this.propEditor = new MySystemPropEditor({});
+        
         /**
-     * Container DOM element
-     * @property el
-     */
+        * Container DOM element
+        * @property el
+        */
         this.el = Dom.get(data.parentEl);
 
-    /**
-     * @property helpPanel
-     * @type {YAHOO.widget.Panel}
-     */
+      /**
+       * @property helpPanel
+       * @type {YAHOO.widget.Panel}
+       */
         this.helpPanel = new widget.Panel('helpPanel', {
             fixedcenter: true,
             draggable: true,
@@ -94,9 +95,9 @@
         this.helpPanel.render();
 
         /**
-     * @property layout
-     * @type {YAHOO.widget.Layout}
-     */
+       * @property layout
+       * @type {YAHOO.widget.Layout}
+       */
         this.layout = new widget.Layout(this.el, this.options.layoutOptions);
         this.layout.render();
         
@@ -487,7 +488,7 @@
              this.load();
          },
          
-         load: function() {
+         load: function(modelId) {
         	// debug("loading...\nrootLayer: " + this.rootLayer);
         	
          	var callback = function(text, context) {
@@ -498,9 +499,10 @@
 	         	context.rootLayer.setWiring(obj[0]);
 	         	// debug("done loading.");
          	};
-         	
-         	this.options.modelId = prompt("Enter the model ID for the model you wish to load: ", this.options.modelId);
-         	
+         	if (modelId) {}
+         	else {
+         	  this.options.modelId = prompt("Enter the model ID for the model you wish to load: ", this.options.modelId);
+         	}
          	HTTP.getText(this.options.dataDir + "/" + this.options.modelId, this, callback);
          },
 
