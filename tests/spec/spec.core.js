@@ -9,7 +9,7 @@ describe 'MySystem'
   end
   
   it 'MySystemDemo should have a method to setDataSTore'
-    mySystem.should_respond_to('setDataStore')
+    mySystem.should_respond_to('setDataService')
   end
 
 end
