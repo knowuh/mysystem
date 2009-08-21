@@ -10,10 +10,8 @@
   <!-- InputEx CSS -->
   <link type='text/css' rel='stylesheet' href='lib/inputex/css/inputEx.css' />
 
-
   <!-- Prototype -->
   <script type="text/javascript" src="lib/prototype.js"></script>
-
 
   <!-- WireIt CSS -->
   <link rel="stylesheet" type="text/css" href="css/WireIt.css" />
@@ -45,6 +43,9 @@
   <script type="text/javascript" src="js/wireit/LayerMap.js"></script>
   <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
 
+  <!-- My DataService -->
+  <script type="text/javascript" src="js/DSService.js"></script>
+  
   <!-- My System -->
   <script type="text/javascript" src="js/uuid.js"></script>
   <script type="text/javascript" src="js/MySystemUtil.js"></script>
@@ -53,7 +54,7 @@
   <script type="text/javascript" src="js/MySystemContainer.js"></script>
   <script type="text/javascript" src="js/MySystemData.js"></script>
   <script type="text/javascript" src="js/MySystemEditor.js"></script>
-  <script type="text/javascript" src="js/MySystemDemo.js"></script>
+  <script type="text/javascript" src="js/MySystem.js"></script>
   
   <!-- My Engine -->
   <script type="text/javascript" src="engine/mysystem-engine.js"></script>
@@ -67,15 +68,9 @@
 
   <script>
     document.observe("dom:loaded", function() {
-      // don't load data, but provide a saving key: (when would we do that?)
-      // results = MySystemDemo.init_learner(null,"pre-generated-key");            
-      // load data, and save with new key
-      // results = MySystemDemo.init_learner("pre-generated-key",null)
-      // load and save to the same system:
-      //results = MySystemDemo.init_learner("pre-generated-key","pre-generated-key")
-      // don't load data, and also generate a new saving key
-      results = MySystemDemo.init_learner(null,null);
-      //alert("new key " + results);
+      // ds = new DataService(); 
+      mySystem = new MySystem();
+      // mySystem.setDataStore(ds);
     });
   </script>
 

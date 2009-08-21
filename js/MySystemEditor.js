@@ -469,61 +469,34 @@
         * @method onSave
         */
         onSave: function() {
-         // debug("Save clicked");
-          this.save();
+         if (this.dataService) {
+           this.dataService.save([this.rootLayer.getWiring()].toJSON());
+         }
+         else {
+           alert("No Data Service defined");
+         }
         },
 
-        /**
-        * save the layer data
-        * @method save
-        * TODO: Actually save something!
-        */
-        save: function() {
-        // 	debug([this.rootLayer.getWiring()].toJSON());
-        	
-        	var postUrl = this.options.dataDir;
-        	if (this.options.modelId != null) {
-        		postUrl += "/" + this.options.modelId;
-        	}
-
-        	var xmlhttp = HTTP.newRequest();
-        	xmlhttp.open('PUT', postUrl, false);
-        	
-        	var json = [this.rootLayer.getWiring()].toJSON();
-        	debug("===================================\n" + json);
-        	xmlhttp.send([this.rootLayer.getWiring()].toJSON());
-        	
-        	if (this.options.modelId == null) {
-            this.options.modelId  = eval(xmlhttp.responseText);
-        	}
-        	alert("Your model was saved with the ID: " + this.options.modelId);
-        },
-        
         /**
          * @method onSave
          */
          onLoad: function() {
-         	// debug("Load clicked");
-             this.load();
+           if (this.dataService) {
+             this.dataService.load(this,load_callback);
+           }
+           else {
+             alert("No Data Service defined");
+           }
          },
          
-         load: function(modelId) {
-        	// debug("loading...\nrootLayer: " + this.rootLayer);
-        	
-         	var callback = function(text, context) {
-         	 debug("===================================\n" + text);
-	         	var obj = eval(text);
-	         	// debug("got object: " + obj[0].containers[0]);
-	         	context.resetLayers();
-	         	context.rootLayer.setWiring(obj[0]);
-	         	// debug("done loading.");
-         	};
-         	if (modelId) {}
-         	else {
-         	  this.options.modelId = prompt("Enter the model ID for the model you wish to load: ", this.options.modelId);
-         	}
-         	HTTP.getText(this.options.dataDir + "/" + this.options.modelId, this, callback);
+         load_callback: function(text, context) {	
+            debug("===================================\n" + text);
+            var obj = eval(text);
+            context.resetLayers();
+            context.rootLayer.setWiring(obj[0]);
          },
+      
+
 
         /**
         * Create a help panel

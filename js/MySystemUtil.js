@@ -1,7 +1,7 @@
 function debug(message) {
-  // if (console && console.log) {
-  //   console.log(message);
-  // } 
+  if (console && console.log) {
+    console.log(message);
+  } 
 }
 
 // let the monkey patching begin!
