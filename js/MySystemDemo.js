@@ -1,83 +1,99 @@
 var testData = [
 	{
 		'name'				: 'sun',
+    'icon'				: "./images/sun.png",
     'image'				: "./images/sun.png",
     'xtype'				: "MySystemContainer",
-    'icon'				: "./images/sun.png",
+		'etype'				: 'source',
     'fields'			: {
-    									'energy': 888,
-    									'efficiency'	: { 'light': 1 },
-											'output'			: [ 'space', 'earth' ],
-											'type'				: 'source'
+    									'energy'			: 100,
+    									'form'				: 'light',
+    									'efficiency'	: 1								
     								}
 	},
 	{
 		'name'				: 'space',
-		'type'				: 'void',
+    'icon'				: "./images/space.jpg",
     'image'				: "./images/space.jpg",
     'xtype'				: "MySystemContainer",
-    'icon'				: "./images/space.jpg"
+		'etype'				: 'node',
+    'fields'			: {
+    									'inputRate'		: 1
+    								}
 	},
 	{
 		'name'				: 'earth',
-		'type'				: 'planet',
-		'inputRate'		: .5,
-		'efficiency'	: { light: .2 },
-		'output'			: [ 'grass1', 'grass2' ],
+    'icon'				: "./images/world.png",
     'image'				: "./images/world.png",
     'xtype'				: "MySystemContainer",
-    'icon'				: "./images/world.png"
+		'etype'				: 'node',
+    'fields'			: {
+    									'inputRate'		: .5,
+    									'form'				: 'light',
+    									'efficiency'	: .2    									
+    								}
+
 	},
 	{
 		'name'				: 'grass',
-		'type'				: 'primary producer',
-		'inputRate'		: .15,
-		'efficiency'	: { chemical: .1 },
-		'output'			: [ 'bugs-fungi' ],
+    'icon'				: "./images/grass.jpg",
     'image'				: "./images/grass.jpg",
     'xtype'				: "MySystemContainer",
-    'icon'				: "./images/grass.jpg"
+		'etype'				: 'node',
+    'fields'			: {
+    									'inputRate'		: .15,
+    									'form'				: 'chemical',
+    									'efficiency'	: .2   									
+    								}
 	},
 	{
 		'name'				: 'bugs-fungi',
-		'type'				: 'decomposer',
-		'inputRate'		: .1,
-		'efficiency'	: { chemical: .1 },
-		'output'			: [ 'grass1' ],
+    'icon'				: "./images/bugs.jpg",
     'image'				: "./images/bugs.jpg",
     'xtype'				: "MySystemContainer",
-    'icon'				: "./images/bugs.jpg"
+		'etype'				: 'node',
+    'fields'			: {
+    									'inputRate'		: .1,
+    									'form'				: 'chemical',
+    									'efficiency'	: .1
+    								}
 	},
 	{
 		'name'				: 'rabbit',
-		'type'				: 'primary consumer',
-		'inputRate'		: .2,
-		'efficiency'	: { chemical: .15 },
-		'output'			: [ 'owl', 'bugs-fungi' ],
-    'image'				: "./images/rabbit.jpg",
-    'xtype'				: "MySystemContainer",
-    'icon'				: "./images/rabbit.jpg"
+    'icon'				: "./images/rabbit.jpg",
+    'image'				: "./images/rabbit.jpg",		
+    'xtype'				: "MySystemContainer",    
+				'etype'				: 'node',
+    'fields'			: {
+    									'inputRate'		: .2,
+    									'form'				: 'chemical',
+    									'efficiency'	: .15    									
+    								}
 	},
 	{
 		'name'				: 'owl',
-		'type'				: 'secondary consumer',
-		'inputRate'		: .2,
-		'efficiency'	: { chemical: .15 },
-		'output'			: [ 'fox', 'bugs-fungi' ],
+    'icon'				: "./images/owl.jpg",
     'image'				: "./images/owl.jpg",
     'xtype'				: "MySystemContainer",
-    'icon'				: "./images/owl.jpg"
+		'etype'				: 'node',
+    'fields'			: {
+    									'inputRate'		: .2,
+    									'form'				: 'chemical',
+    									'efficiency'	: .15,    								
+    								}
 	},
 	{
 		'name'				: 'fox',
-		'type'				: 'predator',
-		'inputRate'		: .18,
-		'efficiency'	: { chemical: .1 },
-		'output'			: [ 'bugs-fungi' ],
+    'icon'				: "./images/fox.jpg",
     'image'				: "./images/fox.jpg",
     'xtype'				: "MySystemContainer",
-    'icon'				: "./images/fox.jpg"
-	}		
+		'etype'				: 'node',
+    'fields'			: {
+    									'inputRate'		: .18,
+    									'form'				: 'chemical',
+    									'efficiency'	: .1
+    								}
+	}
 ];
 
 
