@@ -151,6 +151,9 @@ WireIt.Layer.prototype = {
     * @return {WireIt.Wire} Wire instance build from the xtype
     */
    addWire: function(wireConfig) {
+   
+   		console.log( "sdfsdf" );
+   
       var type = eval(wireConfig.xtype || "WireIt.Wire");
    
       var src = wireConfig.src;

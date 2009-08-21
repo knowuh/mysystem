@@ -75,7 +75,6 @@
             		efficiency	: energyForm
             });
             
-            my.cycle();
             my.list();
                         
         }

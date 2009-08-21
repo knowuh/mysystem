@@ -345,6 +345,9 @@ WireIt.Container.prototype = {
          //TODO: Move me to monkey patched code:
          WireIt.Wire.openPropEditorFor.fire(wire);
       } 
+      
+      console.log( event );
+      
    },
 
    /**
