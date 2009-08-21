@@ -68,7 +68,7 @@
 			
 			iNode.energy += energyTransfer;
 	
-			iNode.cycles < my.sourceCount +1 ? iNode.transform() : 0 ;
+			iNode.cycles < my.sourceCount ? iNode.transform() : 0 ;
 		}
 		
 		this.heatLoss += this.energy * sumLoss || this.energy;
