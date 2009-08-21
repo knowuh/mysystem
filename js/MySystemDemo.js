@@ -8,7 +8,7 @@ var testData = [
     'fields'			: {
     									'energy'			: 100,
     									'form'				: 'light',
-    									'efficiency'	: 1								
+    									'efficiency'	: 1
     								}
 	},
 	{
@@ -30,7 +30,7 @@ var testData = [
     'fields'			: {
     									'inputRate'		: .5,
     									'form'				: 'light',
-    									'efficiency'	: .2    									
+    									'efficiency'	: .2
     								}
 
 	},
