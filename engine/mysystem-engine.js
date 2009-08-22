@@ -50,6 +50,8 @@
 		}
 		var sumLoss = 1 - sumEfficient;
 		
+		console.log(sumEfficient, sumLoss);
+		
 		// todo: calculation for potential energy
 		
 		// calculate childrens energy ratio
@@ -58,9 +60,12 @@
 		for( var i = 0; i < len; i++ ){
 			var iNode = my.node( this.output[ i ] );
 			sumInputRate += iNode.inputRate;
+			console.log( iNode );
 		}
 		var ratio = 1 / sumInputRate;
-								
+	
+		console.log( sumInputRate, ratio );
+									
 		// push energy to children
 		for( var i = 0; i < len; i++ ){
 			var iNode = my.node( this.output[ i ] );
@@ -72,7 +77,7 @@
 		}
 		
 		this.heatLoss += this.energy * sumLoss || this.energy;
-		if( this.type != 'source' ){			
+		if( this.type != 'source' ){
 			this.energy -=  this.energy * ( sumEfficient + sumLoss );
 		}				
 			
@@ -148,8 +153,8 @@
 		this.node = function( id_or_name ){
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
-				var iNode = this.nodes[ i ];					
-				if( id_or_name == iNode.id || id_or_name == iNode.name ){
+				var iNode = this.nodes[ i ];
+				if( id_or_name == iNode.name || id_or_name == iNode.id ){				
 					return iNode;
 				}
 			}

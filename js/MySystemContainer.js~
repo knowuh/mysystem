@@ -25,6 +25,7 @@ MySystemContainer = function(options, layer) {
    this.options.xtype = "MySystemContainer";
    this.propEditor = null;
 
+
    if (this.options.position) {
      debug($(this.options.position).inspect());
      $(this.el).setStyle({

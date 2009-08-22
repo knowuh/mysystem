@@ -296,8 +296,7 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
     * @method onDragDrop
     */
    onDragDrop: function(e,ddTargets) {            
-      var nodeFrom;
-      var nodeTo;
+      var engineNodeFrom, engineNodeTo;
       
       // Prevention when the editing wire could not be created (due to nMaxWires)
       if(!this.editingWire) { return; }
@@ -309,7 +308,17 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
       for(var i = 0 ; i < ddTargets.length ; i++) {
          if( this.isValidWireTerminal(ddTargets[i]) ) {
             targetTerminalProxy =  ddTargets[i];
-            nodeTo = ddTargets[i].terminal.container;
+
+            // Hook into MyEngine...
+						engineNodeFrom = this.terminal.container.module.engineNode;
+            engineNodeTo = ddTargets[i].terminal.container.module.engineNode;
+						var numOutputs = engineNodeFrom.output.length;
+						engineNodeFrom.output[ numOutputs ] = engineNodeTo.id;
+
+						//console.log([ engineNodeFrom.name, engineNodeTo.name ]);
+						//console.log([ engineNodeFrom.output, engineNodeTo.output ]);
+						//console.log([ engineNodeFrom.name, engineNodeTo]);
+
             break;
          }
       }
@@ -342,7 +351,7 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
       
       // Create the wire only if the terminals aren't connected yet
       if(termAlreadyConnected) {
-         //console.log("terminals already connected ");
+      	//console.log("terminals already connected ");
          return;
       }
          
@@ -372,12 +381,6 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
          var w = new WireIt.Wire(term1, term2, parentEl, term1.options.wireConfig);
          w.redraw();
       }
-      
-      
-      // Hook into MyEngine...       
-      nodeFrom = this.terminal.container;
-
-			console.log( 'You connected: "' + nodeFrom.options.name + '" to: "' + nodeTo.options.name + '"' );
       
       
       /*else {

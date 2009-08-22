@@ -210,6 +210,8 @@ WireIt.WiringEditor.prototype = {
   * add a module at the given pos
   */
  addModule: function(module, pos) {
+  		console.log("_______________________");
+ 		console.log(module);
     try {
        var containerConfig = module.container;
        containerConfig.position = pos;

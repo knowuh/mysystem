@@ -51,6 +51,7 @@
         * @method onDragDrop
         */
         onDragDrop: function(e, ddTargets) {
+
             // The layer is the only target :
             var layerTarget = ddTargets[0];
             var layer = ddTargets[0]._layer;
@@ -60,24 +61,24 @@
             pos[0] = pos[0] - layerPos[0];
             pos[1] = pos[1] - layerPos[1];
             this._MySysEditor.addModule(this._module, pos);
-                                    
-            console.log( this._module );
             
+            console.log( this );
+            
+            // Compile various energies into one object ( not really using multiple energies per object yet )
             var energyForm = {};
             energyForm[ this._module.fields.form ] = this._module.fields.efficiency;
             
-            my.newNode({
+            // Creates a new node in myEngine and stored it in element
+            this._module.engineNode = my.newNode({
             		name				: this._module.name,
 								module			: this._module,
             		type				: this._module.etype,
+            		output			: [],
             		energy			: this._module.fields.energy || 0,
             		inputRate		: this._module.fields.inputRate,
-            		efficiency	: energyForm
+            		efficiency	: energyForm // reference energies object
             });
             
-            my.cycle();
-            my.list();
-                        
         }
     });
 
@@ -405,18 +406,20 @@
 
         /**
         * add a module at the given pos
-        * usually invoked by drag-and-drop callbac
+        * usually invoked by drag-and-drop callback
         */
-        addModule: function(module, pos) {
+        addModule: function(module, pos) {        
             try {
                 //var containerConfig = module.container;
                 // debug("addModule called for " + module.name);
                 module.position = pos;
                 module.title = module.name;
                 module.layer = this.layer;
-                var container = this.layer.addContainer(module); 
+                var container = this.layer.addContainer(module);
                 container.setTitle(module.title);
                 container.options.position = pos;
+                container.module = module;
+                //container.engineNodeId = container.module.engineNode.id;
                 Dom.addClass(container.el, "WiringEditor-module-" + module.name);
             }
             catch(ex) {

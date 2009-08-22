@@ -9,6 +9,10 @@ var MySystemData = Class.create({
   },
 
   addModule: function(module,addTerminals) {
+  
+    		console.log("_______________________");
+ 		console.log(module);
+  
     if (addTerminals) {
       module.terminals = MySystemData.defaultTerminals();   
     }
