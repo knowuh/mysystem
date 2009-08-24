@@ -295,9 +295,7 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
    /**
     * @method onDragDrop
     */
-   onDragDrop: function(e,ddTargets) {            
-      var engineNodeFrom, engineNodeTo;
-      
+   onDragDrop: function(e,ddTargets) {
       // Prevention when the editing wire could not be created (due to nMaxWires)
       if(!this.editingWire) { return; }
       
@@ -307,18 +305,16 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
       var targetTerminalProxy = null;
       for(var i = 0 ; i < ddTargets.length ; i++) {
          if( this.isValidWireTerminal(ddTargets[i]) ) {
-            targetTerminalProxy =  ddTargets[i];
-
+            targetTerminalProxy = ddTargets[i];
+						
+						console.log( targetTerminalProxy );
+						
             // Hook into MyEngine...
-						engineNodeFrom = this.terminal.container.module.engineNode;
-            engineNodeTo = ddTargets[i].terminal.container.module.engineNode;
+						var engineNodeFrom = this.terminal.container.module.engineNode;
+            var engineNodeTo = ddTargets[i].terminal.container.module.engineNode;
 						var numOutputs = engineNodeFrom.output.length;
 						engineNodeFrom.output[ numOutputs ] = engineNodeTo.id;
-
-						console.log([ engineNodeFrom.name, engineNodeTo.name ]);
-						console.log([ engineNodeFrom.output, engineNodeTo.output ]);
-						console.log([ engineNodeFrom.name, engineNodeTo]);
-
+						var targetTerminalIndex = i;
             break;
          }
       }
@@ -368,6 +364,11 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
          term2 = this.terminal;
       }
       
+      						
+		
+				//ddTargets[i].terminal.wires.redraw();
+
+      
       // Check the number of wires for this terminal
       var tgtTerm = targetTerminalProxy.terminal;
       if( tgtTerm.options.nMaxWires == 1) {
@@ -375,11 +376,36 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
             tgtTerm.wires[0].remove();
          }
          var w = new WireIt.Wire(term1, term2, parentEl, term1.options.wireConfig);
+         
+         console.log( ' other state - terminal.js - line 380 ' );
+         
          w.redraw();
       }
       else if(tgtTerm.wires.length < tgtTerm.options.nMaxWires) {
          var w = new WireIt.Wire(term1, term2, parentEl, term1.options.wireConfig);
-         w.redraw();
+				
+				my.cycle();
+				my.list();
+
+
+				//var lineWidth = ( my.defaults.arrows.width.max * engineNodeTo.ratio );
+				//ddTargets[ targetTerminalIndex ].terminal.wires[targetTerminalIndex].options.width = lineWidth;
+								
+				// Calculate wire widths on new ratios and redraw all wires
+				var wires = MySystemDemo.editor.layer.wires;
+				var maxWidth = my.defaults.arrows.width.max;
+				var len = wires.length;
+				for( var i = 0; i < len; i++ ){
+					try{
+						var lineWidth = (  / my.sumEnergyInput * wires[ i ].terminal2.container.module.engineNode.ratio );
+						wires[ i ].options.width = lineWidth;
+						console.log( wires[ i ], lineWidth );
+						wires[ i ].redraw();
+					}
+					catch(e){console.log(e);}
+				}
+				
+
       }
       
       

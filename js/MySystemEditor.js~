@@ -73,6 +73,7 @@
             		name				: this._module.name,
 								module			: this._module,
             		type				: this._module.etype,
+            		output			: [],
             		energy			: this._module.fields.energy || 0,
             		inputRate		: this._module.fields.inputRate,
             		efficiency	: energyForm // reference energies object
@@ -418,7 +419,6 @@
                 container.setTitle(module.title);
                 container.options.position = pos;
                 container.module = module;
-                //container.engineNodeId = container.module.engineNode.id;
                 Dom.addClass(container.el, "WiringEditor-module-" + module.name);
             }
             catch(ex) {

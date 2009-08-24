@@ -419,7 +419,6 @@
                 container.setTitle(module.title);
                 container.options.position = pos;
                 container.module = module;
-                //container.engineNodeId = container.module.engineNode.id;
                 Dom.addClass(container.el, "WiringEditor-module-" + module.name);
             }
             catch(ex) {

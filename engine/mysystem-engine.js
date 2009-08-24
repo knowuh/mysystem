@@ -30,14 +30,16 @@
 
 	// Node prototype ////////////////////////////////////////////////////////////
 	var Node = function(){};
-	Node.prototype						= new MyObject;
+	Node.prototype						= new MyObject; // Call the base Prototype for all node objects.
 	Node.prototype.name 			= 'un-named';
-	Node.prototype.type 			= 'void';
-	Node.prototype.energy 		= 0;
-	Node.prototype.heatLoss		= 0;		
-	Node.prototype.cycles 		= 0;
-	Node.prototype.inputRate 	= 1;
-	Node.prototype.output 		= [];
+	Node.prototype.type 			= 'void'; // Type of node. Current types: 'node', 'source'.
+	Node.prototype.energy 		= 0; // The amount of energy currently in this node (will always be 0 after cycle as ebergy expires from system). To get the amount of energy the system 'has' do: energyIn - heatLoss;
+	Node.prototype.ratio 			= 0; // The decimal ratio of energy comsuption in comparisson to it's siblings.
+	Node.prototype.energyIn		= 0; // The amount of energy that came in on the last cycle. (Value will enclude the heat-loss going out)
+	Node.prototype.heatLoss		= 0; // The amount of energy lost as cycle passed through.
+	Node.prototype.cycles 		= 0; // The number of cycles this node has undergone since the system cycle was last called. Used to stop infinite feedback.
+	Node.prototype.inputRate 	= 1; // The energy input rate of this node. Also used to calculate ratio.
+	Node.prototype.output 		= []; // The output array contains children of this node.
 	// todo: remove what is not needed above when done
 	
 	Node.prototype.transform = function(){
@@ -50,9 +52,7 @@
 		}
 		var sumLoss = 1 - sumEfficient;
 		
-		console.log(sumEfficient, sumLoss);
-		
-		// todo: calculation for potential energy
+		// todo: calculation for potential energy (retension/storrage)
 		
 		// calculate childrens energy ratio
 		var sumInputRate = 0;
@@ -63,53 +63,68 @@
 			console.log( iNode );
 		}
 		var ratio = 1 / sumInputRate;
-	
-		console.log( sumInputRate, ratio );
+		
 									
 		// push energy to children
 		for( var i = 0; i < len; i++ ){
 			var iNode = my.node( this.output[ i ] );
 			var energyTransfer = ( this.energy * iNode.inputRate * ratio ) * sumEfficient;
 			
+			iNode.ratio = 1 / sumInputRate * iNode.inputRate;
 			iNode.energy += energyTransfer;
-	
-			iNode.cycles < my.sourceCount ? iNode.transform() : 0 ;
+
+			iNode.cycles < my.sourceCount + my.cycles ? iNode.transform() : 0 ;
+		}
+			
+		/*// Acculmulative Heat Loss
+		this.heatLoss += this.energy * sumLoss || this.energy;
+		if( this.type != 'source' ){
+			this.energy -=  this.energy * ( sumEfficient + sumLoss );
+		}*/		
+		
+		// Reset energy counters for every cycle
+		if( this.cycles < my.sourceCount + my.cycles){
+			this.heatLoss = 0;
+			this.energyIn = 0;
 		}
 		
 		this.heatLoss += this.energy * sumLoss || this.energy;
 		if( this.type != 'source' ){
 			this.energy -=  this.energy * ( sumEfficient + sumLoss );
-		}				
-			
+		}		
+		this.energyIn += sumEfficient;
+		
 	}
 
 	// System constructor ////////////////////////////////////////////////////////
 	var System = function(){
 
 		this.defaults = {
-			entropy	: .987654321,
-			arrows	: {
-									width: { max: 30, min: .5 }
+			entropy	: .987654321, // un-used thus far
+			arrows	: { width : { max: 20 }
 								},
 			nodes		: {
 								},
 			AJAX		:	{ method: 'GET', async: true }
 		};
-
-		this.nodes 	= [];
-		this.arrows = [];
-
-		// CYCLE: 1 turn or cycle of the engine ....................................
-		this.cycles = 0;
+				
+		this.nodes 	= []; // NODES - The array in which all nodes are storred.
+		this.cycles = 0; // CYCLES -The number of times energy has passed through the system. Resets to 0 every time. Child nodes are compare with this to kill any infinite loops.
+		this.sumInputEnergy = 0; // sumInputEnergy - The combined energy value of all sources ( used to calculate arrow widths )	
+			
+		// Cycle() Method : One turn or 'cycle' of the engine.
 		this.cycle = function(){
 			this.cycles ++;
 			var sources = this.nodesWith( { type: 'source' } );
+			this.sumInputEnergy = 0;
 			var len = sources.length;
 			this.sourceCount = len;
 			for( var i = 0; i < len; i++ ){
-					sources[ i ].transform();
+					iSource = sources[ i ];
+					iSource.transform();
+					this.sumInputEnergy += parseFloat( iSource.energy );
 			}
-			console.log('-> cycled <-');
+			console.log('--> cycled <--');
 		}
 
 		this.newNode = function( props ){
