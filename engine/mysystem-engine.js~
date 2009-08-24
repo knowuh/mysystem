@@ -63,14 +63,14 @@
 			console.log( iNode );
 		}
 		var ratio = 1 / sumInputRate;
-		
 									
 		// push energy to children
 		for( var i = 0; i < len; i++ ){
 			var iNode = my.node( this.output[ i ] );
 			var energyTransfer = ( this.energy * iNode.inputRate * ratio ) * sumEfficient;
 			
-			iNode.ratio = 1 / sumInputRate * iNode.inputRate;
+			iNode.ratio = 1;
+			
 			iNode.energy += energyTransfer;
 
 			iNode.cycles < my.sourceCount + my.cycles ? iNode.transform() : 0 ;
@@ -88,11 +88,12 @@
 			this.energyIn = 0;
 		}
 		
+		this.energyIn += sumEfficient * this.energy;
+		
 		this.heatLoss += this.energy * sumLoss || this.energy;
 		if( this.type != 'source' ){
 			this.energy -=  this.energy * ( sumEfficient + sumLoss );
 		}		
-		this.energyIn += sumEfficient;
 		
 	}
 
@@ -101,7 +102,7 @@
 
 		this.defaults = {
 			entropy	: .987654321, // un-used thus far
-			arrows	: { width : { max: 20 }
+			arrows	: { width : { max: 100, min: .5 }
 								},
 			nodes		: {
 								},

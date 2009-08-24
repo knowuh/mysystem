@@ -393,14 +393,21 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
 								
 				// Calculate wire widths on new ratios and redraw all wires
 				var wires = MySystemDemo.editor.layer.wires;
-				var maxWidth = my.defaults.arrows.width.max;
 				var len = wires.length;
+				var maxWidth = my.defaults.arrows.width.max;
 				for( var i = 0; i < len; i++ ){
 					try{
-						var lineWidth = maxWidth * wires[ i ].terminal2.container.module.engineNode.ratio;
-						wires[ i ].options.width = lineWidth;
-						console.log( wires[ i ], lineWidth );
-						wires[ i ].redraw();
+					//var lineWidth = ( my.defaults.arrows.width.max / my.sumInputEnergy ) * wires[ i ].terminal1.container.module.engineNode.energyIn );
+					
+					var engineNodeFrom = wires[ i ].terminal1.container.module.engineNode;
+					var engineNodeTo = wires[ i ].terminal2.container.module.engineNode;
+					
+					var lineWidth = ( maxWidth / my.sumInputEnergy ) * ( engineNodeFrom.energyIn * engineNodeTo.ratio )	;
+					wires[ i ].options.width = lineWidth;
+					
+					console.log([ wires[ i ], lineWidth ]);
+					
+					wires[ i ].redraw();
 					}
 					catch(e){console.log(e);}
 				}

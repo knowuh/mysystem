@@ -5,6 +5,7 @@ var testData = [
     'image'				: "./images/sun.png",
     'xtype'				: "MySystemContainer",
 		'etype'				: 'source',
+    'inputRate'		: .5,
     'fields'			: {
     									'energy'			: 100,
     									'form'				: 'light',
@@ -18,8 +19,7 @@ var testData = [
     'xtype'				: "MySystemContainer",
 		'etype'				: 'node',
     'fields'			: {
-    									'inputRate'		: 1,
-    									'inputRate'		: 0    									
+    									'inputRate'		: 1
     								}
 	},
 	{
