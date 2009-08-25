@@ -1,0 +1,24 @@
+(function() {
+  // A Moc DatService, which does not require a backend at all.
+  MocDSService = function(one,two){
+    this.data = "";
+    debug ("new " + this + " created")
+  };
+
+  MocDSService.prototype = {
+    save: function(_data) {
+        debug("Moc Saving ...")
+        this.data = _data;
+    },
+
+    load: function(context,callback) {
+      debug("Moc Loading ... ")
+      callback(this.data,context);
+    
+  	},
+  	toString: function() {
+  	  var dataString = this.data.substr(0,50);
+  	  return "Moc Data Service (" + dataString + ")";
+  	}
+  };
+})();

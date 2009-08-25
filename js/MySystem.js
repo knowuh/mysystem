@@ -107,7 +107,6 @@
         this.data = new MySystemData();
         this.data.setData(testData,[],true);
         this.editor = new MySystemEditor(this.data);
-        this.setDataService(new DSService());
       }
       catch (e){
         debug("error initializing MySystemDemo: " + e.name + " " + e.message)
