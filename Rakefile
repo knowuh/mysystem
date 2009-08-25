@@ -11,7 +11,7 @@ def simple_sprocket(list,filename)
     :source_files => list
   )
   concatenation = secretary.concatenation
-  concatenation.save_to("#{filename}.js")
+  concatenation.save_to("dist/#{filename}.js")
 end
 
 
@@ -31,6 +31,13 @@ task :wire_it do
 end
 
 task :all_js do
+  %x{rm -rf ./dist}
+  %x{mkdir -p ./dist/lib }
   simple_sprocket(@libs + @wire_it + @my_system,'all')
+  %x{cp mysystem.html dist}
+  %x{cp -r lib/excanvas.js dist/lib}
+  %x{cp -r lib/prototype.js dist/lib}
+  %x{cp -r images dist}
+  %x{cp -r css dist}
 end
 
