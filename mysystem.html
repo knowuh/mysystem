@@ -38,9 +38,10 @@
     document.observe("dom:loaded", function() {
       var mySystem = new MySystem();
       var myDataService = new MocDSService(null,null);
-      // or var myDataService = new VLEDSService(vle);
+      var myDataService = new VLEDSService(vle);
       // or var myDataService = new 
       mySystem.setDataService(myDataService);
+      mySystem.load();
     });
   </script>
 

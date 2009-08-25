@@ -61,20 +61,19 @@
   <!-- My Engine -->
   <script type="text/javascript" src="engine/mysystem-engine.js"></script>
   
-  
   <script type="text/javascript" src="lib/http.js"></script>
   
 </head>
 
 <body class="yui-skin-sam">
-
   <script>
     document.observe("dom:loaded", function() {
       var mySystem = new MySystem();
       var myDataService = new MocDSService(null,null);
       // or var myDataService = new VLEDSService(vle);
-      // or var myDataService = new 
+      // or var myDataService = new DSSService(read,write);
       mySystem.setDataService(myDataService);
+      mySystem.load();
     });
   </script>
 
