@@ -118,6 +118,14 @@
     },
     
     /**
+    * Tell the editor to load data from the dataService.
+    * @method load
+    */
+    load: function() {
+      this.editor.onLoad();
+    },
+    
+    /**
     * Execute the module in the "ExecutionFrame" virtual machine
     * @method run
     * @static
