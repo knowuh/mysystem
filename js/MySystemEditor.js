@@ -67,12 +67,12 @@
             energyForm[ this._module.fields.form ] = this._module.fields.efficiency;
             
             my.newNode({
-            		name				: this._module.name,
-								module			: this._module,
-            		type				: this._module.etype,
-            		energy			: this._module.fields.energy || 0,
-            		inputRate		: this._module.fields.inputRate,
-            		efficiency	: energyForm
+                name        : this._module.name,
+                module      : this._module,
+                type        : this._module.etype,
+                energy      : this._module.fields.energy || 0,
+                inputRate   : this._module.fields.inputRate,
+                efficiency  : energyForm
             });
             
             my.cycle();
@@ -304,7 +304,7 @@
           // kind of a hack, clean any bad wiring from the layer before we continue:
           this.cleanWiring(newLayer);
           if (this.layer == null) { this.layer = this.rootLayer;}
-      	  var parentDom = this.layer.options.parentEl;
+          var parentDom = this.layer.options.parentEl;
           parentDom.replaceChild(newLayer.el,this.layer.el);
           this.layer.el.hide();
           
@@ -357,8 +357,8 @@
             this.ddTarget._layer = this.layer;
         },
         
-        addModuleChoice: function(module) {        		
-        		
+        addModuleChoice: function(module) {           
+            
             // debug("found name: " + module.name);
             var left = Dom.get('left');
             var div = WireIt.cn('div', {
@@ -491,7 +491,7 @@
            }
          },
          
-         load_callback: function(text, context) {	
+         load_callback: function(text, context) { 
             debug("===================================\n" + text);
             var obj = eval(text);
             context.resetLayers();
