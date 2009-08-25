@@ -1,3 +1,4 @@
+(function(){
     var testData = [
   	{
   		'name'				: 'sun',
@@ -96,8 +97,7 @@
   	}
   ];
 
-
-  var MySystem = function(){
+  MySystem = function(){
     this.init();
   };
   
@@ -127,5 +127,4 @@
         ef.run();
     }
   }
-
-  
+})();
