@@ -470,7 +470,9 @@
         */
         onSave: function() {
          if (this.dataService) {
+           debug("calling save " + this.dataService);
            this.dataService.save([this.rootLayer.getWiring()].toJSON());
+           debug("save has returned... ");
          }
          else {
            alert("No Data Service defined");
@@ -482,7 +484,7 @@
          */
          onLoad: function() {
            if (this.dataService) {
-             this.dataService.load(this,load_callback);
+             this.dataService.load(this,this.load_callback);
            }
            else {
              alert("No Data Service defined");
