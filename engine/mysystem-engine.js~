@@ -90,7 +90,7 @@
 
 		this.defaults = {
 			entropy	: .987654321, // un-used thus far
-			arrows	: { width : { max: 20 }
+			arrows	: { width : { max: 30, min: .25 }
 								},
 			nodes		: {
 								},
@@ -105,6 +105,7 @@
 		this.cycle = function(){
 			this.cycles ++;
 			var sources = this.nodesWith( { type: 'source' } );
+			this.sourceCount = sources.length;
 			this.sumInputEnergy = 0;
 			var len = sources.length;
 			this.sourceCount = len;
