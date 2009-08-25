@@ -1,9 +1,8 @@
 
-var DSService = function(){
+var DSService = function(read_key,write_key){
   this.data = "";
-  this.read_key = "";
-  this.write_key = "";
   this.postPath = "/models/"
+  this.setKeys(read_key,write_key);
 };
 
 DSService.prototype = {
@@ -41,5 +40,8 @@ DSService.prototype = {
 	  if (this.read_key) {
 	    HTTP.getText(this.dataDir + "/" + this.options.modelId, context, callback); 
     }
+	},
+	toString: function() {
+	  return "Data Service (" + this.postPath + "" + this.write_key + ")";
 	}
 };
