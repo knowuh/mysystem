@@ -484,21 +484,21 @@
          */
          onLoad: function() {
            if (this.dataService) {
-             this.dataService.load(this,this.load_callback);
+             this.dataService.load(this,this.loadCallback);
            }
            else {
              alert("No Data Service defined");
            }
          },
          
-         load_callback: function(text, context) { 
-            debug("===================================\n" + text);
+         loadCallback: function(text, context) { 
+            debug("json-loading:\n===================================\n" + text);
             var obj = eval(text);
-            context.resetLayers();
-            context.rootLayer.setWiring(obj[0]);
+            if (obj) {
+              context.resetLayers();
+              context.rootLayer.setWiring(obj[0]);
+            }
          },
-      
-
 
         /**
         * Create a help panel
