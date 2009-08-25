@@ -14,20 +14,3 @@ describe 'MySystem'
 
 end
 
-describe 'MySystemDataService'
-  before
-    ds = new DSService();
-  end
-  
- 
-  it 'return value of DSService should not be null'
-    ds.should_not.be_null
-  end
-  
-  it 'DSService should have a methods to save and load Data'
-    ds.should_respond_to('save')
-    ds.should_respond_to('load')
-  end
-
-end
-
