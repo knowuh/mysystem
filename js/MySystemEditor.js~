@@ -60,25 +60,34 @@
             var layerPos = YAHOO.util.Dom.getXY(layer.el);
             pos[0] = pos[0] - layerPos[0];
             pos[1] = pos[1] - layerPos[1];
-            this._MySysEditor.addModule(this._module, pos);
             
-            console.log( this );
             
-            // Compile various energies into one object ( not really using multiple energies per object yet )
-            var energyForm = {};
-            energyForm[ this._module.fields.form ] = this._module.fields.efficiency;
-            
-            // Creates a new node in myEngine and stored it in element
-            this._module.engineNode = my.newNode({
-            		name				: this._module.name,
-								module			: this._module,
-            		type				: this._module.etype,
-            		output			: [],
-            		energy			: this._module.fields.energy || 0,
-            		inputRate		: this._module.fields.inputRate,
-            		efficiency	: energyForm // reference energies object
-            });
-            
+            /*var Copy = new Object;
+            for( var i in this._module ){
+            	Copy[ i ] = this._module[ i ];
+            }
+            Copy.engineNode = newEngineNode;
+            */
+
+						var Copy = function( par ){
+		          for( var i in par._module ){
+		          	this[ i ] = par._module[ i ];
+		          }
+		          var energyForm = {};
+		          energyForm[ par._module.fields.form ] = par._module.fields.efficiency;            
+
+		          this.NewengineNode = my.newNode({
+		          		name				: par._module.name,
+									module			: this,
+		          		type				: par._module.etype,
+		          		output			: [],
+		          		energy			: par._module.fields.energy || 0,
+		          		inputRate		: par._module.fields.inputRate,
+		          		efficiency	: energyForm // reference energies object
+		          });
+						}
+
+            this._MySysEditor.addModule( new Copy( this ), pos );
         }
     });
 
@@ -408,7 +417,8 @@
         * add a module at the given pos
         * usually invoked by drag-and-drop callback
         */
-        addModule: function(module, pos) {        
+        addModule: function(module, pos){
+
             try {
                 //var containerConfig = module.container;
                 // debug("addModule called for " + module.name);
