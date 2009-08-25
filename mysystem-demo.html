@@ -43,9 +43,11 @@
   <script type="text/javascript" src="js/wireit/LayerMap.js"></script>
   <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
 
-  <!-- My DataService -->
+  <!-- My DataServices -->
   <script type="text/javascript" src="js/DSService.js"></script>
-  
+  <script type="text/javascript" src="js/VleDSService.js"></script>
+  <script type="text/javascript" src="js/MocDSService.js"></script>
+      
   <!-- My System -->
   <script type="text/javascript" src="js/uuid.js"></script>
   <script type="text/javascript" src="js/MySystemUtil.js"></script>
@@ -68,9 +70,11 @@
 
   <script>
     document.observe("dom:loaded", function() {
-      // ds = new DataService(); 
-      mySystem = new MySystem();
-      // mySystem.setDataStore(ds);
+      var mySystem = new MySystem();
+      var myDataService = new MocDSService(null,null);
+      // or var myDataService = new VLEDSService(vle);
+      // or var myDataService = new 
+      mySystem.setDataService(myDataService);
     });
   </script>
 
