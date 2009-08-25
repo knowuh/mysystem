@@ -384,9 +384,9 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
       else if(tgtTerm.wires.length < tgtTerm.options.nMaxWires) {
          var w = new WireIt.Wire(term1, term2, parentEl, term1.options.wireConfig);
 				
+				my.reset();
 				my.cycle();
 				my.list();
-
 
 				//var lineWidth = ( my.defaults.arrows.width.max * engineNodeTo.ratio );
 				//ddTargets[ targetTerminalIndex ].terminal.wires[targetTerminalIndex].options.width = lineWidth;
@@ -400,13 +400,12 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
 					//var lineWidth = ( my.defaults.arrows.width.max / my.sumInputEnergy ) * wires[ i ].terminal1.container.module.engineNode.energyIn );
 					
 					var engineNodeFrom = wires[ i ].terminal1.container.module.engineNode;
-					var engineNodeTo = wires[ i ].terminal2.container.module.engineNode;
+					var engineNodeTo = wires[ i ].terminal2.container.module.engineNode;					
+					var lineWidth = engineNodeFrom.energyIn;
 					
-					var lineWidth = ( maxWidth / my.sumInputEnergy ) * ( engineNodeFrom.energyIn * engineNodeTo.ratio );
+					console.log(lineWidth);		
+					
 					wires[ i ].options.width = lineWidth;
-					
-					console.log([ wires[ i ], lineWidth ]);
-					
 					wires[ i ].redraw();
 					}
 					catch(e){console.log(e);}

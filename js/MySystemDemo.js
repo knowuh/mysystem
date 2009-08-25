@@ -31,7 +31,7 @@ var testData = [
     'fields'			: {
     									'inputRate'		: .5,
     									'form'				: 'light',
-    									'efficiency'	: .2
+    									'efficiency'	: .9
     								}
 
 	},
@@ -44,7 +44,7 @@ var testData = [
     'fields'			: {
     									'inputRate'		: .15,
     									'form'				: 'chemical',
-    									'efficiency'	: .2   									
+    									'efficiency'	: 1
     								}
 	},
 	{
