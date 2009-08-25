@@ -60,26 +60,39 @@
 		for( var i = 0; i < len; i++ ){
 			var iNode = my.node( this.output[ i ] );
 			sumInputRate += iNode.inputRate;
+			console.log( iNode );
 		}
 		var ratio = 1 / sumInputRate;
-
+									
 		// push energy to children
 		for( var i = 0; i < len; i++ ){
 			var iNode = my.node( this.output[ i ] );
-			var energyTransfer = ( ( this.energy * iNode.inputRate ) * iNode.inputRate * ratio ) * sumEfficient;
+			var energyTransfer = ( this.energy * iNode.inputRate * ratio ) * sumEfficient;
 			
-			iNode.ratio = 1 / sumInputRate * iNode.inputRate;
+			iNode.ratio = 1;
+			
 			iNode.energy += energyTransfer;
-			iNode.energyIn += energyTransfer;
 
 			iNode.cycles < my.sourceCount + my.cycles ? iNode.transform() : 0 ;
 		}
 			
-		// Acculmulative Heat Loss
-		this.heatLoss = sumLoss * this.energy;
+		/*// Acculmulative Heat Loss
+		this.heatLoss += this.energy * sumLoss || this.energy;
 		if( this.type != 'source' ){
 			this.energy -=  this.energy * ( sumEfficient + sumLoss );
-		} else {
+		}*/		
+		
+		// Reset energy counters for every cycle
+		if( this.cycles < my.sourceCount + my.cycles ){
+			this.heatLoss = 0;
+			this.energyIn = 0;
+		}
+		this.energyIn += sumEfficient * this.energy;
+		
+		this.heatLoss += this.energy * sumLoss || this.energy;
+		if( this.type != 'source' ){
+			this.energy -=  this.energy * ( sumEfficient + sumLoss );
+		}	else {
 			this.energyIn = this.energy;
 		}
 		
@@ -90,7 +103,7 @@
 
 		this.defaults = {
 			entropy	: .987654321, // un-used thus far
-			arrows	: { width : { max: 20 }
+			arrows	: { width : { max: 100, min: .5 }
 								},
 			nodes		: {
 								},
@@ -134,21 +147,9 @@
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
 				var n = this.nodes[ i ]
-				console.log([ n.name, n.type, n.energyIn, n.heatLoss ]);
+				console.log([ n.name, n.type, n.heatLoss ]);
 			}
 		},
-
-		this.reset = function(){
-			var len = this.nodes.length;
-			for( var i = 0; i < len; i++ ){
-				var n = this.nodes[ i ]
-				n.energyIn = 0;
-				n.heatLoss = 0;
-				n.cycles = 0;				
-			}
-			System.cycles = 0;
-		},
-
 
 
 		this.nodesWith = function( props ){
@@ -216,4 +217,3 @@
 	this.my = new System();
 
 })();
-
