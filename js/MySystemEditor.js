@@ -61,7 +61,7 @@
             pos[1] = pos[1] - layerPos[1];
             this._MySysEditor.addModule(this._module, pos);
                                     
-            console.log( this._module );
+            debug( this._module );
             
             var energyForm = {};
             energyForm[ this._module.fields.form ] = this._module.fields.efficiency;

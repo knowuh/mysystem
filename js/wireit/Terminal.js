@@ -377,7 +377,7 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
       // Hook into MyEngine...       
       nodeFrom = this.terminal.container;
 
-			console.log( 'You connected: "' + nodeFrom.options.name + '" to: "' + nodeTo.options.name + '"' );
+			debug( 'You connected: "' + nodeFrom.options.name + '" to: "' + nodeTo.options.name + '"' );
       
       
       /*else {

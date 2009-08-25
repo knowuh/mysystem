@@ -104,7 +104,7 @@
 			for( var i = 0; i < len; i++ ){
 					sources[ i ].transform();
 			}
-			console.log('-> cycled <-');
+			debug('-> cycled <-');
 		}
 
 		this.newNode = function( props ){
@@ -125,7 +125,7 @@
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
 				var n = this.nodes[ i ]
-				console.log([ n.name, n.type, n.heatLoss ]);
+				debug([ n.name, n.type, n.heatLoss ]);
 			}
 		},
 
@@ -172,7 +172,7 @@
 				Get.send( keyvals || 'null' );
 
 				if( async ){
-					console.log("async", this);
+					debug("async", this);
 					Get.onreadystatechange = function(){
 						if( Get.readyState == 4 ){
 							this.responseText = Get.responseText;
