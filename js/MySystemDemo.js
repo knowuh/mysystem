@@ -29,9 +29,9 @@ var testData = [
     'xtype'				: "MySystemContainer",
 		'etype'				: 'node',
     'fields'			: {
-    									'inputRate'		: .5,
+    									'inputRate'		: 1,
     									'form'				: 'light',
-    									'efficiency'	: .9
+    									'efficiency'	: .5
     								}
 
 	},

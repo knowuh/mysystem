@@ -76,7 +76,7 @@
 		          var energyForm = {};
 		          energyForm[ par._module.fields.form ] = par._module.fields.efficiency;            
 
-		          this.NewengineNode = my.newNode({
+		          this.engineNode = my.newNode({
 		          		name				: par._module.name,
 									module			: this,
 		          		type				: par._module.etype,
@@ -85,7 +85,7 @@
 		          		inputRate		: par._module.fields.inputRate,
 		          		efficiency	: energyForm // reference energies object
 		          });
-						}
+						}	
 
             this._MySysEditor.addModule( new Copy( this ), pos );
         }

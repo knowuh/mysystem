@@ -402,9 +402,9 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
 					
 					var engineNodeFrom = wires[ i ].terminal1.container.module.engineNode;
 					var engineNodeTo = wires[ i ].terminal2.container.module.engineNode;					
-					var lineWidth = widthRange / (my.sumInputEnergy/my.sourceCount)  * engineNodeFrom.energyIn + my.defaults.arrows.width.min;
+					var lineWidth = widthRange / (my.sumInputEnergy/my.sourceCount) * ( engineNodeFrom.energyIn - engineNodeTo.energyIn ) + my.defaults.arrows.width.min;
 					
-					console.log(lineWidth);		
+					console.log(lineWidth);
 					
 					wires[ i ].options.width = lineWidth;
 					wires[ i ].redraw();

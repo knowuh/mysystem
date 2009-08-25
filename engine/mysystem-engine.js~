@@ -64,6 +64,7 @@
 		var ratio = 1 / sumInputRate;
 
 		// push energy to children
+		var heatLoss = 0;
 		for( var i = 0; i < len; i++ ){
 			var iNode = my.node( this.output[ i ] );
 			var energyTransfer = ( ( this.energy * iNode.inputRate ) * iNode.inputRate * ratio ) * sumEfficient;
@@ -71,12 +72,14 @@
 			iNode.ratio = 1 / sumInputRate * iNode.inputRate;
 			iNode.energy += energyTransfer;
 			iNode.energyIn += energyTransfer;
-
+			
+			heatLoss += energyTransfer;
+			
 			iNode.cycles < my.sourceCount + my.cycles ? iNode.transform() : 0 ;
 		}
 			
 		// Acculmulative Heat Loss
-		this.heatLoss = sumLoss * this.energy;
+		this.heatLoss = heatLoss;//sumLoss * this.energy;
 		if( this.type != 'source' ){
 			this.energy -=  this.energy * ( sumEfficient + sumLoss );
 		} else {
@@ -105,7 +108,9 @@
 		this.cycle = function(){
 			this.cycles ++;
 			var sources = this.nodesWith( { type: 'source' } );
+			
 			this.sourceCount = sources.length;
+			
 			this.sumInputEnergy = 0;
 			var len = sources.length;
 			this.sourceCount = len;
@@ -140,6 +145,7 @@
 		},
 
 		this.reset = function(){
+			console.log(' RESETING...  ( cycles = ' + this.cycles + ' )' );
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
 				var n = this.nodes[ i ]
@@ -147,7 +153,8 @@
 				n.heatLoss = 0;
 				n.cycles = 0;				
 			}
-			System.cycles = 0;
+			this.cycles = 0;
+			console.log(' RESET: cycles = ' + this.cycles );
 		},
 
 
