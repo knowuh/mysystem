@@ -4,24 +4,46 @@ Part of the CLEAR project, MySystem is a system diagraming tool. Part of the goa
 component to be used inside something like mozSwing (?)
 
 See the basecamp docs for the project description for "CLEAR":http://concordconsortium.basecamphq.com/projects/2939067/project/log
-See Alexes Narratives in "this spreadsheet":http://concordconsortium.basecamphq.com/projects/2939067/file/30061007/CLEAR%20Narrative%20Linking%205_28.xls
+See Alex' Narratives in "this spreadsheet":http://concordconsortium.basecamphq.com/projects/2939067/file/30061007/CLEAR%20Narrative%20Linking%205_28.xls
 
 
 h2. Dependencies
 
-
 Based on "WireIt":http://http://javascript.neyric.com/wireit/
 Which uses "YUI":http://developer.yahoo.com/yui/
 
-(note that currently all dependent libraries are included in this repo, should probably be fixed up...)
+(note: that currently all dependent libraries are included in this repo, and thats not good....)
+(note: We are working on reducing dependancies on these libraries.)
+
+h2. Developer notes:
+
+h3. Building:
+
+If you need to make a compact and easy to distribute version of MySystem, you can use Rake
+to build a dist/ directory.  *Building is not required* You can preview the work simply by opening
+./mysystem-dev.html in your browser.
+
+If you have ruby installed, you should also install a few gems to run the distro rake task
+* @sudo gem install --remote sprockets@
+* @sudo gem sources -a http://gems.opscode.com@
+* @rake@
+* @open ./dist/mysystem.html@*
+
+h3. Testing
+
+first install visionmedia-jspec with @sudo gem install visionmedia-jspec@
+We are trying to get better about testing javascript. All test can be run from ./test/spec.dev.html.
+
+After you have built
 
 h2. Todo
 
-# Save Data:
-## Decouple view from models
-## Make json call to some remote service 
-## Make some endpoint for storing data
-## Adding users / roles groups to "portal"
+# authorable pallet of icons / node types.
+# decouple view from models
+# code documentation
+# more tests
+# google gears integration.
+# means to handle page-out data saving.
 # Subsystems: The ability to add 'sub-modules' inside of modules (nested modules)
 # Clean up dependencies on YUI if possible.
 # restructure this repository
