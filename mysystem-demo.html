@@ -51,7 +51,7 @@
   <script type="text/javascript" src="js/MySystemContainer.js"></script>
   <script type="text/javascript" src="js/MySystemData.js"></script>
   <script type="text/javascript" src="js/MySystemEditor.js"></script>
-  <script type="text/javascript" src="js/MySystemDemo.js"></script>
+  <script type="text/javascript" src="js/MySystem.js"></script>
   
   <!-- My Engine -->
   <script type="text/javascript" src="engine/mysystem-engine.js"></script>
@@ -65,15 +65,12 @@
 
   <script>
     document.observe("dom:loaded", function() {
-      // don't load data, but provide a saving key: (when would we do that?)
-      // results = MySystemDemo.init_learner(null,"pre-generated-key");            
-      // load data, and save with new key
-      // results = MySystemDemo.init_learner("pre-generated-key",null)
-      // load and save to the same system:
-      //results = MySystemDemo.init_learner("pre-generated-key","pre-generated-key")
-      // don't load data, and also generate a new saving key
-      results = MySystemDemo.init_learner(null,null);
-      //alert("new key " + results);
+      var mySystem = new MySystem();
+      var myDataService = new MocDSService(null,null);
+      // or var myDataService = new VLEDSService(vle);
+      // or var myDataService = new DSSService(read,write);
+      mySystem.setDataService(myDataService);
+      mySystem.load();
     });
   </script>
 

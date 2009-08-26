@@ -99,12 +99,12 @@
 								},
 			AJAX		:	{ method: 'GET', async: true }
 		};
-				
-		this.nodes 	= []; // NODES - The array in which all nodes are storred.
-		this.cycles = 0; // CYCLES -The number of times energy has passed through the system. Resets to 0 every time. Child nodes are compare with this to kill any infinite loops.
-		this.sumInputEnergy = 0; // sumInputEnergy - The combined energy value of all sources ( used to calculate arrow widths )	
-			
-		// Cycle() Method : One turn or 'cycle' of the engine.
+
+		this.nodes 	= [];
+		this.arrows = [];
+
+		// CYCLE: 1 turn or cycle of the engine ....................................
+		this.cycles = 0;
 		this.cycle = function(){
 			this.cycles ++;
 			var sources = this.nodesWith( { type: 'source' } );
@@ -119,7 +119,7 @@
 					iSource.transform();
 					this.sumInputEnergy += parseFloat( iSource.energy );
 			}
-			console.log('--> cycled <--');
+			debug('-> cycled <-');
 		}
 
 		this.newNode = function( props ){
@@ -140,7 +140,7 @@
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
 				var n = this.nodes[ i ]
-				console.log([ n.name, n.type, n.energyIn, n.heatLoss ]);
+				debug([ n.name, n.type, n.heatLoss ]);
 			}
 		},
 

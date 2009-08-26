@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/opt/local/lib/ruby/gems/1.8/gems/visionmedia-jspec-2.8.4/lib/jspec.css" />
+    <script src="/opt/local/lib/ruby/gems/1.8/gems/visionmedia-jspec-2.8.4/lib/jspec.js"></script>
+    
+    <script type="text/javascript" src="../../lib/prototype.js"></script>
+    <!--Include YUI Loader: -->
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader-min.js"></script>
+
+    <script type="text/javascript" src="../../lib/canvastext.js"></script>
+
+    <!-- WireIt -->
+    <!--[if IE]><script type="text/javascript" src="lib/excanvas.js"></script><![endif]-->
+    <script type="text/javascript" src="../../dist/all.js"></script>
+    
+    <script>
+      function runSuites() {
+        ['spec.core.js','spec.DataService.html','spec.Util.js'].each(function(suite) {
+          JSpec
+          .exec(suite)
+          .run()
+          .report();
+        });
+      }
+    </script>
+  </head>
+  <body class="jspec" onLoad="runSuites();">
+    <div id="jspec-top"><h2 id="jspec-title">JSpec <em><script>document.write(JSpec.version)</script></em></h2></div>
+    <div id="jspec"></div>
+    <div id="jspec-bottom"></div>
+  </body>
+</html>

@@ -71,4 +71,4 @@ MySystemData.defaultTerminals = function() {
            "allowedTypes": ["input", "output"]
        }  
    }];
-}
+};
