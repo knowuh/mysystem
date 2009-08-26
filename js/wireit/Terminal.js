@@ -391,16 +391,17 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
         var maxWidth = my.defaults.arrows.width.max;
         for( var i = 0; i < len; i++ ){
           try{
-          //var lineWidth = ( my.defaults.arrows.width.max / my.sumInputEnergy ) * wires[ i ].terminal1.container.module.engineNode.energyIn );
-          
-          var engineNodeFrom = wires[ i ].terminal1.container.module.engineNode;
-          var engineNodeTo = wires[ i ].terminal2.container.module.engineNode;          
-          var lineWidth = widthRange / (my.sumInputEnergy/my.sourceCount) * ( Math.sqrt(engineNodeFrom.energyIn * engineNodeTo.energyIn) ) + my.defaults.arrows.width.min;
-          
+            //var lineWidth = ( my.defaults.arrows.width.max / my.sumInputEnergy ) * wires[ i ].terminal1.container.module.engineNode.energyIn );
 
+            var engineNodeFrom = wires[ i ].terminal1.container.module.engineNode;
+            var engineNodeTo = wires[ i ].terminal2.container.module.engineNode;          
+            var lineWidth = widthRange / (my.sumInputEnergy/my.sourceCount) * ( Math.sqrt(engineNodeFrom.energyIn * engineNodeTo.energyIn) ) + my.defaults.arrows.width.min;
 
-          wires[ i ].options.width = lineWidth;
-          wires[ i ].redraw();
+            wires[ i ].options.width = lineWidth;
+            wires[ i ].redraw();
+          }
+          catch(e) {
+            window.console && console.log && console.log(e);
           }
         }
         

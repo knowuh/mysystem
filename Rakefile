@@ -38,7 +38,6 @@ require 'Sprockets'
 }
 
 def simple_sprocket(list,filename)
-
   secretary = Sprockets::Secretary.new(
     :source_files => list
   )
@@ -69,7 +68,7 @@ desc "combine all of the javascript files, and make a distrobution directory"
 task :all_js do
   %x{rm -rf ./dist}
   %x{mkdir -p ./dist/lib }
-  simple_sprocket(@libs + @wire_it + @my_system,'all')
+  simple_sprocket(@libs + @wire_it + @my_system, 'all')
   %x{cp mysystem-for-dist.html dist/mysystem.html}
   %x{cp -r lib/excanvas.js dist/lib}
   %x{cp -r lib/prototype.js dist/lib}
