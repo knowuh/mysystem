@@ -15,12 +15,11 @@
     
     <script>
       function runSuites() {
-        ['spec.core.js','spec.DataService.html','spec.Util.js'].each(function(suite) {
-          JSpec
-          .exec(suite)
-          .run()
-          .report();
+        var spec = JSpec;
+        ['spec.core.js','spec.DataService.html','spec.Util.js'].each(function(name) {
+          spec.exec(name);
         });
+        spec.report();
       }
     </script>
   </head>
