@@ -101,6 +101,7 @@
     this.init();
   };
   
+  
   MySystem.prototype = {
     init: function() {
       try {  
