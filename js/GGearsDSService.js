@@ -110,6 +110,7 @@
     },
     
     open_db: function() {
+      // this line is not working, something about factory.create needs to be investigated:
       this.db_connection = google.gears.factory.create(this.db);
       this.db_connection.open(this.db);
       this.db_connection.execute (
@@ -123,8 +124,8 @@
       debug(this + " save called");
       this.data = _data;
       this.open_db();
-      this.db_connection.execute('insert into ' + this.table + ' values (?, ?, ?)', [this.writeKey, this.data , new Date().getTime()]);
-      debug(this + " save done");
+      // this.db_connection.execute('insert into ' + this.table + ' values (?, ?, ?)', [this.writeKey, this.data , new Date().getTime()]);
+      // debug(this + " save done");
     },
 
     load: function(context,callback) {
@@ -153,7 +154,7 @@
   	},
   	
   	toString: function() {
-  	  return "Gears Data Service (" + this.postPath + "" + this.writeKey + ")";
+  	  return "Gears Data Service (" + this.table + ":" + this.writeKey + ")";
   	}
   };
 })();
