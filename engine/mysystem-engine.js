@@ -145,7 +145,7 @@
 		},
 
 		this.reset = function(){
-			console.log(' RESETING...  ( cycles = ' + this.cycles + ' )' );
+			debug(' RESETING...  ( cycles = ' + this.cycles + ' )' );
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
 				var n = this.nodes[ i ]
@@ -154,7 +154,7 @@
 				n.cycles = 0;				
 			}
 			this.cycles = 0;
-			console.log(' RESET: cycles = ' + this.cycles );
+			debug(' RESET: cycles = ' + this.cycles );
 		},
 
 
@@ -201,7 +201,7 @@
 				Get.send( keyvals || 'null' );
 
 				if( async ){
-					console.log("async", this);
+					debug("async", this);
 					Get.onreadystatechange = function(){
 						if( Get.readyState == 4 ){
 							this.responseText = Get.responseText;

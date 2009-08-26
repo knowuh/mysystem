@@ -234,13 +234,13 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
       if(this.terminal.container) {
          var obj = this.terminal.container.layer.el;
          var curleft = curtop = 0;
-        	if (obj.offsetParent) {
-        		do {
-        			curleft += obj.offsetLeft;
-        			curtop += obj.offsetTop;
-        			obj = obj.offsetParent ;
-        		} while ( obj = obj.offsetParent );
-        	}
+          if (obj.offsetParent) {
+            do {
+              curleft += obj.offsetLeft;
+              curtop += obj.offsetTop;
+              obj = obj.offsetParent ;
+            } while ( obj = obj.offsetParent );
+          }
          this.fakeTerminal.pos = [e.clientX-curleft+this.terminal.container.layer.el.scrollLeft,
                                   e.clientY-curtop+this.terminal.container.layer.el.scrollTop];
       }
@@ -306,15 +306,12 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
       for(var i = 0 ; i < ddTargets.length ; i++) {
          if( this.isValidWireTerminal(ddTargets[i]) ) {
             targetTerminalProxy = ddTargets[i];
-						
-						console.log( targetTerminalProxy );
-						
             // Hook into MyEngine...
-						var engineNodeFrom = this.terminal.container.module.engineNode;
+            var engineNodeFrom = this.terminal.container.module.engineNode;
             var engineNodeTo = ddTargets[i].terminal.container.module.engineNode;
-						var numOutputs = engineNodeFrom.output.length;
-						engineNodeFrom.output[ numOutputs ] = engineNodeTo.id;
-						var targetTerminalIndex = i;
+            var numOutputs = engineNodeFrom.output.length;
+            engineNodeFrom.output[ numOutputs ] = engineNodeTo.id;
+            var targetTerminalIndex = i;
             break;
          }
       }
@@ -347,7 +344,6 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
       
       // Create the wire only if the terminals aren't connected yet
       if(termAlreadyConnected) {
-      	//console.log("terminals already connected ");
          return;
       }
          
@@ -364,9 +360,9 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
          term2 = this.terminal;
       }
       
-      						
-		
-				//ddTargets[i].terminal.wires.redraw();
+                  
+    
+        //ddTargets[i].terminal.wires.redraw();
 
       
       // Check the number of wires for this terminal
@@ -376,50 +372,40 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
             tgtTerm.wires[0].remove();
          }
          var w = new WireIt.Wire(term1, term2, parentEl, term1.options.wireConfig);
-         
-         console.log( ' other state - terminal.js - line 380 ' );
-         
          w.redraw();
       }
       else if(tgtTerm.wires.length < tgtTerm.options.nMaxWires) {
          var w = new WireIt.Wire(term1, term2, parentEl, term1.options.wireConfig);
-				
-				my.reset();
-				my.cycle();
-				my.list();
+        
+        my.reset();
+        my.cycle();
+        my.list();
 
-				//var lineWidth = ( my.defaults.arrows.width.max * engineNodeTo.ratio );
-				//ddTargets[ targetTerminalIndex ].terminal.wires[targetTerminalIndex].options.width = lineWidth;
-								
-				// Calculate wire widths on new ratios and redraw all wires
-				var wires = MySystemDemo.editor.layer.wires;
-				var len = wires.length;
-				var widthRange = my.defaults.arrows.width.max - my.defaults.arrows.width.min;
-				var maxWidth = my.defaults.arrows.width.max;
-				for( var i = 0; i < len; i++ ){
-					try{
-					//var lineWidth = ( my.defaults.arrows.width.max / my.sumInputEnergy ) * wires[ i ].terminal1.container.module.engineNode.energyIn );
-					
-					var engineNodeFrom = wires[ i ].terminal1.container.module.engineNode;
-					var engineNodeTo = wires[ i ].terminal2.container.module.engineNode;					
-					var lineWidth = widthRange / (my.sumInputEnergy/my.sourceCount) * ( Math.sqrt(engineNodeFrom.energyIn * engineNodeTo.energyIn) ) + my.defaults.arrows.width.min;
-					
-					console.log(lineWidth);
-					
-					wires[ i ].options.width = lineWidth;
-					wires[ i ].redraw();
-					}
-					catch(e){console.log(e);}
-				}
-				
+        //var lineWidth = ( my.defaults.arrows.width.max * engineNodeTo.ratio );
+        //ddTargets[ targetTerminalIndex ].terminal.wires[targetTerminalIndex].options.width = lineWidth;
+                
+        // Calculate wire widths on new ratios and redraw all wires
+        var wires = MySystemDemo.editor.layer.wires;
+        var len = wires.length;
+        var widthRange = my.defaults.arrows.width.max - my.defaults.arrows.width.min;
+        var maxWidth = my.defaults.arrows.width.max;
+        for( var i = 0; i < len; i++ ){
+          try{
+          //var lineWidth = ( my.defaults.arrows.width.max / my.sumInputEnergy ) * wires[ i ].terminal1.container.module.engineNode.energyIn );
+          
+          var engineNodeFrom = wires[ i ].terminal1.container.module.engineNode;
+          var engineNodeTo = wires[ i ].terminal2.container.module.engineNode;          
+          var lineWidth = widthRange / (my.sumInputEnergy/my.sourceCount) * ( Math.sqrt(engineNodeFrom.energyIn * engineNodeTo.energyIn) ) + my.defaults.arrows.width.min;
+          
+
+
+          wires[ i ].options.width = lineWidth;
+          wires[ i ].redraw();
+          }
+        }
+        
 
       }
-      
-      
-      /*else {
-         // console.log("Cannot connect to this terminal: nMaxWires = ", ddTargets[0].terminal.options.nMaxWires);
-      }*/
-      
    },
    
    
@@ -686,15 +672,15 @@ WireIt.Terminal.prototype = {
 
       var obj = this.el;
       var curleft = curtop = 0;
-     	if (obj.offsetParent) {
-     		do {
-     			curleft += obj.offsetLeft;
-     			curtop += obj.offsetTop;
-     			obj = obj.offsetParent;
-     		} while ( !!obj && obj != layerEl);
-     	}
-  	
-     	return [curleft+15,curtop+15];
+      if (obj.offsetParent) {
+        do {
+          curleft += obj.offsetLeft;
+          curtop += obj.offsetTop;
+          obj = obj.offsetParent;
+        } while ( !!obj && obj != layerEl);
+      }
+    
+      return [curleft+15,curtop+15];
    },
 
 

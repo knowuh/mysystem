@@ -687,7 +687,6 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @param {Integer} y top position of the mouse (relative to the canvas)
     */
    onWireMove: function(x,y) {
-      // console.log("onWireMove",x,y);
    },
    
    updateFields: function() {
@@ -762,17 +761,16 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
      debug('clicked');
      WireIt.Wire.openPropEditorFor.fire(this);
      this.redraw;
-    //       // console.log("onWireClick",x,y);
+
     // wd = this.options.width;
     // nwd = wd + 2;
     // this.options.width = nwd;
     // this.redraw();
-    // // console.log("New Wire Width = ", nwd);
+
    },
 
    onWireDblClick: function(x,y) {
  	  debug('dbl-clicked');
- 	  // console.log("onWireDblClick",x,y);
 		// this.options.width = 3;
     WireIt.Wire.openPropEditorFor.fire(this);
 		this.redraw;

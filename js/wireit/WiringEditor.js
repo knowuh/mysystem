@@ -218,7 +218,6 @@ WireIt.WiringEditor.prototype = {
        Dom.addClass(container.el, "WiringEditor-module-"+module.name);
     }
     catch(ex) {
-       // console.log("Error Layer.addContainer", ex.message);
     }    
  },
 
@@ -265,7 +264,7 @@ WireIt.WiringEditor.prototype = {
   * @method onSMDsuccess
   */
  onSMDsuccess: function() {
-    //console.log("onSMDsuccess",this.service);
+
  },
  
  /**
@@ -273,7 +272,7 @@ WireIt.WiringEditor.prototype = {
   * @method onSMDfailure
   */
  onSMDfailure: function() { 
-    //console.log("onSMDfailure", this.service);
+
  },
 
  /**
@@ -381,12 +380,13 @@ WireIt.WiringEditor.prototype = {
           
           var li = WireIt.cn('li',null,{cursor: 'pointer'},module.name);
           Event.addListener(li, 'click', function(e,args) {
-             try {
+             //try {
                 this.loadPipe(Event.getTarget(e).innerHTML);
-             }
-             catch(ex) {
+             //}
+             // Just fail so we can debug it.
+             //catch(ex) {
                 // console.log(ex);
-             }
+             //}
           }, this, true);
           list.appendChild(li);
        }
@@ -425,14 +425,15 @@ WireIt.WiringEditor.prototype = {
     for(var i = 0 ; i < n ; i++) {
        if(this.pipes[i].name == name) {
           // Try to eval working property:
-          try {
+          // lets debug this, instead of catching it.
+          // try {
              ret = JSON.parse(this.pipes[i].working);
              return ret;
-          }
-          catch(ex) {
-             // console.log("Unable to eval working json for module "+name);
-             return null;
-          }
+          //}
+          //catch(ex) {
+             // 
+            // return null;
+          //}
        }
     }
     
