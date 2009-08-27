@@ -1,5 +1,7 @@
 (function(){
-  MySystem = function(){ };
+  MySystem = function(){ 
+    this.init();
+  };
   
   MySystem.prototype = {
     init: function() {
