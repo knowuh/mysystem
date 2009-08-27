@@ -1,0 +1,99 @@
+[{
+
+  'icon'        : "./images/sun.png",
+  'image'       : "./images/sun.png",
+  'xtype'       : "MySystemContainer",
+  'etype'       : 'source',
+  'fields'      : {
+                    'name'        : 'sun',
+                    'energy'      : 100,
+                    'form'        : 'light',
+                    'efficiency'  : 1
+                  }
+},
+{
+  'icon'        : "./images/space.jpg",
+  'image'       : "./images/space.jpg",
+  'xtype'       : "MySystemContainer",
+  'etype'       : 'source',
+  'fields'      : {
+                    'name'        : 'space',
+                    'energy'      : 100,
+                    'form'        : 'heat',
+                    'efficiency'  : 1
+                  }
+},
+{
+  'icon'        : "./images/world.png",
+  'image'       : "./images/world.png",
+  'xtype'       : "MySystemContainer",
+  'etype'       : 'source',
+  'fields'      : {
+                    'name'        : 'world',
+                    'energy'      : 100,
+                    'form'        : 'heat',
+                    'efficiency'  : 1
+                  }
+
+},
+{
+  'icon'        : "./images/grass.jpg",
+  'image'       : "./images/grass.jpg",
+  'xtype'       : "MySystemContainer",
+  'etype'       : 'source',
+  'fields'      : {
+                    'name'        : 'grass',
+                    'energy'      : .1,
+                    'form'        : 'chemical',
+                    'efficiency'  : 1
+                  }
+},
+{
+  'icon'        : "./images/bugs.jpg",
+  'image'       : "./images/bugs.jpg",
+  'xtype'       : "MySystemContainer",
+  'etype'       : 'node',
+  'fields'      : {
+                    'name'        : 'bugs',
+                    'energy'      : .1,
+                    'form'        : 'chemical',
+                    'efficiency'  : 1
+                  }
+},
+{
+  'icon'        : "./images/rabbit.jpg",
+  'image'       : "./images/rabbit.jpg",    
+  'xtype'       : "MySystemContainer",    
+  'etype'       : 'node',
+  'fields'      : {
+                    'name'        : 'rabbit',
+                    'energy'      : 1,
+                    'form'        : 'chemical',
+                    'efficiency'  : 1
+                  }
+},
+{
+ 
+  'icon'        : "./images/owl.jpg",
+  'image'       : "./images/owl.jpg",
+  'xtype'       : "MySystemContainer",
+  'etype'       : 'node',
+  'fields'      : {
+                    'name'        : 'owl',
+                    'energy'      : 1,
+                    'form'        : 'chemical',
+                    'efficiency'  : 1
+                  }
+},
+{
+  'icon'        : "./images/fox.jpg",
+  'image'       : "./images/fox.jpg",
+  'xtype'       : "MySystemContainer",
+  'etype'       : 'node',
+  'fields'      : {
+                    'name'        : 'fox',
+                    'energy'      : 1,
+                    'form'        : 'chemical',
+                    'efficiency'  : 1
+                  }
+}]

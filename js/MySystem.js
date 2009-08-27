@@ -1,121 +1,48 @@
 (function(){
-    var testData = [
-  	{
-  		'name'				: 'sun',
-      'icon'				: "./images/sun.png",
-      'image'				: "./images/sun.png",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'source',
-      'fields'			: {
-      									'energy'			: 100,
-      									'form'				: 'light',
-      									'efficiency'	: 1
-      								}
-  	},
-  	{
-  		'name'				: 'space',
-      'icon'				: "./images/space.jpg",
-      'image'				: "./images/space.jpg",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'node',
-      'fields'			: {
-      									'inputRate'		: 1
-      								}
-  	},
-  	{
-  		'name'				: 'earth',
-      'icon'				: "./images/world.png",
-      'image'				: "./images/world.png",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'node',
-      'fields'			: {
-      									'inputRate'		: .5,
-      									'form'				: 'light',
-      									'efficiency'	: .2
-      								}
-
-  	},
-  	{
-  		'name'				: 'grass',
-      'icon'				: "./images/grass.jpg",
-      'image'				: "./images/grass.jpg",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'node',
-      'fields'			: {
-      									'inputRate'		: .15,
-      									'form'				: 'chemical',
-      									'efficiency'	: .2
-      								}
-  	},
-  	{
-  		'name'				: 'bugs-fungi',
-      'icon'				: "./images/bugs.jpg",
-      'image'				: "./images/bugs.jpg",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'node',
-      'fields'			: {
-      									'inputRate'		: .1,
-      									'form'				: 'chemical',
-      									'efficiency'	: .1
-      								}
-  	},
-  	{
-  		'name'				: 'rabbit',
-      'icon'				: "./images/rabbit.jpg",
-      'image'				: "./images/rabbit.jpg",		
-      'xtype'				: "MySystemContainer",    
-  		'etype'				: 'node',
-      'fields'			: {
-      									'inputRate'		: .2,
-      									'form'				: 'chemical',
-      									'efficiency'	: .15
-      								}
-  	},
-  	{
-  		'name'				: 'owl',
-      'icon'				: "./images/owl.jpg",
-      'image'				: "./images/owl.jpg",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'node',
-      'fields'			: {
-      									'inputRate'		: .2,
-      									'form'				: 'chemical',
-      									'efficiency'	: .15,
-      								}
-  	},
-  	{
-  		'name'				: 'fox',
-      'icon'				: "./images/fox.jpg",
-      'image'				: "./images/fox.jpg",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'node',
-      'fields'			: {
-      									'inputRate'		: .18,
-      									'form'				: 'chemical',
-      									'efficiency'	: .1
-      								}
-  	}
-  ];
-
-  MySystem = function(){
-    this.init();
-  };
-  
+  MySystem = function(){ };
   
   MySystem.prototype = {
     init: function() {
-      try {  
-        this.data = new MySystemData();
-        this.data.setData(testData,[],true);
-        this.editor = new MySystemEditor(this.data);
-      }
-      catch (e){
-        debug("error initializing MySystem: " + e.name + " " + e.message)
-      }
+      this.loadModules('modules.json');
     },
     
     setDataService: function(ds) {
-      this.editor.dataService=ds;
+      this.dataService=ds;
+      if (this.editor) {
+        this.editor.dataService = this.dataService;
+      }
+    },
+    
+    setEditor: function(_editor) {
+      debug("new editor being set");
+      if (_editor) {  
+        this.editor = _editor;
+      }
+      else {
+        debug("new editor set");
+        this.editor = new MySystemEditor(this.data);
+      }
+      this.editor.dataService = this.dataService;
+    },
+    
+    loadModules: function(filename) {
+      var self = this;
+      debug("calling loadModules " + filename);
+      new Ajax.Request(filename, {
+        asynchronous: false,
+        onSuccess: function(rsp) {
+          var text = rsp.responseText;
+          var _data = eval(text);
+          debug("content: "+ text);
+          debug("data: " + _data);
+          self.data = new MySystemData();
+          self.data.setData(_data,[],true);
+          self.setEditor();
+        },
+        onFailure: function(req,err) {
+          debug("failed!");
+        }
+      });
     },
     
     /**
@@ -125,15 +52,6 @@
     load: function() {
       this.editor.onLoad();
     },
-    
-    /**
-    * Execute the module in the "ExecutionFrame" virtual machine
-    * @method run
-    * @static
-    */
-    run: function() {
-        var ef = new ExecutionFrame(this.editor.getValue());
-        ef.run();
-    }
+
   }
 })();
