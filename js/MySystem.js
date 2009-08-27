@@ -110,7 +110,7 @@
         this.editor = new MySystemEditor(this.data);
       }
       catch (e){
-        debug("error initializing MySystemDemo: " + e.name + " " + e.message)
+        debug("error initializing MySystem: " + e.name + " " + e.message)
       }
     },
     
