@@ -15,17 +15,17 @@ var MySystemData = Class.create({
     this.modules.push(module)
   },
 
-  setModules: function (modules,addTerminals) {
+  setModules: function (_modules,addTerminals) {
     this.modules = [];
     // debug("set modules called");
-    modules.each(function(m){ 
+    _modules.each(function(m){ 
       this.addModule(m,addTerminals); 
     }.bind(this));
   },
   
-  setInstances: function(instances) {
+  setInstances: function(_instances) {
     this.instances = [];
-    instances.each(function(i){
+    _instances.each(function(i){
       this.addInstance(i);
     }.bind(this))
   },
