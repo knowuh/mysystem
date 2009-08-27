@@ -32,7 +32,7 @@
       var get_from = this.getPath + "/" + this.writeKey;
       var self = this;
   	  if (this.readKey) {
-  	    HTTP.getText(this.dataDir + "/" + this.options.modelId, self, this.load_callback(context,callback)); 
+  	    HTTP.getText(this.dataDir + "/" + this.options.modelId, self, this.load_callback); 
       }
       else {
         debug("load caleld, but no read key specified...");
