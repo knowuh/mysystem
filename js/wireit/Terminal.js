@@ -381,11 +381,16 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
         my.cycle();
         my.list();
 
+
+        /*
+        NOAH: Removed this for Berklee Demo.
+        We shouldn't have our hooks in this deep into wire-it.
+        Fortunately we are re-writing wireit.
+        
+        // Calculate wire widths on new ratios and redraw all wires
         //var lineWidth = ( my.defaults.arrows.width.max * engineNodeTo.ratio );
         //ddTargets[ targetTerminalIndex ].terminal.wires[targetTerminalIndex].options.width = lineWidth;
-                
-        // Calculate wire widths on new ratios and redraw all wires
-        var wires = MySystemDemo.editor.layer.wires;
+        var wires = MySystem.editor.layer.wires;
         var len = wires.length;
         var widthRange = my.defaults.arrows.width.max - my.defaults.arrows.width.min;
         var maxWidth = my.defaults.arrows.width.max;
@@ -404,7 +409,7 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
             window.console && console.log && console.log(e);
           }
         }
-        
+        */
 
       }
    },
