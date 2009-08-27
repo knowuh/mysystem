@@ -2,17 +2,19 @@ require 'rubygems'
 require 'Sprockets'
 
 @libs = %w{
-  lib/prototype.js, 
-  lib/http.js, 
+  lib/YUI/YUI-combo.js
+  lib/prototype.js
+  lib/http.js
   lib/canvastext.js
-  lib/uuid.js  
+  lib/uuid.js
 }
 
 @my_system = %w{ 
   engine/mysystem-engine.js 
   js/DSService.js  
   js/VleDSService.js  
-  js/MocDSService.js  
+  js/GGearsDSService.js
+  js/MocDSService.js
   js/MySystemUtil.js  
   js/MySystemPropEditor.js
   js/MySystemWireLabel.js  
@@ -42,7 +44,7 @@ def simple_sprocket(list,filename)
     :source_files => list
   )
   concatenation = secretary.concatenation
-  concatenation.save_to("dist/#{filename}.js")
+  concatenation.save_to(filename)
 end
 
 
@@ -68,11 +70,14 @@ desc "combine all of the javascript files, and make a distrobution directory"
 task :all_js do
   %x{rm -rf ./dist}
   %x{mkdir -p ./dist/lib }
-  simple_sprocket(@libs + @wire_it + @my_system, 'all')
+  %x{mkdir -p ./dist/css/YUI }
+  
+  simple_sprocket(@libs + @wire_it + @my_system, 'dist/all.js')
   %x{cp mysystem-for-dist.html dist/mysystem.html}
   %x{cp -r lib/excanvas.js dist/lib}
-  %x{cp -r lib/prototype.js dist/lib}
+  %x{cp modules.json dist}
   %x{cp -r images dist}
-  %x{cp -r css dist}
+  %x{cp -r css/* dist/css}
+  %x{cp ./lib/YUI/*.css ./dist/css/YUI}
 end
 
