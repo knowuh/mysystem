@@ -78,7 +78,7 @@
 
 		          this.engineNode = my.newNode({
 		          		name				: par._module.name,
-									module			: this,
+									module			: par._module,
 		          		type				: par._module.etype,
 		          		output			: [],
 		          		energy			: par._module.fields.energy || 0,
@@ -428,6 +428,7 @@
                 var container = this.layer.addContainer(module);
                 container.setTitle(module.title);
                 container.options.position = pos;
+                // container.options.module = module;
                 container.module = module;
                 Dom.addClass(container.el, "WiringEditor-module-" + module.name);
             }

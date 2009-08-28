@@ -307,11 +307,11 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
          if( this.isValidWireTerminal(ddTargets[i]) ) {
             targetTerminalProxy = ddTargets[i];
             // Hook into MyEngine...
-            var engineNodeFrom = this.terminal.container.module.engineNode;
-            var engineNodeTo = ddTargets[i].terminal.container.module.engineNode;
-            var numOutputs = engineNodeFrom.output.length;
-            engineNodeFrom.output[ numOutputs ] = engineNodeTo.id;
-            var targetTerminalIndex = i;
+            // var engineNodeFrom = this.terminal.container.module.engineNode;
+            // var engineNodeTo = ddTargets[i].terminal.container.module.engineNode;
+            // var numOutputs = engineNodeFrom.output.length;
+            // engineNodeFrom.output[ numOutputs ] = engineNodeTo.id;
+            // var targetTerminalIndex = i;
             break;
          }
       }
