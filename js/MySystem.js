@@ -54,6 +54,14 @@
     load: function() {
       this.editor.onLoad();
     },
+    /**
+    * Tell the editor to save data to the dataService.
+    * @method save
+    */
+    save: function() {
+      this.editor.onSave();
+    }
+    
 
   }
 })();
