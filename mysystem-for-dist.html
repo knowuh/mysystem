@@ -26,14 +26,23 @@
 <body class="yui-skin-sam">
 
   <script>
-    document.observe("dom:loaded", function() {
-      var mySystem = new MySystem();
-      var myDataService = new MocDSService(null,null);
-      // var myDataService = new VLEDSService(vle);
-      // or var myDataService = new 
-      mySystem.setDataService(myDataService);
-      mySystem.load();
-    });
+        var mySystem;
+        var myDataService;
+        document.observe("dom:loaded", function() {
+          mySystem = new MySystem();
+          //myDataService = new MocDSService(null,null);
+          var myDataService = new VLEDSService(vle);
+          // or var myDataService = new DSSService(read,write);
+          mySystem.setDataService(myDataService);
+          mySystem.load();
+        });
+        
+        window.onbeforeunload = function () {
+          debug("saving mystem data before we leave");
+          mySystem.save();
+          debug("saved!");
+      }.bind(this);
+
   </script>
 
   <div id="top">
