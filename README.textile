@@ -31,10 +31,12 @@ If you have ruby installed, you should also install a few gems to run the distro
 
 h3. Testing
 
-first install visionmedia-jspec with @sudo gem install visionmedia-jspec@
-We are trying to get better about testing javascript. All test can be run from ./test/spec.dev.html.
+I had installed visionmedia-jspec with @sudo gem install visionmedia-jspec@ 
+but then I copied the spec javascripts and css flies into the tests/ directory.
 
-After you have built
+All test can be run by opening ./test/spec.dev.html in a browser.
+After you have built the dist directory, you can run test on the dist opening ./test/spec.dist.html.
+
 
 h2. Todo
 
