@@ -88,10 +88,10 @@
 
 
 (function(){
-  GGearsDSService = function(readKey,writeKey,_table){
+  GGearsDSService = function(readKey,writeKey,_db,_table){
     this.data = "";
-    this.table = _table || "models";
-    this.db = this.table;
+    this.db = _db || "models" 
+    this.table = _table || this.db
     this.setKeys(readKey,writeKey);
   };
 
@@ -111,33 +111,33 @@
     
     open_db: function() {
       // this line is not working, something about factory.create needs to be investigated:
-      this.db_connection = google.gears.factory.create(this.db);
+      this.db_connection = google.gears.factory.create("beta.database");
       this.db_connection.open(this.db);
       this.db_connection.execute (
-        'create table if not exists ' + this.table +
-        ' (key string, content text, Timestamp int)'
+               'create table if not exists ' + this.table +
+               ' (key string, content text, Timestamp int)'
       );
     },
     
     // write the data
     save: function(_data) {
-      debug(this + " save called");
       this.data = _data;
       this.open_db();
-      // this.db_connection.execute('insert into ' + this.table + ' values (?, ?, ?)', [this.writeKey, this.data , new Date().getTime()]);
-      // debug(this + " save done");
+      this.db_connection.execute('insert into ' + this.table + ' values (?, ?, ?)', [this.writeKey, this.data , new Date().getTime()]);
     },
 
+
+    
     load: function(context,callback) {
       debug(this + " loading");
       var get_from = this.getPath + "/" + this.writeKey;
-      var self = this;
   	  if (this.readKey) {
         this.open_db();
         var rs = this.db_connection.execute('select * from ' + this.table + ' order by Timestamp desc');
         if (rs.isValidRow()) {
           debug(this + " found valid row data");
-          this.load_callback(rs.field(1),context,callback)
+          this.data = rs.field(1);
+          callback(this.data,context);
         }
         rs.close();
         debug(this + " load done");

@@ -64,9 +64,15 @@ describe 'Google Gears DS (GGearsDSService)'
   end
   
   it 'GGearsDSService should save data!'
-    _data = 'some crazy data';
+    var _data = 'some crazy data';
+    var _read_data = ""
     gg_service.save(_data);
-
+    self = this;
+    gg_service.load(self,function(data,self) {
+         _read_data = data;
+    });
+    
+    _read_data.should.be(_data);
   end
   
 end
