@@ -1,11 +1,11 @@
 (function(){
-  DSService = function(readKey,writeKey,_post_path){
+  RestDS = function(readKey,writeKey,_post_path){
     this.data = "";
     this.postPath = _post_path || "/models/"
     this.setKeys(readKey,writeKey);
   };
 
-  DSService.prototype = {
+  RestDS.prototype = {
     setKeys: function(read,write) {
       if (read) {
         this.load(this,function(){});// just load data

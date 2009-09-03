@@ -1,12 +1,12 @@
 (function() {
   // Very simple proxy for the VLE
-  VLEDSService = function(_vle){
+  VleDS = function(_vle){
     this.data = "";
     this.vle = _vle
     this.vleNode=_vle.getCurrentNode();
   };
 
-  VLEDSService.prototype = {
+  VleDS.prototype = {
     save: function(_data) {
         this.vle.saveHtmlState(_data,this.vleNode);
         this.data = _data;

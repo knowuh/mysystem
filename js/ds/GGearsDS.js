@@ -88,14 +88,14 @@
 
 
 (function(){
-  GGearsDSService = function(readKey,writeKey,_db,_table){
+  GGearsDS = function(readKey,writeKey,_db,_table){
     this.data = "";
     this.db = _db || "models" 
     this.table = _table || this.db
     this.setKeys(readKey,writeKey);
   };
 
-  GGearsDSService.prototype = {
+  GGearsDS.prototype = {
     setKeys: function(read,write) {
       if (read) {
         this.load(this,function(){});// just load data
@@ -122,15 +122,13 @@
     // write the data
     save: function(_data) {
       this.data = _data;
+      this.readKey = this.writeKey;
       this.open_db();
       this.db_connection.execute('insert into ' + this.table + ' values (?, ?, ?)', [this.writeKey, this.data , new Date().getTime()]);
     },
 
-
-    
     load: function(context,callback) {
       debug(this + " loading");
-      var get_from = this.getPath + "/" + this.writeKey;
   	  if (this.readKey) {
         this.open_db();
         var rs = this.db_connection.execute('select * from ' + this.table + ' order by Timestamp desc');
@@ -149,7 +147,7 @@
   	
   	// we do this to capture the data locally too...
   	load_callback: function(_data,context,callback) {
-  	  self.data = _data;
+  	  context.data = _data;
   	  callback(data,context,callback);
   	},
   	

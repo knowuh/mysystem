@@ -1,11 +1,11 @@
 (function() {
   // A Moc DatService, which does not require a backend at all.
-  MocDSService = function(one,two){
+  MocDS = function(one,two){
     this.data = "";
     debug ("new " + this + " created")
   };
 
-  MocDSService.prototype = {
+  MocDS.prototype = {
     save: function(_data) {
         debug("Moc Saving ...")
         this.data = _data;
