@@ -11,11 +11,12 @@ require 'Sprockets'
 
 @my_system = %w{ 
   engine/mysystem-engine.js 
-  js/DSService.js  
-  js/VleDSService.js  
-  js/GGearsDSService.js
-  js/MocDSService.js
   js/MySystemUtil.js  
+  js/ds/RestDS.js  
+  js/ds/VleDS.js  
+  js/ds/GGearsDS.js
+  js/ds/MocDS.js
+  js/ds/CookieDS.js
   js/MySystemPropEditor.js
   js/MySystemWireLabel.js  
   js/MySystemContainer.js  
@@ -74,6 +75,7 @@ task :all_js do
   
   simple_sprocket(@libs + @wire_it + @my_system, 'dist/all.js')
   %x{cp mysystem-for-dist.html dist/mysystem.html}
+  %x{cp print-for-dist.html dist/print.html}
   %x{cp -r lib/excanvas.js dist/lib}
   %x{cp modules.json dist}
   %x{cp -r images dist}
