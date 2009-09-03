@@ -30,19 +30,22 @@
         var myDataService;
         document.observe("dom:loaded", function() {
           mySystem = new MySystem();
-          //myDataService = new MocDSService(null,null);
-          var myDataService = new VLEDSService(vle);
+          //myDataService = new MocDS(null,null);
+          var myDataService = new VleDS(vle);
           // or var myDataService = new DSSService(read,write);
           mySystem.setDataService(myDataService);
           mySystem.load();
         });
         
+        
         onExit = function () {
-          debug("saving mystem data before we leave");
-          mySystem.save();
-          debug("saved!");
-      }
-
+            debug("saving mystem data before we leave");
+            mySystem.save();
+            debug("saved!");
+        }
+        // window.onbeforeunload = onExit;
+  
+  
   </script>
 
   <div id="top">
