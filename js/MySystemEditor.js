@@ -121,12 +121,21 @@
             modal: true
         });
         this.helpPanel.render();
+        
+        this.devPanel = new widget.Panel('developer', {
+            fixedcenter: true,
+            draggable: true,
+            visible: false,
+            modal: false
+        });
+        this.devPanel.render();
 
+        
         /**
        * @property layout
        * @type {YAHOO.widget.Layout}
        */
-        this.layout = new widget.Layout(this.el, this.options.layoutOptions);
+        this.layout = new widget.Layout(null, this.options.layoutOptions);
         this.layout.render();
         
         // Render module list
@@ -472,11 +481,22 @@
                 container: toolbar
             });
             helpButton.on("click", this.onHelp, this, true);
+            
+            var printButton = new widget.Button({
+                label: "Print",
+                id: "MySystem Print button",
+                container: toolbar
+            });
+            printButton.on("click", this.onPrint, this, true);
+            
+            // var jsonDataButton = new widget.Button({
+            //     label: "show json data",
+            //     id: "MySystem Json data button",
+            //     container: toolbar
+            // });
+            // jsonDataButton.on("click", this.onShowJson, this, true);
+            
         },
-
-
-        onSMDsuccess: function() { alert("Save successful."); },
-        onSMDfailure: function() { alert("Save failed."); },
 
         /**
         * @method onSave
@@ -513,6 +533,32 @@
             }
          },
 
+         /**
+         * @method onPrint
+         */
+         onPrint: function() {
+           this.onSave();
+           window.open('print.html');
+         },
+         
+         /**
+         * @method onPrint
+         */
+         onShowJson: function(layer_object) {
+           var width = this.rootLayer.el.getWidth();
+           var height = this.rootLayer.el.getHeight();
+
+
+           $('JSON_DATA').update(
+             "<p><br><ul><li>width: " + width + 
+             "<li> height: " + height +
+            "</ul></p><code>" + [this.rootLayer.getWiring()].toJSON() + "</code>");
+           this.devPanel.render();
+           this.devPanel.show();
+
+         },
+         
+         
         /**
         * Create a help panel
         * @method onHelp
@@ -590,7 +636,10 @@
                 name: obj.properties.name,
                 working: obj
             };
-        }
+        },
+        
+
+        
 
     };
 
