@@ -14,7 +14,7 @@
 
   <!-- Prototype -->
   <script type="text/javascript" src="lib/prototype.js"></script>
-  <script type="text/javascript" src="lib/canvastext.js"></script>
+  <script type="text/javascript" src="lib/raphael-min.js"></script>
   
   <!-- Data service adaptors -->
   <script type="text/javascript" src="js/DDService.js"></script>
@@ -27,7 +27,7 @@
   <script type="text/javascript" src="js/MySystemUtil.js"></script>
 
   <script type="text/javascript" src="lib/http.js"></script>
-  <script type="text/javascript" src="js/MySystemPrint.js"></script>  
+  <script type="text/javascript" src="js/MySystemPrint2.js"></script>  
   
 </head>
 <style type="text/css" media="screen">
@@ -54,7 +54,7 @@
           // myDataService = new DSSService('read','wrtie');
           myDataService = new GGearsDS('write','write','mysystem');
           // myDataService = new CookieDS('write','write');
-          printer = new MySystemPrint(myDataService);
+          printer = new MySystemPrint(myDataService,"printing_canvas");
           printer.load();
         });
 
@@ -63,7 +63,7 @@
   <div class="headline">printing canvas:</div>
   <hr/>
   <div class="canvas_wrapper">
-    <canvas id="printing_canvas" width="960" height="600"></canvas>
+    <div id="printing_canvas" width="960" height="600"></div>
   <div>
 
 </body>
