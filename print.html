@@ -21,7 +21,7 @@
   <script type="text/javascript" src="js/ds/MocDS.js"></script>
   <script type="text/javascript" src="js/ds/VleDS.js"></script>
   <script type="text/javascript" src="js/ds/CookieDS.js"></script>
-  <script type="text/javascript" src="js/ds/GGears.js"></script>
+  <script type="text/javascript" src="js/ds/GGearsDS.js"></script>
           
   <!-- Utitlities -->
   <script type="text/javascript" src="js/MySystemUtil.js"></script>
@@ -52,8 +52,8 @@
           // myDataService = new MocDS(null,null);
           // myDataService = new VleDS(vle);
           // myDataService = new DSSService('read','wrtie');
-          // myDataService = new GGearsDS(null,'write','table');
-          myDataService = new CookieDS('write','write');
+          myDataService = new GGearsDS('write','write','mysystem');
+          // myDataService = new CookieDS('write','write');
           printer = new MySystemPrint(myDataService);
           printer.load();
         });

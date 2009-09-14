@@ -81,8 +81,8 @@
           // myDataService = new MocDS(null,null);
           // myDataService = new VleDS(vle);
           // myDataService = new DSSService('read','wrtie');
-          // myDataService = new GGearsDS(null,'write','table');
-          myDataService = new CookieDS(null,'write');
+          myDataService = new GGearsDS('write','write','mysystem');
+          //myDataService = new CookieDS(null,'write');
           mySystem.setDataService(myDataService);
           mySystem.load();
         });
