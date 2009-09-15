@@ -87,7 +87,7 @@
   /**
   *
   **/
-  Node = function() {
+  MySystemNode = function() {
     this.terminals = [];
     this.icon = [];
     this.x = 0;
@@ -95,7 +95,7 @@
   
   };
 
-  Node.prototype.terminal = function(name) {
+  MySystemNode.prototype.terminal = function(name) {
     var returnVal = null;
     this.terminals.each(function(term){
       if (term.name == name) {
@@ -108,14 +108,14 @@
   /**
   *
   **/
-  Node.importJson = function(jsonText,graphics) {
+  MySystemNode.importJson = function(jsonText,graphics,contentBaseUrl) {
     var objs = eval(jsonText);
     var nodes = [];
     var wires = [];
     if (objs) {
       objs[0].containers.each(function(container) {
-        var node = new Node();
-        node.icon=container.icon;
+        var node = new MySystemNode();
+        node.icon=contentBaseUrl+"/"+container.icon;
         node.x = (container.position[0].replace("px","")) / 1;
         node.y = (container.position[1].replace("px","")) / 1;
         node.rep = graphics.set();
@@ -167,12 +167,12 @@
       objs[0].wires.each(function(w) {
         var wire = new Wire();
         wire.src = w.src;
-        wire.sourceNode = nodes[w.src.moduleId];
-        wire.sourceTerminal = wire.sourceNode.terminal(w.src.terminal);
+        wire.sourceMySystemNode = nodes[w.src.moduleId];
+        wire.sourceTerminal = wire.sourceMySystemNode.terminal(w.src.terminal);
         
         wire.tgt = w.tgt;
-        wire.targetNode = nodes[w.tgt.moduleId];
-        wire.targetTerminal = wire.targetNode.terminal(w.tgt.terminal);
+        wire.targetMySystemNode = nodes[w.tgt.moduleId];
+        wire.targetTerminal = wire.targetMySystemNode.terminal(w.tgt.terminal);
         
         wire.options = w.options;
         wire.fields = w.options.fields;
@@ -183,7 +183,7 @@
         
         // do the drawing for the wire 
         // wire.rep = graphics.connection(wire.sourceTerminal.rep,wire.targetTerminal.rep,wire.color,wire.color + "|" + wire.width);
-        wire.rep = graphics.connection(wire.sourceNode.rep,wire.targetNode.rep,wire.color,wire.color + "|" + wire.width);
+        wire.rep = graphics.connection(wire.sourceMySystemNode.rep,wire.targetMySystemNode.rep,wire.color,wire.color + "|" + wire.width);
         wires.push(wire);
       });
     }
@@ -201,11 +201,11 @@
   //   this.name = "my print";
   //   this.graphics = Raphael(document.getElementById(dom_id));
   // };
-  MySystemPrint = function(_json,dom_id) {
+  MySystemPrint = function(_json,dom_id,contentBaseUrl,width,height) {
     this.data = [];
     this.name = "my print";
-    this.graphics = Raphael(document.getElementById(dom_id));
-    this.nodes = Node.importJson(_json,this.graphics);
+    this.graphics = Raphael(document.getElementById(dom_id),width,height);
+    this.nodes = MySystemNode.importJson(_json,this.graphics,contentBaseUrl);
     this.wires = Wire.importJson(_json,this.graphics,this.nodes);
   };
   
@@ -228,7 +228,7 @@
   *
   **/
   MySystemPrint.prototype.loadCallback = function(_data,context) {
-    context.nodes = Node.importJson(_data,context.graphics);
+    context.nodes = MySystemNode.importJson(_data,context.graphics);
     context.wires = Wire.importJson(_data,context.graphics,context.nodes);
   };
 
