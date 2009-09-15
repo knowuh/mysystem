@@ -36,8 +36,14 @@
     font: 18pt "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
   }
   .canvas_wrapper {
+
+  }
+  #printing_canvas {
     text-align: center;
     margin: 1em;
+    display: block;
+    width: 100%;
+    height: 500px;
     padding: 1em;
     border: 1px dotted #999;
   }
@@ -62,9 +68,7 @@
 
   <div class="headline">printing canvas:</div>
   <hr/>
-  <div class="canvas_wrapper">
-    <div id="printing_canvas" width="960" height="600"></div>
-  <div>
+  <div id="printing_canvas"></div>
 
 </body>
 </html>
