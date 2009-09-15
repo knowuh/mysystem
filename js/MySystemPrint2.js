@@ -1,5 +1,24 @@
 (function () {
+  
+  Raphael.fn.arrow = function(start,end) {
+    var fTheta = 45.0 * 180.0/Math.PI;
+    
+    // lineVector = toPoint - fromPoint
+    //     lineLength = length of lineVector
+    // calculate point at base of arrowhead
 
+    tPointOnLine = nWidth / (2 * (tanf(fTheta) / 2) * lineLength);
+    pointOnLine = toPoint + -tPointOnLine * lineVector
+
+    // calculate left and right points of arrowhead
+
+    normalVector = (-lineVector.y, lineVector.x)
+    tNormal = nWidth / (2 * lineLength)
+    leftPoint = pointOnLine + tNormal * normalVector
+    rightPoint = pointOnLine + -tNormal * normalVector
+    
+  };
+  
   Raphael.fn.connection = function (obj1, obj2, line, bg) {
       if (obj1.line && obj1.from && obj1.to) {
           line = obj1;
@@ -176,11 +195,18 @@
   /**
   *
   **/
-  MySystemPrint = function(_ds,dom_id) {
-    this.dataService = _ds;
+  // MySystemPrint = function(_ds,dom_id) {
+  //   this.dataService = _ds;
+  //   this.data = [];
+  //   this.name = "my print";
+  //   this.graphics = Raphael(document.getElementById(dom_id));
+  // };
+  MySystemPrint = function(_json,dom_id) {
     this.data = [];
     this.name = "my print";
     this.graphics = Raphael(document.getElementById(dom_id));
+    this.nodes = Node.importJson(_json,this.graphics);
+    this.wires = Wire.importJson(_json,this.graphics,this.nodes);
   };
   
   
