@@ -64,28 +64,28 @@
             
             /*var Copy = new Object;
             for( var i in this._module ){
-            	Copy[ i ] = this._module[ i ];
+              Copy[ i ] = this._module[ i ];
             }
             Copy.engineNode = newEngineNode;
             */
 
-						var Copy = function( par ){
-		          for( var i in par._module ){
-		          	this[ i ] = par._module[ i ];
-		          }
-		          var energyForm = {};
-		          energyForm[ par._module.fields.form ] = par._module.fields.efficiency;            
+            var Copy = function( par ){
+              for( var i in par._module ){
+                this[ i ] = par._module[ i ];
+              }
+              var energyForm = {};
+              energyForm[ par._module.fields.form ] = par._module.fields.efficiency;            
 
-		          this.engineNode = my.newNode({
-		          		name				: par._module.name,
-									module			: par._module,
-		          		type				: par._module.etype,
-		          		output			: [],
-		          		energy			: par._module.fields.energy || 0,
-		          		inputRate		: par._module.fields.inputRate,
-		          		efficiency	: energyForm // reference energies object
-		          });
-						}	
+              this.engineNode = my.newNode({
+                  name        : par._module.name,
+                  module      : par._module,
+                  type        : par._module.etype,
+                  output      : [],
+                  energy      : par._module.fields.energy || 0,
+                  inputRate   : par._module.fields.inputRate,
+                  efficiency  : energyForm // reference energies object
+              });
+            } 
 
             this._MySysEditor.addModule( new Copy( this ), pos );
         }
@@ -176,13 +176,13 @@
                 },
                 {
                     position: 'left',
-                    width: 225,
+                    width: 120,
                     resize: true,
                     body: 'left',
                     gutter: '5px',
                     collapse: true,
                     collapseSize: 25,
-                    header: 'Objects and Labels',
+                    header: 'Objects:',
                     scroll: true,
                     animate: true
                 },
@@ -193,13 +193,13 @@
                 },
                 {
                     position: 'right',
-                    width: 320,
+                    width: 224,
                     resize: true,
                     body: 'right',
                     gutter: '5px',
                     collapse: true,
                     collapseSize: 25,
-                    header: 'Properties',
+                    header: 'Properties:',
                     scroll: true,
                     animate: true
                 }
@@ -323,7 +323,7 @@
           // kind of a hack, clean any bad wiring from the layer before we continue:
           this.cleanWiring(newLayer);
           if (this.layer == null) { this.layer = this.rootLayer;}
-      	  var parentDom = this.layer.options.parentEl;
+          var parentDom = this.layer.options.parentEl;
           parentDom.replaceChild(newLayer.el,this.layer.el);
           this.layer.el.hide();
           
@@ -376,8 +376,8 @@
             this.ddTarget._layer = this.layer;
         },
         
-        addModuleChoice: function(module) {        		
-        		
+        addModuleChoice: function(module) {           
+            
             // debug("found name: " + module.name);
             var left = Dom.get('left');
             var div = WireIt.cn('div', {
@@ -476,18 +476,18 @@
             saveButton.on("click", this.onSave, this, true);
 
             var helpButton = new widget.Button({
-                label: "More Info",
+                label: "help",
                 id: "WiringEditor-helpButton",
                 container: toolbar
             });
             helpButton.on("click", this.onHelp, this, true);
             
-            var printButton = new widget.Button({
-                label: "Print",
-                id: "MySystem Print button",
-                container: toolbar
-            });
-            printButton.on("click", this.onPrint, this, true);
+            // var printButton = new widget.Button({
+            //               label: "Print",
+            //               id: "MySystem Print button",
+            //               container: toolbar
+            //           });
+            //           printButton.on("click", this.onPrint, this, true);
             
             // var jsonDataButton = new widget.Button({
             //     label: "show json data",

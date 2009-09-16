@@ -96,12 +96,12 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       this.options.bordercap = options.bordercap || 'round';
       this.options.width = options.width || 5;
       this.options.borderwidth = options.borderwidth || 1;
-      this.options.color = options.color || '#BD1550';
+      this.options.color = options.color || '#490A3D';
       this.options.bordercolor = options.bordercolor || '#000000';
       this.options.fields = options.fields || {
-       'name': 'flow',
+       'name': '(type-here)',
        'width': this.options.width,
-       'color': 'color2'
+       'color': 'color1'
       };
    },
    
@@ -337,7 +337,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
         var y1 = bezierPoints[0][1];
         var y2 = bezierPoints[3][1]
         
-        var fontSize=14;
+        var fontSize=10;
         center.x =  (x1 + x2) / 2;
         center.y =  ((y1 + y2) / 2) + (60 * this.terminal2.options.direction[1]);
         var padding = 8;
@@ -716,7 +716,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     */
    onWireIn: function(x,y) {
       this.options.last_color = this.options.color;
-      this.options.color = "#FF0000";
+      this.options.color = "#E97F02";
       this.redraw();
    },
    
@@ -728,7 +728,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @param {Integer} y top position of the mouse (relative to the canvas)
     */
    onWireOut: function(x,y) {
-      this.options.color = this.options.last_color || "#FF00000";
+      this.options.color = this.options.last_color || "#E97F02";
       this.redraw();
    },
    

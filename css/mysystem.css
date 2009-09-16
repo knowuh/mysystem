@@ -29,10 +29,10 @@ div.ComposedModule {
 label {
   text-align: right;
   height: auto;
-  width: 25%;
   float: left;
   clear: left;
-  margin: 5px;
+  margin: 4px;
+  margin-left: 0px;
   color: #3366CC;
 }
 
@@ -44,10 +44,13 @@ input {
 div.inputBox {
   display: block;
   clear: both;
-  margin: 2px;
+  margin: 1px;
+  margin-top: 4px
   float: left;
-  width: 100%;
-  clear: both;
+  clear: none;
+}
+input {
+  width: 80px;
 }
 
 div.title {
@@ -61,7 +64,6 @@ div.title {
 #prop_form {
  display: block;
  clear: both;
- width: 90%;
  padding: 10px;
  margin: 10px;
  border: 1px solid #3366CC;
@@ -137,6 +139,9 @@ div.title {
   border: 1px solid gray;
   margin: 2px;
   padding: 0px;
+}
+#layerMap {
+  display: none;
 }
 .selected {
   border: 2px solid black !important;
