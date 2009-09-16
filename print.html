@@ -7,36 +7,21 @@
   <link rel="icon" href="res/favicon.ico" type="image/png" />
   <link rel="SHORTCUT ICON" href="res/favicon.ico" type="image/png" />
 
-  <!-- WireIt CSS -->
-  <link rel="stylesheet" type="text/css" href="css/WireIt.css" />
-  <link rel="stylesheet" type="text/css" href="css/WireItEditor.css" />
-  <link rel="stylesheet" type="text/css" href="css/mysystem.css" />
-
   <!-- Prototype -->
   <script type="text/javascript" src="lib/prototype.js"></script>
+
+  <!-- Raphael SVG lib: -->
   <script type="text/javascript" src="lib/raphael-min.js"></script>
-  
-  <!-- Data service adaptors -->
-  <script type="text/javascript" src="js/DDService.js"></script>
-  <script type="text/javascript" src="js/ds/MocDS.js"></script>
-  <script type="text/javascript" src="js/ds/VleDS.js"></script>
-  <script type="text/javascript" src="js/ds/CookieDS.js"></script>
-  <script type="text/javascript" src="js/ds/GGearsDS.js"></script>
           
   <!-- Utitlities -->
   <script type="text/javascript" src="js/MySystemUtil.js"></script>
-
-  <script type="text/javascript" src="lib/http.js"></script>
-  <script type="text/javascript" src="js/MySystemPrint2.js"></script>  
+  <script type="text/javascript" src="js/MySystemPrint.js"></script>  
   
 </head>
 <style type="text/css" media="screen">
   .headline {
     text-align: center;
     font: 18pt "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
-  }
-  .canvas_wrapper {
-
   }
   #printing_canvas {
     text-align: center;
@@ -51,22 +36,11 @@
 <body>
 
   <script>
-        var myDataService;
-        var printer;
-        document.observe("dom:loaded", function() {
-          // mySystem = new MySystem();
-          // myDataService = new MocDS(null,null);
-          // myDataService = new VleDS(vle);
-          // myDataService = new DSSService('read','wrtie');
-          myDataService = new GGearsDS('write','write','mysystem');
-          // myDataService = new CookieDS('write','write');
-          // printer = new MySystemPrint(myDataService,"printing_canvas");
-          
-          var json_data = [{"containers": [{"terminals": [{"wireConfig": {"drawingMethod": "bezierArrows"}, "name": "Terminal1", "direction": [0, -1], "offsetPosition": {"left": 20, "top": -25}, "ddConfig": {"type": "input", "allowedTypes": ["input", "output"]}}, {"wireConfig": {"drawingMethod": "bezierArrows"}, "name": "Terminal2", "direction": [0, 1], "offsetPosition": {"left": 20, "bottom": -25}, "ddConfig": {"type": "output", "allowedTypes": ["input", "output"]}}], "draggable": true, "position": ["191px", "67px"], "className": "WireIt-Container WireIt-ImageContainer", "ddHandle": false, "ddHandleClassName": "WireIt-Container-ddhandle", "resizable": false, "resizeHandleClassName": "WireIt-Container-resizehandle", "close": true, "closeButtonClassName": "WireIt-Container-closebutton", "title": "table", "icon": "./images/thermodynamics/table.png", "preventSelfWiring": true, "image": "./images/thermodynamics/table.png", "xtype": "MySystemContainer", "fields": {"energy": 100, "form": "light", "efficiency": 1}, "name": "table", "has_sub": false}, {"terminals": [{"wireConfig": {"drawingMethod": "bezierArrows"}, "name": "Terminal1", "direction": [0, -1], "offsetPosition": {"left": 20, "top": -25}, "ddConfig": {"type": "input", "allowedTypes": ["input", "output"]}}, {"wireConfig": {"drawingMethod": "bezierArrows"}, "name": "Terminal2", "direction": [0, 1], "offsetPosition": {"left": 20, "bottom": -25}, "ddConfig": {"type": "output", "allowedTypes": ["input", "output"]}}], "draggable": true, "position": ["72px", "83px"], "className": "WireIt-Container WireIt-ImageContainer", "ddHandle": false, "ddHandleClassName": "WireIt-Container-ddhandle", "resizable": false, "resizeHandleClassName": "WireIt-Container-resizehandle", "close": true, "closeButtonClassName": "WireIt-Container-closebutton", "icon": "./images/thermodynamics/hotbowl.png", "preventSelfWiring": true, "image": "./images/thermodynamics/hotbowl.png", "xtype": "MySystemContainer", "fields": {"name": "hot bowl", "energy": 100, "form": "light", "efficiency": 1}, "name": "hot bowl", "has_sub": false}], "wires": [{"src": {"moduleId": 1, "terminal": "Terminal2"}, "tgt": {"moduleId": 0, "terminal": "Terminal2"}, "options": {"className": "WireIt-Wire", "coeffMulDirection": 100, "drawingMethod": "bezierArrows", "cap": "round", "bordercap": "round", "width": 5, "borderwidth": 1, "color": "#BD1550", "bordercolor": "#000000", "fields": {"name": "flow", "width": 5, "color": "color2"}, "selected": false}}]}];
-          new MySystemPrint(json_data,"printing_canvas");
-          // printer.load();
-        });
-
+      var printer;
+      document.observe("dom:loaded", function() {
+        var json_data = [{"containers": [{"terminals": [{"wireConfig": {"drawingMethod": "bezierArrows"}, "name": "Terminal1", "direction": [0, -1], "offsetPosition": {"left": 20, "top": -25}, "ddConfig": {"type": "input", "allowedTypes": ["input", "output"]}}, {"wireConfig": {"drawingMethod": "bezierArrows"}, "name": "Terminal2", "direction": [0, 1], "offsetPosition": {"left": 20, "bottom": -25}, "ddConfig": {"type": "output", "allowedTypes": ["input", "output"]}}], "draggable": true, "position": ["191px", "67px"], "className": "WireIt-Container WireIt-ImageContainer", "ddHandle": false, "ddHandleClassName": "WireIt-Container-ddhandle", "resizable": false, "resizeHandleClassName": "WireIt-Container-resizehandle", "close": true, "closeButtonClassName": "WireIt-Container-closebutton", "title": "table", "icon": "./images/thermodynamics/table.png", "preventSelfWiring": true, "image": "./images/thermodynamics/table.png", "xtype": "MySystemContainer", "fields": {"energy": 100, "form": "light", "efficiency": 1}, "name": "table", "has_sub": false}, {"terminals": [{"wireConfig": {"drawingMethod": "bezierArrows"}, "name": "Terminal1", "direction": [0, -1], "offsetPosition": {"left": 20, "top": -25}, "ddConfig": {"type": "input", "allowedTypes": ["input", "output"]}}, {"wireConfig": {"drawingMethod": "bezierArrows"}, "name": "Terminal2", "direction": [0, 1], "offsetPosition": {"left": 20, "bottom": -25}, "ddConfig": {"type": "output", "allowedTypes": ["input", "output"]}}], "draggable": true, "position": ["72px", "83px"], "className": "WireIt-Container WireIt-ImageContainer", "ddHandle": false, "ddHandleClassName": "WireIt-Container-ddhandle", "resizable": false, "resizeHandleClassName": "WireIt-Container-resizehandle", "close": true, "closeButtonClassName": "WireIt-Container-closebutton", "icon": "./images/thermodynamics/hotbowl.png", "preventSelfWiring": true, "image": "./images/thermodynamics/hotbowl.png", "xtype": "MySystemContainer", "fields": {"name": "hot bowl", "energy": 100, "form": "light", "efficiency": 1}, "name": "hot bowl", "has_sub": false}], "wires": [{"src": {"moduleId": 1, "terminal": "Terminal2"}, "tgt": {"moduleId": 0, "terminal": "Terminal2"}, "options": {"className": "WireIt-Wire", "coeffMulDirection": 100, "drawingMethod": "bezierArrows", "cap": "round", "bordercap": "round", "width": 5, "borderwidth": 1, "color": "#BD1550", "bordercolor": "#000000", "fields": {"name": "flow", "width": 5, "color": "color2"}, "selected": false}}]}];
+        printer = new MySystemPrint(json_data,"printing_canvas");
+      });
   </script>
 
   <div class="headline">printing canvas:</div>
