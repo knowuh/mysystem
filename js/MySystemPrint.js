@@ -203,10 +203,10 @@
   /**
   * @constructor
   **/
-  MySystemPrint = function(_json,dom_id,contentBaseUrl,width,height) {
+  MySystemPrint = function(_json,dom_id,contentBaseUrl,width,height,scale_factor) {
     this.data = _json;
     this.name = "my print";
-    this.scale = 0.6;
+    this.scale =typeof(scale_factor0) != 'undefined' ? scale_factor : 0.6;
     this.graphics = Raphael(document.getElementById(dom_id),width,height);
     this.nodes = MySystem.Node.importJson(_json,contentBaseUrl);
     this.wires = MySystem.Wire.importJson(_json,this.nodes);
