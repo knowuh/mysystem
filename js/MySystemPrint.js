@@ -121,10 +121,9 @@
     var returnVal = null;
     this.terminals.each(function(term){
       if (term.name == name) {
-        returnVal =  term;
+	return returnVal;
       }
     });
-    return returnVal;
   };
   
   /**
@@ -192,7 +191,6 @@
         wire.color.name = wire.fields.color;
         
         // do the drawing for the wire 
-
         wires.push(wire);
       });
     }
@@ -245,6 +243,23 @@
   **/
   MySystemPrint.prototype.drawWire = function(wire) {
     wire.rep = this.graphics.connection(wire.sourceNode.rep,wire.targetNode.rep,wire.color,wire.color + "|" + (wire.width * this.scale));
+    
+    var srcX = wire.sourceNode.x, 
+        srcY = wire.sourceNode.y,
+        tgtX = wire.targetNode.x,
+        tgtY = wire.targetNode.y;
+    
+    var xDist = ( tgtX - srcX ) / 2;
+    var yDist = ( tgtY - srcY ) / 2;
+
+    var realX = ( srcX + xDist ) * this.scale,
+        realY = ( srcY + yDist ) * this.scale;
+    
+    var txt = this.graphics.text( realX, realY, wire.name );
+   
+    //txt.rotate(-90,true);
+    
+    wire.rep.push(txt);
   }
   
 
