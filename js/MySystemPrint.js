@@ -121,9 +121,10 @@
     var returnVal = null;
     this.terminals.each(function(term){
       if (term.name == name) {
-	return returnVal;
+        returnVal = term;
       }
     });
+    return returnVal;
   };
   
   /**
@@ -259,7 +260,7 @@
    
     //txt.rotate(-90,true);
     
-    wire.rep.push(txt);
+    // wire.rep.push(txt);
   }
   
 
