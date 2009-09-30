@@ -25,8 +25,13 @@
 			props[ prop ] = this[ prop ];
 		}
 	};
-		
-	MyObject.prototype.kill = function(){}
+
+  // Array Remove - By John Resig (MIT Licensed)
+  Array.prototype.remove = function(from, to) {
+    var rest = this.slice((to || from) + 1 || this.length);
+    this.length = from < 0 ? this.length + from : from;
+    return this.push.apply(this, rest);
+  };
 
 	// Node prototype ////////////////////////////////////////////////////////////
 	var Node = function(){};
@@ -43,7 +48,7 @@
 	// todo: remove what is not needed above when done
 	
 	Node.prototype.transform = function(){
-		this.cycles ++;
+		this.cycles ++;				
 		
 		// calculate node's transfer efficiency
 		var sumEfficient = 0;
@@ -51,8 +56,6 @@
 			sumEfficient += this.efficiency[ i ];
 		}
 		var sumLoss = 1 - sumEfficient;
-		
-		// todo: calculation for potential energy (retension/storrage)
 		
 		// calculate childrens energy ratio
 		var sumInputRate = 0;
@@ -71,7 +74,7 @@
 			
 			iNode.ratio = 1 / sumInputRate * iNode.inputRate;
 			iNode.energy += energyTransfer;
-			iNode.energyIn += energyTransfer;
+			iNode.energyIn += energyTransfer || 0 ;
 			
 			heatLoss += energyTransfer;
 			
@@ -79,9 +82,9 @@
 		}
 			
 		// Acculmulative Heat Loss
-		this.heatLoss = heatLoss;//sumLoss * this.energy;
+		this.heatLoss = sumLoss * this.energy;
 		if( this.type != 'source' ){
-			this.energy -=  this.energy * ( sumEfficient + sumLoss );
+			this.energy -=  this.energy
 		} else {
 			this.energyIn = this.energy;
 		}
@@ -99,12 +102,12 @@
 								},
 			AJAX		:	{ method: 'GET', async: true }
 		};
-
-		this.nodes 	= [];
-		this.arrows = [];
-
-		// CYCLE: 1 turn or cycle of the engine ....................................
-		this.cycles = 0;
+				
+		this.nodes 	= []; // NODES - The array in which all nodes are storred.
+		this.cycles = 0; // CYCLES -The number of times energy has passed through the system. Resets to 0 every time. Child nodes are compare with this to kill any infinite loops.
+		this.sumInputEnergy = 0; // sumInputEnergy - The combined energy value of all sources ( used to calculate arrow widths )	
+			
+		// Cycle() Method : One turn or 'cycle' of the engine.
 		this.cycle = function(){
 			this.cycles ++;
 			var sources = this.nodesWith( { type: 'source' } );
@@ -119,7 +122,7 @@
 					iSource.transform();
 					this.sumInputEnergy += parseFloat( iSource.energy );
 			}
-			debug('-> cycled <-');
+			//console.log('MyEngine Cycled');
 		}
 
 		this.newNode = function( props ){
@@ -128,6 +131,30 @@
 					.constructor( 'n' + len + '_' )
 					.set( props );
 		}
+
+		this.kill = function( node ){
+		  // Get this node's index		  
+		  var index = this.node( node, true );
+
+			// Search through outputs array (node's connections)
+			var len1 = this.nodes.length;
+			for( var i = 0; i < len1; i++ ){
+			  var len2 = this.nodes[ i ].output.length;
+			  for( var j = 0; j < len2; j++ ){
+			    
+			    //If a connection is found to the node you want to delete, remove the connection
+  			  if( this.nodes[ i ].output[ j ] == this.nodes[ index ].id ){
+  			    this.nodes[ i ].output.remove( j );
+  			  }
+    		}
+			}
+			
+			// Delete the node object/instance of MyObject;
+			delete this.node( node );
+			
+			// Remove the link in the array object
+			this.nodes.remove( index )
+		}				
 		
 		this.loadNodes = function( file ){
 			JSON = eval( this.AJAX.get( file ).responseText );
@@ -140,12 +167,11 @@
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
 				var n = this.nodes[ i ]
-				debug([ n.name, n.type, n.heatLoss ]);
+				console.log([ n.name, n.type, n.energyIn, n.heatLoss ]);
 			}
 		},
 
 		this.reset = function(){
-			debug(' RESETING...  ( cycles = ' + this.cycles + ' )' );
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
 				var n = this.nodes[ i ]
@@ -154,10 +180,7 @@
 				n.cycles = 0;				
 			}
 			this.cycles = 0;
-			debug(' RESET: cycles = ' + this.cycles );
 		},
-
-
 
 		this.nodesWith = function( props ){
 			var collection = [];
@@ -174,16 +197,16 @@
 		},
 
 		// Returns a node by a) it's ID, b) it's Name (return array?), c) it's Index
-		this.node = function( id_or_name ){
+		this.node = function( id_or_name, onlyIndex ){
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
 				var iNode = this.nodes[ i ];
-				if( id_or_name == iNode.name || id_or_name == iNode.id ){				
-					return iNode;
+				if( id_or_name == iNode.name || id_or_name == iNode.id ){
+					return onlyIndex ? i : iNode ;
 				}
 			}
 			return false;
-		}		
+		},		
 		
 		//-- AJAX ----------------------------------------------------------------//
 		this.AJAX = new Object();
@@ -201,7 +224,7 @@
 				Get.send( keyvals || 'null' );
 
 				if( async ){
-					debug("async", this);
+					console.log("async", this);
 					Get.onreadystatechange = function(){
 						if( Get.readyState == 4 ){
 							this.responseText = Get.responseText;

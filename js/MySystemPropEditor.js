@@ -1,4 +1,3 @@
-
 /**
  * MySystemPropEditor
  * @class MySystemPropEditor
@@ -11,15 +10,39 @@ MySystemPropEditor = function(options) {
    this.selected_color = "#000000"
 };
 
-
 MySystemPropEditor.prototype = {
   updateFields: function() {
+  
+    // The way the forms are built, they work of the base modules and not the 'new copies' of the modules created upon dragging into the canvas
+    
+    try{
+      realEngineNode = this.node.module.engineNode;
+    }
+    catch(e){
+      realEngineNode = null;
+    }
+  
     var subsTmpl = new Template ('<div class="inputBox"><label for="has_sub">sub systems?</label><input type="checkbox" #{checked} name="has_sub" value="1" id="has_sub"></div>')
     var fieldTmpl = new Template('<div class="inputBox"><label for="#{name}">#{name}</label><input type="text" name="#{name}" value="#{value}" id="#{name}"></div>');
     var fields = [];
+    
+    console.log(this.node);
+    
     $H(this.node.options.fields).keys().each(function (field_name) {
       if(field_name !='color') {
-        fields.push (fieldTmpl.evaluate({name: field_name, value: this.node.options.fields[field_name]}));
+        switch( field_name ){
+ //         case 'width':break;
+          case 'inputRate':
+            fields.push (fieldTmpl.evaluate({name: field_name, value: realEngineNode.inputRate }));
+            break;
+          case 'heat loss':
+            fields.push (fieldTmpl.evaluate({name: field_name, value: realEngineNode.heatLoss }));
+            break;            
+          default:
+            fields.push (fieldTmpl.evaluate({name: field_name, value: this.node.options.fields[field_name]}));
+            break;
+      }
+      //fields.push (fieldTmpl.evaluate({name: field_name, value: this.node.options.fields[field_name]}));
       }
     }.bind(this));
     fields.push (subsTmpl.evaluate({checked: (this.node.has_sub ? 'checked="true"' : '')}));
@@ -39,6 +62,7 @@ MySystemPropEditor.prototype = {
   save_values: function() {
     var theForm = $(this.formName);
     var fieldNames = $H(this.node.options.fields).keys();
+    console.log( this.node.options.fields );
     theForm.getInputs('text').each(function (fe) {
       this.node.options.fields[fe.name] = fe.value;
     }.bind(this));
@@ -109,18 +133,38 @@ MySystemPropEditor.prototype = {
         $('icon_spot').update('');
       }
     }
+    
+    if(realEngineNode){ // A Node was clicked.
+      
+      // Store the real engineNode to be controlled through the form
+      var ctrlEngineNode     = this.node.module.engineNode;
+      
+      // Grab form inputs
+      var ctrlFormEnergy     = this.form_observer.element.energy;
+      var ctrlFormInputRate  = this.form_observer.element.inputRate;
+      var ctrlForm_FORM      = this.form_observer.element.form;
+      var ctrlFormEfficiency = this.form_observer.element.efficiency;    
+
+      // Link energy fields to energy properties of enginNodes
+      ctrlFormEnergy.onchange = function(){
+         ctrlEngineNode.energy = parseFloat( ctrlFormEnergy.value );
+         WireIt.myRedraw();
+      }   
+        
+      ctrlFormInputRate.onchange = function(){ 
+         ctrlEngineNode.inputRate = parseFloat( ctrlFormInputRate.value );
+         WireIt.myRedraw();
+      }
+      
+      ctrlFormEfficiency.onchange = function(){
+         ctrlEngineNode.efficiency[ ctrlForm_FORM.value ] = parseFloat( ctrlFormEfficiency.value );
+         WireIt.myRedraw();
+      }
+      
+    }else{
+      // A Wire was clicked, do nothing to engine.
+    }
+ 
   }
   
 }
-
-
-
-
-
-
-
-
-
-
-
-

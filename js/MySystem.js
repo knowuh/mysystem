@@ -1,5 +1,5 @@
 (function(){
-  MySystem = function(){ 
+  this.MySystem = function(){
     this.init();
   };
   
@@ -17,7 +17,7 @@
     
     setEditor: function(_editor) {
       debug("new editor being set");
-      if (_editor) {  
+      if (_editor) {
         this.editor = _editor;
       }
       else {

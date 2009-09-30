@@ -760,8 +760,9 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
    onWireClick: function(x,y) {
      debug('clicked');
      WireIt.Wire.openPropEditorFor.fire(this);
-     this.redraw;
-
+     console.log(this.options);
+     this.redraw;          
+     
     // wd = this.options.width;
     // nwd = wd + 2;
     // this.options.width = nwd;

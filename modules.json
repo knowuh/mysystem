@@ -4,10 +4,12 @@
       'icon'				: "./images/thermodynamics/coldbowl.png",
       'image'				: "./images/thermodynamics/coldbowl.png",
       'xtype'				: "MySystemContainer",
-  		'etype'				: 'source',
+  		'etype'				: 'node',
       'fields'			: {
-        								'name'				: 'cold bowl',
-      									'efficiency'	: 1
+    									'inputRate'		: 1,
+    									'form'				: 'heat',
+    									'efficiency'	: .5,
+    									'heat loss'    : 0
       								}
   	},  	{
 
@@ -15,11 +17,12 @@
       'image'				: "./images/thermodynamics/hotbowl.png",
       'xtype'				: "MySystemContainer",
   		'etype'				: 'source',
+      'name'				: 'hot bowl',
       'fields'			: {
-     									  		'name'				: 'hot bowl',
       									'energy'			: 100,
-      									'form'				: 'light',
-      									'efficiency'	: 1
+      									'form'				: 'heat',
+      									'inputRate'		: 1,  
+      									'efficiency'	: .7,
       								}
   	},  	{
   		'name'				: 'hot cup',
@@ -28,8 +31,9 @@
       'xtype'				: "MySystemContainer",
   		'etype'				: 'source',
       'fields'			: {
-      									'energy'			: 100,
-      									'form'				: 'light',
+      									'energy'			: 75,
+      									'form'				: 'heat',
+      									'inputRate'		: 1,
       									'efficiency'	: 1
       								}
   	},  	{
@@ -37,11 +41,11 @@
       'icon'				: "./images/thermodynamics/table.png",
       'image'				: "./images/thermodynamics/table.png",
       'xtype'				: "MySystemContainer",
-  		'etype'				: 'source',
+  		'etype'				: 'node',
       'fields'			: {
-      									'energy'			: 100,
       									'form'				: 'light',
-      									'efficiency'	: 1
+      									'efficiency'	: .5,
+      									'inputRate'		: 1      									
       								}
   	},
   	  	{
@@ -49,11 +53,12 @@
       'icon'				: "./images/thermodynamics/thumb.png",
       'image'				: "./images/thermodynamics/thumb.png",
       'xtype'				: "MySystemContainer",
-  		'etype'				: 'source',
+  		'etype'				: 'node',
       'fields'			: {
       									'energy'			: 100,
       									'form'				: 'light',
-      									'efficiency'	: 1
+      									'efficiency'	: .5,
+      									'inputRate'		: 1
       								}
   	},
   ];
