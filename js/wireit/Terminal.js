@@ -819,15 +819,13 @@ WireIt.myRedraw = function(){
 	var widthRange = my.defaults.arrows.width.max - my.defaults.arrows.width.min;
 	var maxWidth = my.defaults.arrows.width.max;
 
-	
-
 	for( var i = 0; i < len; i++ ){
 
 		try{
 		  var engineNodeFrom = wires[ i ].terminal1.container.module.engineNode;
 		  var engineNodeTo = wires[ i ].terminal2.container.module.engineNode;
 		  
-		  var lineWidth = widthRange / ( my.sumInputEnergy / my.sourceCount ) * ( engineNodeTo.energyIn ) + my.defaults.arrows.width.min ;
+		  var lineWidth = widthRange / ( my.sumInputEnergy / my.sourceCount ) * ( engineNodeTo.energyIn ) + my.defaults.arrows.width.min;		  
 		  
 		  wires[ i ].options.fields.width = lineWidth;
 		  wires[ i ].options.width = lineWidth;

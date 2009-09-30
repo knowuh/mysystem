@@ -31,15 +31,24 @@ MySystemPropEditor.prototype = {
     $H(this.node.options.fields).keys().each(function (field_name) {
       if(field_name !='color') {
         switch( field_name ){
- //         case 'width':break;
           case 'inputRate':
             fields.push (fieldTmpl.evaluate({name: field_name, value: realEngineNode.inputRate }));
             break;
-          case 'heat loss':
+          case 'efficiency':
+            fields.push (fieldTmpl.evaluate({name: field_name, value: realEngineNode.efficiency }));
+            break;
+          case 'form':
+            fields.push (fieldTmpl.evaluate({name: field_name, value: realEngineNode.form }));
+            break;
+          case 'name':
+          case 'width':          
+            fields.push (fieldTmpl.evaluate({name: field_name, value: this.node.options.fields[field_name] }));
+            break;
+          case 'heatLoss':
             fields.push (fieldTmpl.evaluate({name: field_name, value: realEngineNode.heatLoss }));
-            break;            
+            break;
           default:
-            fields.push (fieldTmpl.evaluate({name: field_name, value: this.node.options.fields[field_name]}));
+            fields.push (fieldTmpl.evaluate({name: field_name, value:  this.node.options.fields[field_name].value }));
             break;
       }
       //fields.push (fieldTmpl.evaluate({name: field_name, value: this.node.options.fields[field_name]}));
@@ -143,7 +152,8 @@ MySystemPropEditor.prototype = {
       var ctrlFormEnergy     = this.form_observer.element.energy;
       var ctrlFormInputRate  = this.form_observer.element.inputRate;
       var ctrlForm_FORM      = this.form_observer.element.form;
-      var ctrlFormEfficiency = this.form_observer.element.efficiency;    
+      var ctrlFormEfficiency = this.form_observer.element.efficiency;
+
 
       // Link energy fields to energy properties of enginNodes
       ctrlFormEnergy.onchange = function(){
@@ -157,7 +167,8 @@ MySystemPropEditor.prototype = {
       }
       
       ctrlFormEfficiency.onchange = function(){
-         ctrlEngineNode.efficiency[ ctrlForm_FORM.value ] = parseFloat( ctrlFormEfficiency.value );
+
+         ctrlEngineNode.efficiency = parseFloat( ctrlFormEfficiency.value );
          WireIt.myRedraw();
       }
       
@@ -166,5 +177,5 @@ MySystemPropEditor.prototype = {
     }
  
   }
-  
+
 }

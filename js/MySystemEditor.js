@@ -60,31 +60,26 @@
             var layerPos = YAHOO.util.Dom.getXY(layer.el);
             pos[0] = pos[0] - layerPos[0];
             pos[1] = pos[1] - layerPos[1];
-            
-            
-            /*var Copy = new Object;
-            for( var i in this._module ){
-              Copy[ i ] = this._module[ i ];
-            }
-            Copy.engineNode = newEngineNode;
-            */
-
+                                    
             var Copy = function( par ){
               for( var i in par._module ){
                 this[ i ] = par._module[ i ];
               }
-              var energyForm = {};
-              energyForm[ par._module.fields.form ] = par._module.fields.efficiency;            
 
-              this.engineNode = my.newNode({
+              var newProps = {
                   name        : par._module.name,
-                  module      : par._module,
+                  module      : par._module, // ref back
                   type        : par._module.etype,
+                  heatLoss    : 0,                  
                   output      : [],
-                  energy      : par._module.fields.energy || 0,
-                  inputRate   : par._module.fields.inputRate,
-                  efficiency  : energyForm // reference energies object
-              });
+                  energy      : par._module.fields.energy ? par._module.fields.energy.value : 0
+              };
+             
+              for( var i in par._module.fields ){
+                newProps[ i ] = par._module.fields[ i ].value;
+              }
+
+              this.engineNode = my.newNode( newProps );
             } 
 
             this._MySysEditor.addModule( new Copy( this ), pos );
