@@ -5,6 +5,7 @@ require 'Sprockets'
   lib/YUI/YUI-combo.js
   lib/prototype.js
   lib/http.js
+  lib/excanvas.js
   lib/canvastext.js
   lib/uuid.js
 }
@@ -38,6 +39,13 @@ require 'Sprockets'
   js/wireit/util/inputex/FormContainer-beta.js 
   js/wireit/LayerMap.js 
   js/wireit/ImageContainer.js
+}
+
+@print = %w{
+  lib/prototype.js
+  lib/raphael-min.js
+  js/MySystemUtil.js
+  js/MySystemPrint.js
 }
 
 def simple_sprocket(list,filename)
@@ -74,6 +82,7 @@ task :all_js do
   %x{mkdir -p ./dist/css/YUI }
   
   simple_sprocket(@libs + @wire_it + @my_system, 'dist/all.js')
+  simple_sprocket(@print, 'dist/print.js')
   %x{cp mysystem-for-dist.html dist/mysystem.html}
   %x{cp print-for-dist.html dist/print.html}
   %x{cp -r lib/excanvas.js dist/lib}
