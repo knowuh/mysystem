@@ -1,11 +1,12 @@
 (function(){
-  MySystem = function(){ 
-    this.init();
+  
+  this.MySystem = function( jsonURL ){ 
+    this.init( jsonURL );
   };
   
   MySystem.prototype = {
-    init: function() {
-      this.loadModules('modules.json');
+    init: function( jsonURL ) {
+      this.loadModules( jsonURL );
     },
     
     setDataService: function(ds) {
@@ -64,4 +65,5 @@
     
 
   }
+  
 })();

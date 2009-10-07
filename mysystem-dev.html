@@ -77,7 +77,7 @@
         var mySystem;
         var myDataService;
         document.observe("dom:loaded", function() {
-          mySystem = new MySystem();
+          mySystem = new MySystem( 'modules2.json' );
           // myDataService = new MocDS(null,null);
           // myDataService = new VleDS(vle);
           // myDataService = new DSSService('read','wrtie');
