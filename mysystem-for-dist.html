@@ -29,10 +29,12 @@
         var mySystem;
         var myDataService;
         document.observe("dom:loaded", function() {
-          mySystem = new MySystem();
-          //myDataService = new MocDS(null,null);
-          var myDataService = new VleDS(vle);
-          // or var myDataService = new DSSService(read,write);
+          mySystem = new MySystem("modules2.json");
+          // myDataService = new MocDS(null,null);
+          myDataService = new VleDS(vle);
+          // myDataService = new DSSService('read','wrtie');
+          // myDataService = new GGearsDS('write','write','mysystem');
+          // myDataService = new CookieDS(null,'write');
           mySystem.setDataService(myDataService);
           mySystem.load();
         });
