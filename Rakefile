@@ -86,7 +86,7 @@ task :all_js do
   %x{cp mysystem-for-dist.html dist/mysystem.html}
   %x{cp print-for-dist.html dist/print.html}
   %x{cp -r lib/excanvas.js dist/lib}
-  %x{cp modules.json dist}
+  %x{cp *.json dist}
   %x{cp -r images dist}
   %x{cp -r css/* dist/css}
   %x{cp ./lib/YUI/*.css ./dist/css/YUI}
