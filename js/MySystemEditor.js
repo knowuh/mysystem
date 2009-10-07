@@ -427,7 +427,6 @@
         * usually invoked by drag-and-drop callback
         */
         addModule: function(module, pos){
-
             try {
                 //var containerConfig = module.container;
                 // debug("addModule called for " + module.name);
@@ -461,19 +460,7 @@
             });
             newButton.on("click", this.onNew, this, true);
 
-            var loadButton = new widget.Button({
-                label: "Load",
-                id: "WiringEditor-loadButton",
-                container: toolbar
-            });
-            loadButton.on("click", this.onLoad, this, true);
 
-            var saveButton = new widget.Button({
-                label: "Save",
-                id: "WiringEditor-saveButton",
-                container: toolbar
-            });
-            saveButton.on("click", this.onSave, this, true);
 
             var helpButton = new widget.Button({
                 label: "help",
@@ -481,23 +468,57 @@
                 container: toolbar
             });
             helpButton.on("click", this.onHelp, this, true);
-            
-            // var printButton = new widget.Button({
-            //               label: "Print",
-            //               id: "MySystem Print button",
-            //               container: toolbar
-            //           });
-            //           printButton.on("click", this.onPrint, this, true);
-            
-            // var jsonDataButton = new widget.Button({
-            //     label: "show json data",
-            //     id: "MySystem Json data button",
-            //     container: toolbar
-            // });
-            // jsonDataButton.on("click", this.onShowJson, this, true);
-            
         },
-
+        /**
+        * Enable the save and load buttons
+        * @method enableLoadAndSave
+        */
+        enableLoadAndSave: function() {
+          var toolbar = Dom.get('toolbar');
+          var loadButton = new widget.Button({
+              label: "Load",
+              id: "WiringEditor-loadButton",
+              container: toolbar
+          });
+          loadButton.on("click", this.onLoad, this, true);
+          
+          var saveButton = new widget.Button({
+              label: "Save",
+              id: "WiringEditor-saveButton",
+              container: toolbar
+          });
+          saveButton.on("click", this.onSave, this, true);
+        },
+        
+        /**
+        * Enable the print button
+        * @method enablePrint
+        */
+        enablePrint: function() {
+          var toolbar = Dom.get('toolbar');
+          var printButton = new widget.Button(
+            {
+              label: "Print",
+              id: "MySystem Print button",
+              container: toolbar
+            });
+            printButton.on("click", this.onPrint, this, true);
+        },
+        
+        /**
+        * Enable the button to "Show Jason Data"
+        * @method enableShowJason
+        */
+        enableShowJason: function() {
+          var toolbar = Dom.get('toolbar');
+          var jsonDataButton = new widget.Button({
+              label: "show json data",
+              id: "MySystem Json data button",
+              container: toolbar
+          });
+          jsonDataButton.on("click", this.onShowJson, this, true);
+        },
+        
         /**
         * @method onSave
         */
