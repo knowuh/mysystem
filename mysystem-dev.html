@@ -85,6 +85,9 @@
           //myDataService = new CookieDS(null,'write');
           mySystem.setDataService(myDataService);
           mySystem.load();
+          if (mySystem.editor) {
+            mySystem.editor.enableLoadAndSave();
+          }
         });
         
         onExit = function () {
