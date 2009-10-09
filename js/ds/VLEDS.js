@@ -8,12 +8,12 @@
 
   VleDS.prototype = {
     save: function(_data) {
-        this.vle.saveHtmlState(_data,this.vleNode);
+        this.vle.saveState(_data,this.vleNode);
         this.data = _data;
     },
 
     load: function(context,callback) {
-      this.data = this.vle.getLatestHtmlState();
+      this.data = this.vle.getLatestStateForCurrentNode();
       callback(this.data,context);  
     },
 
