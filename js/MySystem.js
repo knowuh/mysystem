@@ -30,9 +30,10 @@
     
     loadModules: function(filename) {
       var self = this;
-      debug("calling loadModules " + filename);
+      debug("calling loadModules (with GET)" + filename);
       new Ajax.Request(filename, {
         asynchronous: false,
+        method: 'GET',
         onSuccess: function(rsp) {
           var text = rsp.responseText;
           var _data = eval(text);
