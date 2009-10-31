@@ -90,6 +90,7 @@
 (function(){
   GGearsDS = function(readKey,writeKey,_db,_table){
     this.data = "";
+    this.enableLoadAndSave = true;
     this.db = _db || "models" 
     this.table = _table || this.db
     this.setKeys(readKey,writeKey);

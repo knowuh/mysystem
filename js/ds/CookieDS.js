@@ -8,6 +8,7 @@
   CookieDS = function(readKey, writeKey, _days) {
     this.data = "";
     this.days = _days || 14;
+    this.enableLoadAndSave = true;
     this.setKeys(readKey, writeKey);
   };
 

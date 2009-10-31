@@ -4,6 +4,7 @@
     this.data = "";
     this.vle = _vle
     this.vleNode=_vle.getCurrentNode();
+    this.enableLoadAndSave = false;
   };
 
   VleDS.prototype = {
