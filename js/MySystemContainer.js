@@ -14,11 +14,8 @@ MySystemContainer = function(options, layer) {
    this.has_sub = options.has_sub || false;
    this.subSystem =  null;
    if (options.subsystem_options != null) {
-     // debug(("initializing subsystem");
      this.subSystem = new WireIt.Layer(options.subsystem_options);
-     // debug(("Successfully initialized layer");
      this.subSystem.setWiring(options.subsystem_wiring);
-     // debug(("successfully set wiring");
      // tell the editor about the new layer.
      MySystemContainer.openContextFor.fire(this);
    }
@@ -27,7 +24,6 @@ MySystemContainer = function(options, layer) {
 
 
    if (this.options.position) {
-     debug($(this.options.position).inspect());
      $(this.el).setStyle({
        position: 'absolute',
        left: this.options.position[0],
@@ -92,7 +88,6 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     this.options.name = this.title;
     this.options.has_sub = this.has_sub;
     if (this.subSystem != null) {
-      // debug(("saving subsystem config");
       this.options.subsystem_options = this.subSystem.options;
       this.options.subsystem_wiring = this.subSystem.getWiring();
     }
