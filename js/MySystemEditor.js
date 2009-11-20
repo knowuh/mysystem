@@ -433,22 +433,14 @@
         * usually invoked by drag-and-drop callback
         */
         addModule: function(module, pos){
-            try {
-                //var containerConfig = module.container;
-                // debug("addModule called for " + module.name);
-                module.position = pos;
-                module.title = module.name;
-                module.layer = this.layer;
-                var container = this.layer.addContainer(module);
-                container.setTitle(module.title);
-                container.options.position = pos;
-                // container.options.module = module;
-                container.module = module;
-                Dom.addClass(container.el, "WiringEditor-module-" + module.name);
-            }
-            catch(ex) {
-                // debug("Error Layer.addContainer", ex.message);
-            }
+              module.position = pos;
+              module.title = module.name;
+              module.layer = this.layer;
+              var container = this.layer.addContainer(module);
+              container.setTitle(module.title);
+              container.options.position = pos;
+              container.module = module;
+              Dom.addClass(container.el, "WiringEditor-module-" + module.name);
         },
 
 
