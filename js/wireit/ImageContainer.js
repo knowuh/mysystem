@@ -37,6 +37,14 @@ YAHOO.lang.extend(WireIt.ImageContainer, WireIt.Container, {
    render: function() {
       WireIt.ImageContainer.superclass.render.call(this);
       YAHOO.util.Dom.setStyle(this.bodyEl, "background-image", "url("+this.options.image+")");
+      var newImg = new Image();
+      newImg.src = this.options.image;
+      var height = newImg.height;
+      var width = newImg.width;
+      this.el.style.height=height+"px";
+      this.el.style.width=width+"px";
+      this.bodyEl.style.width=width+"px"
+      this.bodyEl.style.height=height+"px"
    },
    
    /**

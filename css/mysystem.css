@@ -56,9 +56,14 @@ input {
 div.title {
   display: block;  
   position: relative;
-  font-size: 18px;
+  font-size: 16px;
   float: left;
+  width: 200%
   z-order: 10;
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  filter:alpha(opacity=80);
+  background-color: white
 }
 
 #prop_form {

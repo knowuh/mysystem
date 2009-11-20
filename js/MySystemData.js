@@ -64,7 +64,7 @@ MySystemData.defaultTerminals = function() {
        "direction": [0, 1],
        "offsetPosition": {
            "left": 20,
-           "bottom": -25
+           "bottom": -50
        },
        "ddConfig": {
            "type": "output",
