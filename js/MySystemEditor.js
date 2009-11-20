@@ -400,6 +400,12 @@
                 // debug("created WiringEditor module");
             }
 
+            if (module.fields && module.fields.name) {
+              div.appendChild(WireIt.cn('span', null, null, module.fields.name));
+            }
+            else if (module.name) {
+              div.appendChild(WireIt.cn('span', null, null, module.name));
+            }
             var ddProxy = new MySystemDragAndDropProxy(div, this);
             ddProxy._module = module;
             left.appendChild(div);
