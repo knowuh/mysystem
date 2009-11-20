@@ -377,8 +377,7 @@
         },
         
         addModuleChoice: function(module) {           
-            
-            // debug("found name: " + module.name);
+          
             var left = Dom.get('left');
             var div = WireIt.cn('div', {
                 className: "WiringEditor-module"
@@ -391,13 +390,11 @@
                 div.appendChild(WireIt.cn('img', {
                     src: module.icon
                 }));
-                // debug("created icon module");
             } else {
                 var div = WireIt.cn('div', {
                     className: "WiringEditor-module"
                 });
                 div.appendChild(WireIt.cn('span', null, null, module.name));
-                // debug("created WiringEditor module");
             }
 
             if (module.fields && module.fields.name) {
