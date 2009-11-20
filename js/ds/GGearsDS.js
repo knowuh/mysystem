@@ -112,12 +112,14 @@
     
     open_db: function() {
       // this line is not working, something about factory.create needs to be investigated:
-      this.db_connection = google.gears.factory.create("beta.database");
-      this.db_connection.open(this.db);
-      this.db_connection.execute (
-               'create table if not exists ' + this.table +
-               ' (key string, content text, Timestamp int)'
-      );
+      if (google) {
+        this.db_connection = google.gears.factory.create("beta.database");
+        this.db_connection.open(this.db);
+        this.db_connection.execute (
+                 'create table if not exists ' + this.table +
+                 ' (key string, content text, Timestamp int)'
+        );
+      }
     },
     
     // write the data
