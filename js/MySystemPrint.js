@@ -205,7 +205,7 @@
   MySystemPrint = function(_json,dom_id,contentBaseUrl,width,height,scale_factor) {
     this.data = _json;
     this.name = "my print";
-    this.scale =typeof(scale_factor) != 'undefined' ? scale_factor : 0.6;
+    this.scale =typeof(scale_factor) != 'undefined' ? scale_factor : 1.6;
     this.nodes = MySystem.Node.importJson(_json,contentBaseUrl);
     this.wires = MySystem.Wire.importJson(_json,this.nodes);
     this.domId = dom_id;
@@ -238,16 +238,16 @@
     //     self.lastY = e.pointerY;
     //  });
     //  
-    //  $(dom_id).observe('mouseup', function(e) {
-    //     self.scale = self.scale + 0.3;
-    //     var dx = self.lastx - e.pointerX;
-    //     var dy = self.lasty - e.pointerY;
-    //     var d = Math.sqrt(dx * dx + dy * dy);
-    //     self.mouse_down = false;
-    //     self.lastx = e.pointerX;
-    //     self.lastY = e.pointerY;
-    //     self.redraw();
-    //  });
+     $(dom_id).observe('mouseup', function(e) {
+        self.scale = self.scale + 0.3;
+        var dx = self.lastx - e.pointerX;
+        var dy = self.lasty - e.pointerY;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        self.mouse_down = false;
+        self.lastx = e.pointerX;
+        self.lastY = e.pointerY;
+        self.redraw();
+     });
     //   
     //  
     //  // self.redraw();
@@ -257,11 +257,10 @@
   
   MySystemPrint.prototype.redraw = function() {
     var container = $(this.domId);
-    var width = container.width();
-    var height = container.height();
-    this.graphics.width = width;
-    this.graphics.height = height;
-    this.graphics.scale(this.scale,this.scale);
+    var width = container.width;
+    var height = container.height;
+    this.graphics.setSize(width, height);
+    this.graphics.push.scale(this.scale,this.scale);
   };
   
   /**
@@ -269,35 +268,41 @@
   **/
   MySystemPrint.prototype.drawNode = function(node) {
     node.rep=this.graphics.set();
-    var x = node.x;
-    var y = node.y;
-    var size = 50;
+    var x = node.x * this.scale;
+    var y = node.y * this.scale;
     var image = new Image();
     image.src = node.icon;
-    var icon = node.rep.push(this.graphics.image(node.icon,x,y,size,size));
-    var text  = node.rep.push(this.graphics.text(x-10,y+image.height,node.name));
+    var width = image.width * this.scale;
+    var height = image.height * this.scale;
+    var icon = node.rep.push(this.graphics.image(node.icon,x,y,width,height));
+    var border = 12;
+    var text = node.rep.push(this.graphics.text(x + (width / 2),y + height + border,node.name));
+    node.height = border * 2 + height;
   };
   
   /**
   * @method drawWire
-  * IMPORTANT!!!!! This must be called *after* a call to drawNode. (HACKY-BAD)
+  * IMPORTANT!!!!! This must be called *after* a call to drawNode.
   **/
   MySystemPrint.prototype.drawWire = function(wire) {
     wire.rep = this.graphics.connection(wire.sourceNode.rep,wire.targetNode.rep,wire.color,wire.color + "|" + (wire.width * this.scale));
-    var srcX, srcY, tgtX, tgtY, xDist,yDist,realX,realY;
 
-    srcX = wire.sourceNode.x; 
-    srcY = wire.sourceNode.y;
-    tgtX = wire.targetNode.x;
-    tgtY = wire.targetNode.y;
-
-    xDist = ( tgtX - srcX ) / 2;  
-    yDist = ( tgtY - srcY ) / 2;
-
-    realX = ( srcX + xDist );
-    realY = ( srcY - yDist );
+    var srcX = wire.sourceNode.x * this.scale;
+    var srcY = wire.sourceNode.y * this.scale;
+    var tgtX = wire.targetNode.x * this.scale;
+    var tgtY = wire.targetNode.y * this.scale;
     
-    var txt = this.graphics.text(realX, realY, wire.name);
+    // include the widht    
+    srcY = srcY > tgtY ? srcY + wire.sourceNode.height : tgtY + wire.targetNode.height
+    
+    // include the height when determining vertical midpoint 
+    srcY = srcY > tgtY ? srcY + wire.sourceNode.height : tgtY + wire.targetNode.height
+    
+    var xMid = srcX + tgtX / 2;
+    var yMid = srcY + tgtY / 2;
+
+    
+    var txt = this.graphics.text(xMid, yMid, wire.name);
   };
   
 
