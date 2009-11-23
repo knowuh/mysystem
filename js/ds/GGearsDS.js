@@ -99,8 +99,8 @@
   GGearsDS.prototype = {
     setKeys: function(read,write) {
       if (read) {
-        this.load(this,function(){});// just load data
         this.readKey = read;
+        this.load(this,function(){});// just load data
       }
       if (write) {
         this.writeKey = write;
