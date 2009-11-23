@@ -25,7 +25,7 @@
                    " L " + baseBX  + " " + baseBY +
                    " Z ";
     return {
-      path: this.path({fill: color, stroke: "none"},pathData),
+      line: this.path(pathData).attr({fill: color, stroke: "none"}),
       type: 'arrow'
     };
   };
@@ -52,23 +52,20 @@
           {x: bb2.x - 1, y: bb2.y + bb2.height / 2},
           {x: bb2.x + bb2.width + 1, y: bb2.y + bb2.height / 2}];
       var d = {}, dis = [];
-      
       for (var i = 0; i < 4; i++) {
-          var dx, dy;
           for (var j = 4; j < 8; j++) {
-                  dx = Math.abs(p[i].x - p[j].x);
+              var dx = Math.abs(p[i].x - p[j].x),
                   dy = Math.abs(p[i].y - p[j].y);
               if ((i == j - 4) || (((i != 3 && j != 6) || p[i].x < p[j].x) && ((i != 2 && j != 7) || p[i].x > p[j].x) && ((i != 0 && j != 5) || p[i].y > p[j].y) && ((i != 1 && j != 4) || p[i].y < p[j].y))) {
                   dis.push(dx + dy);
-                  d[dis[dis.length - 1]] = [i, j];  
+                  d[dis[dis.length - 1]] = [i, j];
               }
           }
       }
-      var res;
       if (dis.length == 0) {
-          res = [0, 4];
+          var res = [0, 4];
       } else {
-          res = d[Math.min.apply(Math, dis)];
+          var res = d[Math.min.apply(Math, dis)];
       }
       var x1 = p[res[0]].x,
           y1 = p[res[0]].y,
@@ -86,17 +83,17 @@
           line.line.attr({path: path});
       } else {
           var color = typeof line == "string" ? line : "#000";
-          var strokeWidth = bg.split("|")[1] || 3;
-          var stroke = bg.split("|")[0];
+          var stroke_width = bg.split("|")[1] || 3;
           return {
-              bg: bg && bg.split && this.path({stroke: stroke, fill: "none", "stroke-width": strokeWidth}, path),
-              line: this.path({stroke: color, fill: "none"}, path),
-              arrow: this.arrow(x3,y3,x4,y4,strokeWidth * 2.0,50,color),
+              bg: bg && bg.split && this.path(path).attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": stroke_width}),
+              line: this.path(path).attr({stroke: color, fill: "none"}),
+              arrow: this.arrow(x3,y3,x4,y4, stroke_width * 2.0,50,color),
               from: obj1,
               to: obj2
           };
       }
   };
+
   
   
   
@@ -108,7 +105,6 @@
     this.icon = [];
     this.x = 0;
     this.y = 0;
-  
   };
 
   /**
@@ -127,8 +123,10 @@
     return returnVal;
   };
   
+  
   /**
-  *
+  * @method importJson
+  * creates Node from json text
   **/
   MySystem.Node.importJson = function(jsonText,contentBaseUrl) {
     var objs = eval(jsonText);
@@ -157,7 +155,8 @@
   
   
   /**
-  * @constructor for Wire
+  * MySystem.Wire
+  * @constructor 
   **/
   MySystem.Wire = function() {
     this.source = null;
@@ -200,42 +199,83 @@
   
     
   /**
+  * MySystemPrint
   * @constructor
   **/
   MySystemPrint = function(_json,dom_id,contentBaseUrl,width,height,scale_factor) {
     this.data = _json;
     this.name = "my print";
     this.scale =typeof(scale_factor) != 'undefined' ? scale_factor : 0.6;
-    this.graphics = Raphael(document.getElementById(dom_id),width,height);
     this.nodes = MySystem.Node.importJson(_json,contentBaseUrl);
     this.wires = MySystem.Wire.importJson(_json,this.nodes);
-    this.visContent = this.graphics.set();
+    this.domId = dom_id;
+
+    var container = $(this.domId);
+    this.width = container.width;
+    this.height = container.height;
+    this.graphics = Raphael(this.domId,this.width,this.height);
     var self = this;
     
     this.nodes.each(function(node) {
       self.drawNode(node);
-      self.visContent.push(node.rep);
     });
-    
+  
     this.wires.each(function(wire) {
       self.drawWire(wire);
-      self.visContent.push(wire.rep);
     });
-    this.wrapper = this.graphics;
+    
+    // var self = this;
+    //  document.observe('keyup', function(e) {
+    //     var code = e.keyCode;
+    //     if (code == '+') {self.scale = self.scale * 2;};
+    //     if (code == '-') {self.scale = self.scale / 2;};
+    //     self.redraw();
+    //  });
+    //  $(dom_id).observe('mousedown', function(e) {
+    //     self.scale = self.scale + 0.3;
+    //     self.mouse_down = true;
+    //     self.lastx = e.pointerX;
+    //     self.lastY = e.pointerY;
+    //  });
+    //  
+    //  $(dom_id).observe('mouseup', function(e) {
+    //     self.scale = self.scale + 0.3;
+    //     var dx = self.lastx - e.pointerX;
+    //     var dy = self.lasty - e.pointerY;
+    //     var d = Math.sqrt(dx * dx + dy * dy);
+    //     self.mouse_down = false;
+    //     self.lastx = e.pointerX;
+    //     self.lastY = e.pointerY;
+    //     self.redraw();
+    //  });
+    //   
+    //  
+    //  // self.redraw();
+  };
+  
+
+  
+  MySystemPrint.prototype.redraw = function() {
+    var container = $(this.domId);
+    var width = container.width();
+    var height = container.height();
+    this.graphics.width = width;
+    this.graphics.height = height;
+    this.graphics.scale(this.scale,this.scale);
   };
   
   /**
   * @method drawNode
   **/
   MySystemPrint.prototype.drawNode = function(node) {
-    node.rep = this.graphics.set();
-    var x = node.x * this.scale;
-    var y = node.y * this.scale;
-    var size = 50 * this.scale;
-    node.rep.push(this.graphics.image(node.icon,x,y,size,size)); // TODO: Fixed size==BAD
-    var txt = this.graphics.text(x-10,y,node.name);
-    txt.rotate(-90,true);
-    node.rep.push(txt);
+    node.rep=this.graphics.set();
+    var x = node.x;
+    var y = node.y;
+    var size = 50;
+    var image = new Image();
+    image.src = node.icon;
+    var icon = node.rep.push(this.graphics.image(node.icon,x,y,size,size));
+    var text  = node.rep.push(this.graphics.text(x-10,y+image.height,node.name));
   };
   
   /**
@@ -244,24 +284,21 @@
   **/
   MySystemPrint.prototype.drawWire = function(wire) {
     wire.rep = this.graphics.connection(wire.sourceNode.rep,wire.targetNode.rep,wire.color,wire.color + "|" + (wire.width * this.scale));
-    
-    var srcX = wire.sourceNode.x, 
-        srcY = wire.sourceNode.y,
-        tgtX = wire.targetNode.x,
-        tgtY = wire.targetNode.y;
-    
-    var xDist = ( tgtX - srcX ) / 2;
-    var yDist = ( tgtY - srcY ) / 2;
+    var srcX, srcY, tgtX, tgtY, xDist,yDist,realX,realY;
 
-    var realX = ( srcX + xDist ) * this.scale,
-        realY = ( srcY + yDist ) * this.scale;
+    srcX = wire.sourceNode.x; 
+    srcY = wire.sourceNode.y;
+    tgtX = wire.targetNode.x;
+    tgtY = wire.targetNode.y;
+
+    xDist = ( tgtX - srcX ) / 2;  
+    yDist = ( tgtY - srcY ) / 2;
+
+    realX = ( srcX + xDist );
+    realY = ( srcY - yDist );
     
-    var txt = this.graphics.text( realX, realY, wire.name );
-   
-    //txt.rotate(-90,true);
-    
-    // wire.rep.push(txt);
-  }
+    var txt = this.graphics.text(realX, realY, wire.name);
+  };
   
 
 }());
