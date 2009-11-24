@@ -29,18 +29,18 @@
   
 
   /**
-  * Connection, taken from graffle.js:
+  * modification of Connection, taken from graffle.js:
   * http://raphaeljs.com/graffle.js  author not cited, part of 
   * rapheal project?  http://raphaeljs.com
   **/
-  Raphael.fn.connection = function (obj1, obj2, line, bg) {
+  Raphael.fn.connection = function (obj1, obj2, line, bg,name) {
       if (obj1.line && obj1.from && obj1.to) {
           line = obj1;
           obj1 = line.from;
           obj2 = line.to;
       }
-      var bb1 = obj1.getBBox();
-      var bb2 = obj2.getBBox();
+      var bb1 = obj1.nodeImage.getBBox();
+      var bb2 = obj2.nodeImage.getBBox();
       var p = [{x: bb1.x + bb1.width / 2, y: bb1.y - 1},
           {x: bb1.x + bb1.width / 2, y: bb1.y + bb1.height + 1},
           {x: bb1.x - 1, y: bb1.y + bb1.height / 2},
@@ -79,21 +79,22 @@
       
       if (line && line.line) {
           line.bg && line.bg.attr({path: path});
-          // var stroke_width = line.bg.split("|")[1] || 3;
-          var stroke_width = 10;
-          // var stroke_width=10;
-          line.arrow.attr({path: MySystem.arrow_path(x3,y3,x4,y4, stroke_width * 2.0,50)});
+          var lineWidth=line.lineWidth;
+          line.arrow.attr({path: MySystem.arrow_path(x3,y3,x4,y4, lineWidth * 2.0,50)});
           line.line.attr({path: path});
-          line.label.attr({x: x2,y: y4});
+          var fontSize = 10;
+          line.label.attr({x: x2,y: y4,"font-size": fontSize + "px"});
       } else {
           var color = typeof line == "string" ? line : "#000";
           var stroke_width = bg.split("|")[1] || 3;
           var arrow_path = MySystem.arrow_path(x3,y3,x4,y4, stroke_width * 2.0,50);
+          var fontSize = 10;
           return {
               bg: bg && bg.split && this.path(path).attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": stroke_width}),
               line: this.path(path).attr({stroke: color, fill: "none"}),
-              label: this.text(10,10, "wire.name").attr({stroke: '#FF0000'}),
+              label: this.text(x2,y4, name).attr({fill: '#FF0000',"font-size": fontSize + "px"}),
               arrow: this.path(arrow_path).attr({fill: color, stroke: "none"}),
+              lineWidth: stroke_width,
               from: obj1,
               to: obj2
           };
@@ -106,14 +107,37 @@
   * http://raphaeljs.com/graffle.js  author not cited, part of 
   * rapheal project?  http://raphaeljs.com
   **/
-  Raphael.fn.Node = function (node) {
+  Raphael.fn.Node = function (node, scale) {
+    var label;
+    var nodeImage;
+    if (node.rep) {
+      var nodeImage = node.rep.nodeImage;
+      var label = node.rep.label;
+    }
+    else {
+      node.border = node.border ? node.border : 10;
+      if (!node.loaded) {
+        var image = new Image();
+        image.src = node.icon;
+        node.width = node.width ? node.width : 20;
+        node.height = node.height ? node.height : 20;
+        image.onLoad = function() {
+          node.width = image.width;
+          node.height = image.height;
+          node.loaded = true;
+        };
+      }
+      var nodeImage = this.image(node.icon,node.x,node.y,node.width,node.height);
+      var label = this.text(x,y,node.name).attr({fill: '#FF0000'})
+    }
+    var y =  (node.y + node.height + node.border) * scale;
+    var x =  (node.x + (node.width  / 2.0)) * scale;
+    nodeImage.scale(scale,scale,0,0);
+    var fontSize = 10 * scale;
+    label.attr({x: x, y:y, "font-size": fontSize + "px"});
     return {
-        bg: bg && bg.split && this.path(path).attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": stroke_width}),
-        line: this.path(path).attr({stroke: color, fill: "none"}),
-        label: this.text(10,10, "wire.name").attr({stroke: '#FF0000'}),
-        arrow: this.path(arrow_path).attr({fill: color, stroke: "none"}),
-        from: obj1,
-        to: obj2
+        nodeImage: nodeImage,
+        label: label
     };
   };
   
@@ -285,9 +309,10 @@
     this.graphics.setSize(width, height);
     this.nodes.each(function(node) {
       // node.textrep.scale(self.scale,self.scale);
-      node.rep.scale(self.scale,self.scale,0,0);
+      // node.rep.scale(self.scale,self.scale,0,0);
       // node.textrep.scale(self.scale,self.scale,0,0);
       // var y = (node.y + node.height + node.border) * self.scale;
+      self.graphics.Node(node,self.scale);
     });
     this.wires.each(function(wire){
       self.graphics.connection(wire.rep);
@@ -298,16 +323,7 @@
   * @method drawNode
   **/
   MySystemPrint.prototype.drawNode = function(node) {
-    node.border = 10;
-    var image = new Image();
-    image.src = node.icon;
-    node.width = image.width;
-    node.height = image.height;
-    node.rep = this.graphics.image(node.icon,node.x,node.y,node.width,node.height);
-    node.rep.scale(this.scale,this.scale,0,0);
-    var y = (node.y + node.height + node.border) * this.scale;
-    var x = (node.x *this.scale)+ (node.width * this.scale/ 2);
-    node.textrep = this.graphics.text(x,y,node.name);
+    node.rep = this.graphics.Node(node,this.scale);
     // node.rep.push(this.graphics.text(x,y,node.name));
     // node.textrep.cx = node.rep.cx;
   };
@@ -317,26 +333,7 @@
   * IMPORTANT!!!!! This must be called *after* a call to drawNode.
   **/
   MySystemPrint.prototype.drawWire = function(wire) {
-    wire.rep = this.graphics.connection(wire.sourceNode.rep,wire.targetNode.rep,wire.color,wire.color + "|" + (wire.width * this.scale));
-
-    var srcX = wire.sourceNode.x * this.scale;
-    var srcY = wire.sourceNode.y * this.scale;
-    var tgtX = wire.targetNode.x * this.scale;
-    var tgtY = wire.targetNode.y * this.scale;
-    
-    // include the width when determining horizontal midpoint 
-    srcX = srcX > tgtX ? srcX - wire.sourceNode.width : srcX;
-    tgtX = tgtX > srcX ? tgtX - wire.targetNode.width : tgtX;
-    
-    // include the height when determining vertical midpoint 
-    srcY = srcY < tgtY ? srcY - wire.sourceNode.height : srcY;
-    tgtY = tgtY < srcY ? tgtY - wire.targetNode.height : srcY;
-    
-    var xMid = srcX + tgtX / 2;
-    var yMid = srcY + tgtY / 2;
-
-  
-    var txt = this.graphics.text(xMid, yMid, wire.name);
+    wire.rep = this.graphics.connection(wire.sourceNode.rep,wire.targetNode.rep,wire.color,wire.color + "|" + (wire.width * this.scale), wire.name);
   };
   
 
