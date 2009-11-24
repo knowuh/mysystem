@@ -8,9 +8,7 @@
   /**
   * Arrow 'plugin' for Raphael
   **/
-  MySystem.arrow_path = function(startx,starty,endx,endy,len,angle,color) {
-    color = typeof(color) != 'undefined' ? color : "#888";
-    
+  MySystem.arrow_path = function(startx,starty,endx,endy,len,angle) {    
     var theta = Math.atan2((endy-starty),(endx-startx));
     var baseAngleA = theta + angle * Math.PI/180;
     var baseAngleB = theta - angle * Math.PI/180;
@@ -28,27 +26,82 @@
   };
   
 
+  Raphael.fn.zoomIn = function(x,y,scale) {
+    var attributes = {
+      fill: "#EEFFEE",
+      stroke: "#004400",
+      "stroke-width": scale * 1.25,
+      "stroke-linecap" : "round",
+      "stroke-linejoin" : "round",
+      opacity: 0.7
+    }
+    var zoom = this.set();
+    var glass = this.circle(x,y, (3 * scale));
+    zoom.push(glass);
+      
+    var plus = this.set();
+    plus.push(   this.path("M" + x      + " " + (y+scale)  + "L" +  x     + " " + (y-scale )));
+    plus.push(   this.path("M" + (x+scale)  + " " +  y     + "L" + (x-scale)  + " " +  y   ));
+    zoom.push(plus);
+
+    zoom.attr(attributes);
+    return {
+      zoom: zoom,
+      glass: glass,
+      plus: plus,
+    };
+  };
+
+  Raphael.fn.zoomOut = function(x,y,scale) {
+    var attributes = {
+      fill: "#EEFFEE",
+      stroke: "#003300",
+      "stroke-width": scale * 1.25,
+      "stroke-linecap" : "round",
+      "stroke-linejoin" : "round",
+      opacity: 0.7
+    }
+    var zoom = this.set();
+    var glass = this.circle(x,y, (3 * scale));
+    zoom.push(glass);
+    glass.attr({fill: "#EEFFEE"})
+    var minus = this.path("M" + (x+scale)  + " " +  y     + "L" + (x-scale)  + " " +  y   );
+    zoom.push(minus);
+    zoom.attr(attributes);
+    return {
+      zoom: zoom,
+      glass: glass,
+      minus: minus
+    };
+  };
+  
   /**
   * modification of Connection, taken from graffle.js:
   * http://raphaeljs.com/graffle.js  author not cited, part of 
   * rapheal project?  http://raphaeljs.com
   **/
-  Raphael.fn.connection = function (obj1, obj2, line, bg,name) {
-      if (obj1.line && obj1.from && obj1.to) {
-          line = obj1;
+  Raphael.fn.wire = function (wire, scale) {
+      var line;
+      var obj1 = wire.sourceNode.rep;
+      var obj2 = wire.targetNode.rep;
+      var name = wire.name;
+      //wire.sourceNode.rep,wire.targetNode.rep,wire.color,wire.color + "|" + (wire.width * this.scale), wire.name);
+      if (wire.rep && wire.rep.from && wire.rep.to) {
+          line = wire.rep;
           obj1 = line.from;
           obj2 = line.to;
       }
       var bb1 = obj1.nodeImage.getBBox();
       var bb2 = obj2.nodeImage.getBBox();
+      var border = 10;
       var p = [{x: bb1.x + bb1.width / 2, y: bb1.y - 1},
-          {x: bb1.x + bb1.width / 2, y: bb1.y + bb1.height + 1},
-          {x: bb1.x - 1, y: bb1.y + bb1.height / 2},
-          {x: bb1.x + bb1.width + 1, y: bb1.y + bb1.height / 2},
-          {x: bb2.x + bb2.width / 2, y: bb2.y - 1},
-          {x: bb2.x + bb2.width / 2, y: bb2.y + bb2.height + 1},
-          {x: bb2.x - 1, y: bb2.y + bb2.height / 2},
-          {x: bb2.x + bb2.width + 1, y: bb2.y + bb2.height / 2}];
+          {x: bb1.x + bb1.width / 2, y: bb1.y + bb1.height + border},
+          {x: bb1.x - border, y: bb1.y + bb1.height / 2},
+          {x: bb1.x + bb1.width + border, y: bb1.y + bb1.height / 2},
+          {x: bb2.x + bb2.width / 2, y: bb2.y - border},
+          {x: bb2.x + bb2.width / 2, y: bb2.y + bb2.height + border},
+          {x: bb2.x - border, y: bb2.y + bb2.height / 2},
+          {x: bb2.x + bb2.width + border, y: bb2.y + bb2.height / 2}];
       var d = {}, dis = [];
       for (var i = 0; i < 4; i++) {
           for (var j = 4; j < 8; j++) {
@@ -78,22 +131,21 @@
       var path = ["M", x1.toFixed(3), y1.toFixed(3), "C", x2, y2, x3, y3, x4.toFixed(3), y4.toFixed(3)].join(",");
       
       if (line && line.line) {
-          line.bg && line.bg.attr({path: path});
-          var lineWidth=line.lineWidth;
-          line.arrow.attr({path: MySystem.arrow_path(x3,y3,x4,y4, lineWidth * 2.0,50)});
-          line.line.attr({path: path});
-          var fontSize = 10;
-          line.label.attr({x: x2,y: y4,"font-size": fontSize + "px"});
+          var lineWidth = line.lineWidth * scale;
+          line.arrow.attr({path: MySystem.arrow_path(x3,y3,x4,y4, lineWidth * 1.5,50)});
+          line.line.attr({path: path, "stroke-width": lineWidth, fill: "none"});
+          var fontSize = 10 * scale;
+          line.label.attr({x: x2, y: y4, "font-size": fontSize + "px"});
       } else {
           var color = typeof line == "string" ? line : "#000";
-          var stroke_width = bg.split("|")[1] || 3;
-          var arrow_path = MySystem.arrow_path(x3,y3,x4,y4, stroke_width * 2.0,50);
-          var fontSize = 10;
+          var stroke_width = wire.width || 3;
+          stroke_width = stroke_width * scale;
+          var arrow_path = MySystem.arrow_path(x3,y3,x4,y4, stroke_width * 1.5,50);
+          var fontSize = 10 * scale;
           return {
-              bg: bg && bg.split && this.path(path).attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": stroke_width}),
-              line: this.path(path).attr({stroke: color, fill: "none"}),
-              label: this.text(x2,y4, name).attr({fill: '#FF0000',"font-size": fontSize + "px"}),
-              arrow: this.path(arrow_path).attr({fill: color, stroke: "none"}),
+              line: this.path(path).attr({stroke: wire.color, fill: "none","stroke-width": stroke_width}),
+              label: this.text(x2,y4, name).attr({fill: '#004400',"font-size": fontSize + "px", opacity: 0.8}),
+              arrow: this.path(arrow_path).attr({fill: wire.color, stroke: "none"}),
               lineWidth: stroke_width,
               from: obj1,
               to: obj2
@@ -115,25 +167,21 @@
       var label = node.rep.label;
     }
     else {
-      node.border = node.border ? node.border : 10;
+      node.border = node.border ? node.border : 5;
       if (!node.loaded) {
         var image = new Image();
         image.src = node.icon;
-        node.width = node.width ? node.width : 20;
-        node.height = node.height ? node.height : 20;
-        image.onLoad = function() {
-          node.width = image.width;
-          node.height = image.height;
-          node.loaded = true;
-        };
+        node.width = image.width;
+        node.height = image.height;
+        node.loaded = true;
       }
       var nodeImage = this.image(node.icon,node.x,node.y,node.width,node.height);
-      var label = this.text(x,y,node.name).attr({fill: '#FF0000'})
+      var label = this.text(x,y,node.name).attr({fill: '#004400',opacity: 0.8});
     }
     var y =  (node.y + node.height + node.border) * scale;
     var x =  (node.x + (node.width  / 2.0)) * scale;
     nodeImage.scale(scale,scale,0,0);
-    var fontSize = 10 * scale;
+    var fontSize = 12 * scale;
     label.attr({x: x, y:y, "font-size": fontSize + "px"});
     return {
         nodeImage: nodeImage,
@@ -261,6 +309,7 @@
     this.height = container.height;
     this.graphics = Raphael(this.domId,this.width,this.height);
     var self = this;
+
     
     this.nodes.each(function(node) {
       self.drawNode(node);
@@ -270,33 +319,37 @@
       self.drawWire(wire);
     });
     
-    // var self = this;
-    //  document.observe('keyup', function(e) {
-    //     var code = e.keyCode;
-    //     if (code == '+') {self.scale = self.scale * 2;};
-    //     if (code == '-') {self.scale = self.scale / 2;};
-    //     self.redraw();
-    //  });
-    //  $(dom_id).observe('mousedown', function(e) {
-    //     self.scale = self.scale + 0.3;
-    //     self.mouse_down = true;
-    //     self.lastx = e.pointerX;
-    //     self.lastY = e.pointerY;
-    //  });
-    //  
-     $(dom_id).observe('mouseup', function(e) {
-        self.scale = self.scale + 0.3;
-        var dx = self.lastx - e.pointerX;
-        var dy = self.lasty - e.pointerY;
-        var d = Math.sqrt(dx * dx + dy * dy);
-        self.mouse_down = false;
-        self.lastx = e.pointerX;
-        self.lastY = e.pointerY;
-        self.redraw();
-     });
-    //   
-    //  
-    //  // self.redraw();
+    var self = this;
+    this.zoomIn = this.graphics.zoomIn(10,10,2); 
+    this.zoomOut = this.graphics.zoomOut(35,10,2); 
+    
+    this.zoomIn.zoom.mouseover(function(e) {
+      self.zoomIn.glass.scale(1.5,1.5);
+      self.zoomIn.plus.scale(1.5,1.5);
+    });
+    this.zoomIn.zoom.mouseout(function(e) {
+      self.zoomIn.glass.scale(1,1);
+      self.zoomIn.plus.scale(1,1);
+    });
+    this.zoomIn.zoom.click(function(e) {
+      self.zoomIn.zoom.attr({stroke: "#002200"});
+      self.scale = self.scale + 0.2;
+      self.redraw();
+    });
+
+    this.zoomOut.zoom.mouseover(function(e) {
+      self.zoomOut.glass.scale(1.5,1.5);
+      self.zoomOut.minus.scale(1.5,1.5);
+    });
+    this.zoomOut.zoom.mouseout(function(e) {
+      self.zoomOut.glass.scale(1,1);
+      self.zoomOut.minus.scale(1,1);
+    });
+    this.zoomOut.zoom.click(function(e) {
+      self.zoomOut.zoom.attr({stroke: "#002200"});
+      self.scale = self.scale - 0.2;
+      self.redraw();
+    });
   };
   
 
@@ -308,14 +361,10 @@
     var self = this;
     this.graphics.setSize(width, height);
     this.nodes.each(function(node) {
-      // node.textrep.scale(self.scale,self.scale);
-      // node.rep.scale(self.scale,self.scale,0,0);
-      // node.textrep.scale(self.scale,self.scale,0,0);
-      // var y = (node.y + node.height + node.border) * self.scale;
       self.graphics.Node(node,self.scale);
     });
     this.wires.each(function(wire){
-      self.graphics.connection(wire.rep);
+      self.graphics.wire(wire,self.scale);
     })
   };
   
@@ -324,8 +373,6 @@
   **/
   MySystemPrint.prototype.drawNode = function(node) {
     node.rep = this.graphics.Node(node,this.scale);
-    // node.rep.push(this.graphics.text(x,y,node.name));
-    // node.textrep.cx = node.rep.cx;
   };
   
   /**
@@ -333,7 +380,7 @@
   * IMPORTANT!!!!! This must be called *after* a call to drawNode.
   **/
   MySystemPrint.prototype.drawWire = function(wire) {
-    wire.rep = this.graphics.connection(wire.sourceNode.rep,wire.targetNode.rep,wire.color,wire.color + "|" + (wire.width * this.scale), wire.name);
+    wire.rep = this.graphics.wire(wire,this.scale);
   };
   
 
