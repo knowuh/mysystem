@@ -8,7 +8,7 @@
   /**
   * Arrow 'plugin' for Raphael
   **/
-  Raphael.fn.arrow = function(startx,starty,endx,endy,len,angle,color) {
+  MySystem.arrow_path = function(startx,starty,endx,endy,len,angle,color) {
     color = typeof(color) != 'undefined' ? color : "#888";
     
     var theta = Math.atan2((endy-starty),(endx-startx));
@@ -24,12 +24,10 @@
                    " L " + baseAX  + " " + baseAY +
                    " L " + baseBX  + " " + baseBY +
                    " Z ";
-    return {
-      line: this.path(pathData).attr({fill: color, stroke: "none"}),
-      type: 'arrow'
-    };
+    return pathData;
   };
   
+
   /**
   * Connection, taken from graffle.js:
   * http://raphaeljs.com/graffle.js  author not cited, part of 
@@ -78,22 +76,46 @@
           x3 = [0, 0, 0, 0, x4, x4, x4 - dx, x4 + dx][res[1]].toFixed(3),
           y3 = [0, 0, 0, 0, y1 + dy, y1 - dy, y4, y4][res[1]].toFixed(3);
       var path = ["M", x1.toFixed(3), y1.toFixed(3), "C", x2, y2, x3, y3, x4.toFixed(3), y4.toFixed(3)].join(",");
+      
       if (line && line.line) {
           line.bg && line.bg.attr({path: path});
+          // var stroke_width = line.bg.split("|")[1] || 3;
+          var stroke_width = 10;
+          // var stroke_width=10;
+          line.arrow.attr({path: MySystem.arrow_path(x3,y3,x4,y4, stroke_width * 2.0,50)});
           line.line.attr({path: path});
+          line.label.attr({x: x2,y: y4});
       } else {
           var color = typeof line == "string" ? line : "#000";
           var stroke_width = bg.split("|")[1] || 3;
+          var arrow_path = MySystem.arrow_path(x3,y3,x4,y4, stroke_width * 2.0,50);
           return {
               bg: bg && bg.split && this.path(path).attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": stroke_width}),
               line: this.path(path).attr({stroke: color, fill: "none"}),
-              arrow: this.arrow(x3,y3,x4,y4, stroke_width * 2.0,50,color),
+              label: this.text(10,10, "wire.name").attr({stroke: '#FF0000'}),
+              arrow: this.path(arrow_path).attr({fill: color, stroke: "none"}),
               from: obj1,
               to: obj2
           };
       }
   };
 
+
+  /**
+  * MyNode a mysystem node implementation
+  * http://raphaeljs.com/graffle.js  author not cited, part of 
+  * rapheal project?  http://raphaeljs.com
+  **/
+  Raphael.fn.Node = function (node) {
+    return {
+        bg: bg && bg.split && this.path(path).attr({stroke: bg.split("|")[0], fill: "none", "stroke-width": stroke_width}),
+        line: this.path(path).attr({stroke: color, fill: "none"}),
+        label: this.text(10,10, "wire.name").attr({stroke: '#FF0000'}),
+        arrow: this.path(arrow_path).attr({fill: color, stroke: "none"}),
+        from: obj1,
+        to: obj2
+    };
+  };
   
   
   
@@ -259,25 +281,35 @@
     var container = $(this.domId);
     var width = container.width;
     var height = container.height;
+    var self = this;
     this.graphics.setSize(width, height);
-    this.graphics.push.scale(this.scale,this.scale);
+    this.nodes.each(function(node) {
+      // node.textrep.scale(self.scale,self.scale);
+      node.rep.scale(self.scale,self.scale,0,0);
+      // node.textrep.scale(self.scale,self.scale,0,0);
+      // var y = (node.y + node.height + node.border) * self.scale;
+    });
+    this.wires.each(function(wire){
+      self.graphics.connection(wire.rep);
+    })
   };
   
   /**
   * @method drawNode
   **/
   MySystemPrint.prototype.drawNode = function(node) {
-    node.rep=this.graphics.set();
-    var x = node.x * this.scale;
-    var y = node.y * this.scale;
+    node.border = 10;
     var image = new Image();
     image.src = node.icon;
-    var width = image.width * this.scale;
-    var height = image.height * this.scale;
-    var icon = node.rep.push(this.graphics.image(node.icon,x,y,width,height));
-    var border = 12;
-    var text = node.rep.push(this.graphics.text(x + (width / 2),y + height + border,node.name));
-    node.height = border * 2 + height;
+    node.width = image.width;
+    node.height = image.height;
+    node.rep = this.graphics.image(node.icon,node.x,node.y,node.width,node.height);
+    node.rep.scale(this.scale,this.scale,0,0);
+    var y = (node.y + node.height + node.border) * this.scale;
+    var x = (node.x *this.scale)+ (node.width * this.scale/ 2);
+    node.textrep = this.graphics.text(x,y,node.name);
+    // node.rep.push(this.graphics.text(x,y,node.name));
+    // node.textrep.cx = node.rep.cx;
   };
   
   /**
@@ -292,16 +324,18 @@
     var tgtX = wire.targetNode.x * this.scale;
     var tgtY = wire.targetNode.y * this.scale;
     
-    // include the widht    
-    srcY = srcY > tgtY ? srcY + wire.sourceNode.height : tgtY + wire.targetNode.height
+    // include the width when determining horizontal midpoint 
+    srcX = srcX > tgtX ? srcX - wire.sourceNode.width : srcX;
+    tgtX = tgtX > srcX ? tgtX - wire.targetNode.width : tgtX;
     
     // include the height when determining vertical midpoint 
-    srcY = srcY > tgtY ? srcY + wire.sourceNode.height : tgtY + wire.targetNode.height
+    srcY = srcY < tgtY ? srcY - wire.sourceNode.height : srcY;
+    tgtY = tgtY < srcY ? tgtY - wire.targetNode.height : srcY;
     
     var xMid = srcX + tgtX / 2;
     var yMid = srcY + tgtY / 2;
 
-    
+  
     var txt = this.graphics.text(xMid, yMid, wire.name);
   };
   
