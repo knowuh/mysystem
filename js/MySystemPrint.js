@@ -1,10 +1,63 @@
 (function () {
   
+
   // A bit hackish: If we don't want to load the rest of MySystem,
   // we can create the namespace seperately:
   MySystem = typeof(MySystem) != 'undefined' ? MySystem : function() {};
   
   
+  MySystem.defaultFont = {
+    "font-weight": 'bold',
+    "font-family": 'helvetica, arial, sans-serif',
+    fill: '#000000',
+    opacity: 1
+  }
+  
+  
+  Raphael.fn.zoomIn = function(x,y,size) {
+    var strokeSize = size * 0.2;
+    var radius = size / 2.0;
+    strokeSize = strokeSize < 1 ? 1 : strokeSize;
+    var attributes = {
+      fill: "#EEFFEE",
+      stroke: "#004400",
+      "stroke-width": strokeSize,
+      opacity: 0.7,
+      cx: x,
+      cy: y
+    }
+    var lineExtent = radius - (strokeSize);
+    lineExtent = lineExtent < 1 ? 1 : lineExtent;
+    var zoom = this.set();
+    zoom.push(this.circle(x,y,radius));
+    zoom.push(   this.path("M" + x      + " " + (y+lineExtent)  + "L" +  x     + " " + (y-lineExtent )));
+    zoom.push(   this.path("M" + (x+lineExtent)  + " " +  y     + "L" + (x-lineExtent)  + " " +  y   ));
+    zoom.attr(attributes);
+    return zoom;
+  };
+
+  Raphael.fn.zoomOut = function(x,y,size) {
+    var strokeSize = size * 0.2;
+    var radius = size / 2.0;
+    strokeSize = strokeSize < 1 ? 1 : strokeSize;
+    var attributes = {
+      fill: "#EEFFEE",
+      stroke: "#004400",
+      "stroke-width": strokeSize,
+      opacity: 0.7,
+      cx: x,
+      cy: y
+    }
+    var lineExtent = radius - (strokeSize);
+    lineExtent = lineExtent < 1 ? 1 : lineExtent;
+    var zoom = this.set();
+    zoom.push(this.circle(x,y,radius));
+    zoom.push(   this.path("M" + (x+lineExtent)  + " " +  y     + "L" + (x-lineExtent)  + " " +  y   ));
+    zoom.attr(attributes);
+    return zoom;
+  };
+
+
   /**
   * Arrow 'plugin' for Raphael
   **/
@@ -26,55 +79,6 @@
   };
   
 
-  Raphael.fn.zoomIn = function(x,y,scale) {
-    var attributes = {
-      fill: "#EEFFEE",
-      stroke: "#004400",
-      "stroke-width": scale * 1.25,
-      "stroke-linecap" : "round",
-      "stroke-linejoin" : "round",
-      opacity: 0.7
-    }
-    var zoom = this.set();
-    var glass = this.circle(x,y, (3 * scale));
-    zoom.push(glass);
-      
-    var plus = this.set();
-    plus.push(   this.path("M" + x      + " " + (y+scale)  + "L" +  x     + " " + (y-scale )));
-    plus.push(   this.path("M" + (x+scale)  + " " +  y     + "L" + (x-scale)  + " " +  y   ));
-    zoom.push(plus);
-
-    zoom.attr(attributes);
-    return {
-      zoom: zoom,
-      glass: glass,
-      plus: plus,
-    };
-  };
-
-  Raphael.fn.zoomOut = function(x,y,scale) {
-    var attributes = {
-      fill: "#EEFFEE",
-      stroke: "#003300",
-      "stroke-width": scale * 1.25,
-      "stroke-linecap" : "round",
-      "stroke-linejoin" : "round",
-      opacity: 0.7
-    }
-    var zoom = this.set();
-    var glass = this.circle(x,y, (3 * scale));
-    zoom.push(glass);
-    glass.attr({fill: "#EEFFEE"})
-    var minus = this.path("M" + (x+scale)  + " " +  y     + "L" + (x-scale)  + " " +  y   );
-    zoom.push(minus);
-    zoom.attr(attributes);
-    return {
-      zoom: zoom,
-      glass: glass,
-      minus: minus
-    };
-  };
-  
   /**
   * modification of Connection, taken from graffle.js:
   * http://raphaeljs.com/graffle.js  author not cited, part of 
@@ -135,23 +139,29 @@
           line.arrow.attr({path: MySystem.arrow_path(x3,y3,x4,y4, lineWidth * 1.5,50)});
           line.line.attr({path: path, "stroke-width": lineWidth, fill: "none"});
           var fontSize = 10 * scale;
-          line.label.attr({x: x2, y: y4, "font-size": fontSize + "px"});
+          line.label.attr({x: (x1 + x4)/2, y: (y1 + y4)/2, "font-size": fontSize + "px"});
       } else {
           var color = typeof line == "string" ? line : "#000";
-          var stroke_width = wire.width || 3;
-          stroke_width = stroke_width * scale;
-          var arrow_path = MySystem.arrow_path(x3,y3,x4,y4, stroke_width * 1.5,50);
+          var stroke_width = (wire.width || 3)* scale;
           var fontSize = 10 * scale;
+       
+          var arrow_path = MySystem.arrow_path(x3,y3,x4,y4, stroke_width * 1.5,50);
+          var line = this.path(path).attr({stroke: wire.color, fill: "none","stroke-width": stroke_width});
+          var arrow = this.path(arrow_path).attr({fill: wire.color, stroke: "none"});
+          var label = this.text((x1 + x4)/2,(y1 + y4)/2, name).attr({"font-size": fontSize + "px"})
+          label.attr(MySystem.defaultFont);
           return {
-              line: this.path(path).attr({stroke: wire.color, fill: "none","stroke-width": stroke_width}),
-              label: this.text(x2,y4, name).attr({fill: '#004400',"font-size": fontSize + "px", opacity: 0.8}),
-              arrow: this.path(arrow_path).attr({fill: wire.color, stroke: "none"}),
+              line: line.attr({opacity: 0.8}),
+              arrow: arrow.attr({opacity: 0.8}),
+              label: label,
               lineWidth: stroke_width,
               from: obj1,
               to: obj2
           };
       }
   };
+
+
 
 
   /**
@@ -177,6 +187,7 @@
       }
       var nodeImage = this.image(node.icon,node.x,node.y,node.width,node.height);
       var label = this.text(x,y,node.name).attr({fill: '#004400',opacity: 0.8});
+      label.attr(MySystem.defaultFont);
     }
     var y =  (node.y + node.height + node.border) * scale;
     var x =  (node.x + (node.width  / 2.0)) * scale;
@@ -185,7 +196,11 @@
     label.attr({x: x, y:y, "font-size": fontSize + "px"});
     return {
         nodeImage: nodeImage,
-        label: label
+        label: label,
+        translate: function(x,y) {
+          nodeImage.translate(x,y);
+          label.translate(x,y);
+        }
     };
   };
   
@@ -319,34 +334,35 @@
       self.drawWire(wire);
     });
     
-    var self = this;
-    this.zoomIn = this.graphics.zoomIn(10,10,2); 
-    this.zoomOut = this.graphics.zoomOut(35,10,2); 
+    container.observe('click', function(e){
+      self.nodes.each(function(node) {
+        node.rep.translate(2,2);
+        self.redraw();
+      });
+    });
     
-    this.zoomIn.zoom.mouseover(function(e) {
-      self.zoomIn.glass.scale(1.5,1.5);
-      self.zoomIn.plus.scale(1.5,1.5);
+    var self = this;
+    this.zoomIn = this.graphics.zoomIn(20,20,18); 
+    this.zoomOut = this.graphics.zoomOut(48,20,18); 
+    
+    this.zoomIn.mouseover(function(e) {
+      self.zoomIn.scale(1.25,1.25);
     });
-    this.zoomIn.zoom.mouseout(function(e) {
-      self.zoomIn.glass.scale(1,1);
-      self.zoomIn.plus.scale(1,1);
+    this.zoomIn.mouseout(function(e) {
+      self.zoomIn.scale(1,1);
     });
-    this.zoomIn.zoom.click(function(e) {
-      self.zoomIn.zoom.attr({stroke: "#002200"});
+    this.zoomIn.click(function(e) {
       self.scale = self.scale + 0.2;
       self.redraw();
     });
 
-    this.zoomOut.zoom.mouseover(function(e) {
-      self.zoomOut.glass.scale(1.5,1.5);
-      self.zoomOut.minus.scale(1.5,1.5);
+    this.zoomOut.mouseover(function(e) {
+      self.zoomOut.scale(1.25,1.25);
     });
-    this.zoomOut.zoom.mouseout(function(e) {
-      self.zoomOut.glass.scale(1,1);
-      self.zoomOut.minus.scale(1,1);
+    this.zoomOut.mouseout(function(e) {
+      self.zoomOut.scale(1,1);
     });
-    this.zoomOut.zoom.click(function(e) {
-      self.zoomOut.zoom.attr({stroke: "#002200"});
+    this.zoomOut.click(function(e) {
       self.scale = self.scale - 0.2;
       self.redraw();
     });
