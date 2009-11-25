@@ -16,41 +16,42 @@
       'xtype'				: "MySystemContainer",
   		'etype'				: 'source',
       'fields'			: {
-     									  		'name'				: 'hot bowl',
+     									  'name'				: 'hot bowl',
       									'energy'			: 100,
       									'form'				: 'light',
       									'efficiency'	: 1
       								}
   	},  	{
-  		'name'				: 'hot cup',
+
       'icon'				: "./images/thermodynamics/hotcup.png",
       'image'				: "./images/thermodynamics/hotcup.png",
       'xtype'				: "MySystemContainer",
   		'etype'				: 'source',
       'fields'			: {
+  		                  'name'				: 'hot cup',
       									'energy'			: 100,
       									'form'				: 'light',
       									'efficiency'	: 1
       								}
   	},  	{
-  		'name'				: 'table',
       'icon'				: "./images/thermodynamics/table.png",
       'image'				: "./images/thermodynamics/table.png",
       'xtype'				: "MySystemContainer",
   		'etype'				: 'source',
       'fields'			: {
+									  		'name'				: 'table',
       									'energy'			: 100,
       									'form'				: 'light',
       									'efficiency'	: 1
       								}
   	},
   	  	{
-  		'name'				: 'thumb',
       'icon'				: "./images/thermodynamics/thumb.png",
       'image'				: "./images/thermodynamics/thumb.png",
       'xtype'				: "MySystemContainer",
   		'etype'				: 'source',
       'fields'			: {
+    							  		'name'				: 'thumb',
       									'energy'			: 100,
       									'form'				: 'light',
       									'efficiency'	: 1
