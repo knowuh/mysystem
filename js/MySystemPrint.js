@@ -122,6 +122,9 @@
           res = [0, 4];
       } else {
           res = d[Math.min.apply(Math, dis)];
+          if (!res) {
+            res = [0,4];
+          }
       }
       var x1 = p[res[0]].x,
           y1 = p[res[0]].y,
@@ -141,6 +144,12 @@
           line.line.attr({path: path, "stroke-width": lineWidth, fill: "none"});
           var fontSize = 10 * scale;
           line.label.attr({x: (x1 + x4)/2, y: (y1 + y4)/2, "font-size": fontSize + "px"});
+          var centerX = (x1 + x4)/2;
+          var centerY = (y1 + y4)/2;
+          var wordWidth = name.length * fontSize;
+          var textBoxX = centerX - wordWidth / 2;
+          var textBoxY = centerY;
+          line.textBox.attr({x: textBoxX, y: textBoxY - fontSize, width: wordWidth, height: fontSize*2})
       } else {
           var color = typeof line == "string" ? line : "#000";
           var stroke_width = (wire.width || 3)* scale;
@@ -149,12 +158,20 @@
           var arrow_path = MySystem.arrow_path(x3,y3,x4,y4, stroke_width * 1.5,50);
           var line = this.path(path).attr({stroke: wire.color, fill: "none","stroke-width": stroke_width});
           var arrow = this.path(arrow_path).attr({fill: wire.color, stroke: "none"});
+          var centerX = (x1 + x4)/2;
+          var centerY = (y1 + y4)/2;
+          var wordWidth = name.length * fontSize;
+          var textBoxX = centerX - wordWidth / 2;
+          var textBoxY = centerY;
+          var textBox = this.rect(textBoxX,textBoxY - fontSize, wordWidth, fontSize*2);
+          textBox.attr({fill: "#FFFFFF", stroke: "none", opacity: 0.65});
           var label = this.text((x1 + x4)/2,(y1 + y4)/2, name).attr({"font-size": fontSize + "px"})
           label.attr(MySystem.defaultFont);
           return {
-              line: line.attr({opacity: 0.8}),
-              arrow: arrow.attr({opacity: 0.8}),
+              line: line,
+              arrow: arrow,
               label: label,
+              textBox: textBox,
               lineWidth: stroke_width,
               from: obj1,
               to: obj2
@@ -173,9 +190,13 @@
   Raphael.fn.Node = function (node, scale) {
     var label;
     var nodeImage;
+    var offsetX = 0;
+    var offsetY = 0;
     if (node.rep) {
       var nodeImage = node.rep.nodeImage;
       var label = node.rep.label;
+      offsetX = node.rep.offsetX;
+      offsetY = node.rep.offsetY;
     }
     else {
       node.border = node.border ? node.border : 5;
@@ -186,22 +207,29 @@
         node.height = image.height;
         node.loaded = true;
       }
-      var nodeImage = this.image(node.icon,node.x,node.y,node.width,node.height);
-      var label = this.text(x,y,node.name).attr({fill: '#004400',opacity: 0.8});
+      var nodeImage = this.image(node.icon,node.x,node.y,node.width || 30,node.height || 30);
+      nodeImage.mouseDown = function(e) {
+        node.rep.offsetX = e.clientX;
+        node.rep.offsetY = e.clientY;
+        e.preventDefault && e.preventDefault();
+      }
+      var label = this.text(node.x,node.y,node.name).attr({fill: '#004400',opacity: 0.8});
       label.attr(MySystem.defaultFont);
     }
-    var y =  (node.y + node.height + node.border) * scale;
-    var x =  (node.x + (node.width  / 2.0)) * scale;
-    nodeImage.scale(scale,scale,0,0);
+
+    var imageY =  (node.y * scale) + offsetY;
+    var imageX =  (node.x * scale) + offsetX;
+    var labelY =  imageY + (node.height * scale) +  (node.border * scale);
+    var labelX =  imageX + (node.width  *scale / 2.0);
+    nodeImage.scale(scale,scale);
+    nodeImage.attr({x:imageX, y:imageY});
     var fontSize = 12 * scale;
-    label.attr({x: x, y:y, "font-size": fontSize + "px"});
+    label.attr({x: labelX, y:labelY, "font-size": fontSize + "px"});
     return {
         nodeImage: nodeImage,
         label: label,
-        translate: function(x,y) {
-          nodeImage.translate(x,y);
-          label.translate(x,y);
-        }
+        offsetX: offsetX,
+        offsetY: offsetY
     };
   };
   
@@ -315,7 +343,7 @@
   MySystemPrint = function(_json,dom_id,contentBaseUrl,width,height,scale_factor) {
     this.data = _json;
     this.name = "my print";
-    this.scale =typeof(scale_factor) != 'undefined' ? scale_factor : 1.6;
+    this.scale = typeof(scale_factor) != 'undefined' ? scale_factor : 1.2;
     this.nodes = MySystem.Node.importJson(_json,contentBaseUrl);
     this.wires = MySystem.Wire.importJson(_json,this.nodes);
     this.domId = dom_id;
@@ -335,11 +363,26 @@
       self.drawWire(wire);
     });
     
-    container.observe('click', function(e){
-      self.nodes.each(function(node) {
-        node.rep.translate(2,2);
-        self.redraw();
-      });
+    container.observe('mouseup', function(e){
+      self.mouse_down = false;
+    });
+    container.observe('mousedown',function(e){
+      self.mouse_down = true;
+      self.last_x = e.clientX;
+      self.last_y = e.clientY;
+    });
+    container.observe('mousemove', function(e){
+      if (self.mouse_down) {
+        var dx = e.clientX - self.last_x;
+        var dy = e.clientY- self.last_y;
+        self.nodes.each(function(node) {
+          node.rep.offsetX += dx;
+          node.rep.offsetY += dy;
+          self.redraw();
+        });
+        self.last_x = e.clientX;
+        self.last_y = e.clientY;
+      }
     });
     
     var self = this;
@@ -365,6 +408,7 @@
     });
     this.zoomOut.click(function(e) {
       self.scale = self.scale - 0.2;
+      self.scale = self.scale > 0 ? self.scale : 0.05;
       self.redraw();
     });
   };
