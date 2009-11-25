@@ -340,7 +340,7 @@
   * MySystemPrint
   * @constructor
   **/
-  MySystemPrint = function(_json,dom_id,contentBaseUrl,width,height,scale_factor) {
+  MySystemPrint = function(_json,dom_id,contentBaseUrl) {
     this.data = _json;
     this.name = "my print";
     this.scale = typeof(scale_factor) != 'undefined' ? scale_factor : 1;
@@ -354,7 +354,6 @@
     this.graphics = Raphael(this.domId,this.width,this.height);
     var self = this;
 
-    
     this.nodes.each(function(node) {
       self.drawNode(node);
     });
@@ -411,6 +410,7 @@
       self.scale = self.scale > 0 ? self.scale : 0.05;
       self.redraw();
     });
+    self.redraw();
   };
   
 
@@ -421,11 +421,15 @@
     var height = container.getHeight();
     var self = this;
     if (self.width) {
-      var widthRatio = container.getWidth() / self.width;
-      self.scale = self.scale * widthRatio;
+      var widthRatio = width / self.width;
+      var widthDiff = Math.abs(width - self.width);
+      var heightRatio = height / self.height;
+      var heightDiff = Math.abs(height - self.height);
+      var scalar = heightDiff < widthDiff ? widthRatio : heightRatio;
+      self.scale = self.scale * scalar;
     }
-    self.width = container.getWidth();
-    self.height = container.getHeight();
+    self.width = width;
+    self.height = height;
     this.graphics.setSize(width, height);
     this.nodes.each(function(node) {
       self.graphics.Node(node,self.scale);
