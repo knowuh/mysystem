@@ -343,7 +343,7 @@
   MySystemPrint = function(_json,dom_id,contentBaseUrl,width,height,scale_factor) {
     this.data = _json;
     this.name = "my print";
-    this.scale = typeof(scale_factor) != 'undefined' ? scale_factor : 1.2;
+    this.scale = typeof(scale_factor) != 'undefined' ? scale_factor : 1;
     this.nodes = MySystem.Node.importJson(_json,contentBaseUrl);
     this.wires = MySystem.Wire.importJson(_json,this.nodes);
     this.domId = dom_id;
@@ -420,11 +420,12 @@
     var width = container.getWidth();
     var height = container.getHeight();
     var self = this;
-    if (self.lastWidth) {
-      var widthRatio = self.lastWidth / container.getWidth();
+    if (self.width) {
+      var widthRatio = container.getWidth() / self.width;
       self.scale = self.scale * widthRatio;
-      self.lastWidth = container.getWidth();
     }
+    self.width = container.getWidth();
+    self.height = container.getHeight();
     this.graphics.setSize(width, height);
     this.nodes.each(function(node) {
       self.graphics.Node(node,self.scale);
