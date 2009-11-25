@@ -117,10 +117,11 @@
               }
           }
       }
+      var res=[0,0];
       if (dis.length == 0) {
-          var res = [0, 4];
+          res = [0, 4];
       } else {
-          var res = d[Math.min.apply(Math, dis)];
+          res = d[Math.min.apply(Math, dis)];
       }
       var x1 = p[res[0]].x,
           y1 = p[res[0]].y,
