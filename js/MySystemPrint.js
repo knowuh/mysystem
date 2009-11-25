@@ -417,9 +417,14 @@
   
   MySystemPrint.prototype.redraw = function() {
     var container = $(this.domId);
-    var width = container.width;
-    var height = container.height;
+    var width = container.getWidth();
+    var height = container.getHeight();
     var self = this;
+    if (self.lastWidth) {
+      var widthRatio = self.lastWidth / container.getWidth();
+      self.scale = self.scale * widthRatio;
+      self.lastWidth = container.getWidth();
+    }
     this.graphics.setSize(width, height);
     this.nodes.each(function(node) {
       self.graphics.Node(node,self.scale);

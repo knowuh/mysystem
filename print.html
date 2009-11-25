@@ -32,6 +32,24 @@
     padding: 1em;
     border: 1px dotted #999;
   }
+  #big {
+    text-align: center;
+    margin: 1em;
+    display: inline-block;
+    width: 100px;
+    height: 20px;
+    padding: 1em;
+    border: 1px dotted #999;
+  }
+  #little {
+    text-align: center;
+    margin: 1em;
+    display: inline-block;
+    width: 100px;
+    height: 20px;
+    padding: 1em;
+    border: 1px dotted #999;
+  }
 </style>
 <body>
 
@@ -50,12 +68,23 @@
         //printer = new MySystemPrint(json_data,"printing_canvas");
         var myDataService = new GGearsDS('write','write','mysys');
         myDataService.load(this,loadCallback);
+        $('big').observe('click', function(e) {
+          $('printing_canvas').setStyle('width: 100%;');
+          printer.redraw();
+        });
+        $('little').observe('click', function(e) {
+          $('printing_canvas').setStyle('width: 50%;');
+          printer.redraw();
+        });
       });
   </script>
 
   <div class="headline">printing canvas:</div>
+  <div id="big"> click for large canvas </div>
+  <div id="little"> click for small canvas </div>
   <hr/>
   <div id="printing_canvas"></div>
+  
 
 </body>
 </html>
