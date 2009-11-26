@@ -1,6 +1,5 @@
 (function () {
   
-
   // A bit hackish: If we don't want to load the rest of MySystem,
   // we can create the namespace seperately:
   MySystem = typeof(MySystem) != 'undefined' ? MySystem : function() {};
@@ -245,6 +244,7 @@
     this.y = 0;
   };
 
+
   /**
   * @method terminal
   * finds the named terminal in this node
@@ -343,16 +343,29 @@
   MySystemPrint = function(_json,dom_id,contentBaseUrl) {
     this.data = _json;
     this.name = "my print";
+    this.domId = dom_id;
+    this.container = $(this.domId);
     this.scale = typeof(scale_factor) != 'undefined' ? scale_factor : 1;
+    this.width = this.container.width;
+    this.height = this.container.height;
+    
     this.nodes = MySystem.Node.importJson(_json,contentBaseUrl);
     this.wires = MySystem.Wire.importJson(_json,this.nodes);
-    this.domId = dom_id;
 
-    var container = $(this.domId);
-    this.width = container.width;
-    this.height = container.height;
+    this.autoscale();
+ 
     this.graphics = Raphael(this.domId,this.width,this.height);
     var self = this;
+
+    // check to see if our current container size changing.
+    this.sizeChangeDetector = function() {
+      var width = self.container.getWidth();
+      var height = self.container.getHeight();
+      if (width != self.width || height != self.height) {
+        self.redraw();
+      }
+    };
+    setInterval(self.sizeChangeDetector, 1150);
 
     this.nodes.each(function(node) {
       self.drawNode(node);
@@ -362,15 +375,17 @@
       self.drawWire(wire);
     });
     
-    container.observe('mouseup', function(e){
+    this.container.observe('mouseup', function(e){
       self.mouse_down = false;
     });
-    container.observe('mousedown',function(e){
+    
+    this.container.observe('mousedown',function(e){
       self.mouse_down = true;
       self.last_x = e.clientX;
       self.last_y = e.clientY;
     });
-    container.observe('mousemove', function(e){
+    
+    this.container.observe('mousemove', function(e){
       if (self.mouse_down) {
         var dx = e.clientX - self.last_x;
         var dy = e.clientY- self.last_y;
@@ -414,6 +429,44 @@
   };
   
 
+  /**
+  * return the real size of the graph. (TODO: improve this)
+  ***/
+  MySystemPrint.prototype.graphDimensions = function() {  
+    var maxX = 0;
+    var maxY = 0;
+    this.nodes.each(function (node){
+      maxX = maxX < node.x ? node.x : maxX;
+      maxY = maxY < node.y ? node.y : maxY;
+    });
+    return {
+      width: maxX,
+      height: maxY
+    };
+  }
+  
+  
+  MySystemPrint.prototype.autoscale = function() {
+    var container = $(this.domId);
+    var width = container.getWidth();
+    var height = container.getHeight();
+    var graphDimensions = this.graphDimensions();
+    var self = this;
+    var margin = 80;
+    self.width = graphDimensions.width + margin;
+    self.height = graphDimensions.height + margin;
+    self.scale = 1;
+    if (self.width) {
+      var widthRatio = width / self.width;
+      var widthDiff = Math.abs(width - self.width);
+      var heightRatio = height / self.height;
+      var heightDiff = Math.abs(height - self.height);
+      var scalar = heightDiff > widthDiff ? widthRatio : heightRatio;
+      self.scale = self.scale * scalar;
+    }
+    self.width = width;
+    self.height = height;
+  };
   
   MySystemPrint.prototype.redraw = function() {
     var container = $(this.domId);
@@ -425,7 +478,7 @@
       var widthDiff = Math.abs(width - self.width);
       var heightRatio = height / self.height;
       var heightDiff = Math.abs(height - self.height);
-      var scalar = heightDiff < widthDiff ? widthRatio : heightRatio;
+      var scalar = heightDiff > widthDiff ? widthRatio : heightRatio;
       self.scale = self.scale * scalar;
     }
     self.width = width;
