@@ -67,11 +67,9 @@
         myDataService.load(this,loadCallback);
         $('big').observe('click', function(e) {
           $('printing_canvas').setStyle('width: 100%; height: 500px;');
-          printer.redraw();
         });
         $('little').observe('click', function(e) {
           $('printing_canvas').setStyle('width: 50%; height: 200px;');
-          printer.redraw();
         });
       });
   </script>
