@@ -25,18 +25,32 @@ describe "MySystem" do
   before(:each) do
     puts "basedir: #{@base_dir}<br/>\b"
     @selenium_driver.start_new_browser_session
-  end
+  end 
   
   append_after(:each) do
     @selenium_driver.close_current_browser_session
     @verification_errors.should == []
   end
   
-  it "should not navigate away when the backspace or delete keys are pressed" do
+
+  it "should not let me navigate backwards using the backspace or delete key" do
+    pending "This test works fine in the browser when run by hand ..."
     page.open "#{@base_url}/blank.html"
     page.open "#{@base_url}/mysystem-dev.html"
-    page.key_press "dom=window", "\\127"
-    page.key_press "dom=window", "\\8"
+    page.click "id=center"
+    page.key_press "xpath=//html/body", "\\127"
+    page.key_press "xpath=//html/body", "\\8"
     page.get_title.should == "MySystem"
+  end
+  
+  it "should let me type backspaces into form fields" do
+    page.open "#{@base_url}/mysystem-dev.html" 
+    page.drag_and_drop "//div[@id='left']/div[1]/img[1]", "+300,+0"
+    page.mouse_down_at "//*[@id=\"center\"]/div/div[1]/div[1]", "30,15"
+    page.mouse_up_at "//*[@id=\"center\"]/div/div[1]/div[1]", "30,15"
+    page.type "name", "namex"
+    page.get_value("name").should == "namex"
+    page.key_press "id=name", "\\8"
+    page.get_value("name").should == "name"
   end
 end
