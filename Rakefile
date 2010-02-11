@@ -78,7 +78,7 @@ Selenium::Rake::RemoteControlStopTask.new("stop_selenium") do |rc|
 end
 
 desc "Run all examples"
-Spec::Rake::SpecTask.new('examples') do |t|
+Spec::Rake::SpecTask.new('test') do |t|
   t.spec_files = FileList['tests/*.spec.rb']
   t.spec_opts << '--color'
   t.spec_opts << "--require 'rubygems,selenium/rspec/reporting/selenium_test_report_formatter'"
