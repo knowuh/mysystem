@@ -3,6 +3,7 @@
   
   this.MySystem = function( jsonURL ){ 
     this.init( jsonURL );
+    this.interceptKeys();
   };
   
   MySystem.prototype = {
@@ -17,6 +18,19 @@
       }
     },
     
+    interceptKeys: function() {
+      document.observe('keydown', function(e){
+        var code;
+        var element = $(e.element());
+        if (e.keyCode) code = e.keyCode;
+        else if (e.which) code = e.which;
+        if (code == 8 || code == 127) {
+          if ( !element.match('input')) {
+              e.stop();
+          } 
+        }
+      });
+    },
     setEditor: function(_editor) {
       debug("new editor being set");
       if (_editor) {  
@@ -43,6 +57,7 @@
           self.data = new MySystemData();
           self.data.setData(_data,[],true);
           self.setEditor();
+          self.loaded=true;
         },
         onFailure: function(req,err) {
           debug("failed!");
