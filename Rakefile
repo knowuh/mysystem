@@ -82,7 +82,7 @@ Spec::Rake::SpecTask.new('test') do |t|
   t.spec_files = FileList['tests/*.spec.rb']
   t.spec_opts << '--color'
   t.spec_opts << "--require 'rubygems,selenium/rspec/reporting/selenium_test_report_formatter'"
-  t.spec_opts << "--format=Selenium::RSpec::SeleniumTestReportFormatter:{@report_file}"
+  t.spec_opts << "--format=Selenium::RSpec::SeleniumTestReportFormatter:#{@report_file}"
   t.spec_opts << "--format=progress"
 end
 
