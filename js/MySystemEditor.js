@@ -109,27 +109,6 @@
         * @property el
         */
         this.el = Dom.get(data.parentEl);
-
-      /**
-       * @property helpPanel
-       * @type {YAHOO.widget.Panel}
-       */
-        this.helpPanel = new widget.Panel('helpPanel', {
-            fixedcenter: true,
-            draggable: true,
-            visible: false,
-            modal: true
-        });
-        this.helpPanel.render();
-        
-        this.devPanel = new widget.Panel('developer', {
-            fixedcenter: true,
-            draggable: true,
-            visible: false,
-            modal: false
-        });
-        this.devPanel.render();
-
         
         /**
        * @property layout
@@ -138,6 +117,7 @@
         this.layout = new widget.Layout(null, this.options.layoutOptions);
         this.layout.render();
         
+        this.resetLayers();
         // Render module list
         this.buildModulesList();
 
@@ -187,21 +167,12 @@
                     animate: true
                 },
                 {
+                  position: 'right'
+                },
+                {
                     position: 'center',
                     body: 'center',
                     gutter: '5px'
-                },
-                {
-                    position: 'right',
-                    width: 224,
-                    resize: true,
-                    body: 'right',
-                    gutter: '5px',
-                    collapse: true,
-                    collapseSize: 25,
-                    header: 'Properties:',
-                    scroll: true,
-                    animate: true
                 }
                 ]
             };
@@ -210,8 +181,10 @@
             this.options.layerOptions = {};
             var layerOptions = options.layerOptions || {};
             this.options.layerOptions.parentEl = layerOptions.parentEl ? layerOptions.parentEl: Dom.get('center');
-            this.options.layerOptions.layerMap = YAHOO.lang.isUndefined(layerOptions.layerMap) ? true: layerOptions.layerMap;
-            this.options.layerOptions.layerMapOptions = layerOptions.layerMapOptions || { parentEl: 'layerMap' };
+            // this.options.layerOptions.layerMap = YAHOO.lang.isUndefined(layerOptions.layerMap) ? true: layerOptions.layerMap;
+            this.options.layerOptions.layerMap = false;
+            // this.options.layerOptions.layerMapOptions = false;
+            // this.options.layerOptions.layerMapOptions = layerOptions.layerMapOptions || { parentEl: 'layerMap' };
             
             MySystemContainer.openPropEditorFor.subscribe(this.onOpenPropEditorFor,this,true);
             MySystemContainer.openContextFor.subscribe(this.onOpenContextFor,this,true);
@@ -258,67 +231,40 @@
               if (module.subSystem == null) {
                 module.subSystem = this.addLayer();
               }
-              this.changeLayer(module.subSystem);
+              // this.changeLayer(module.subSystem);
             }
         },
-
-        removeLayerMap: function(newLayer) {
-          try {
-            Event.removeListener(newLayer.layerMap.element, 'mouseup');
-            newLayer.layerMap.options.parentEl.removeChild(newLayer.layerMap.element);
-            if (this.layerStack.indexOf(newLayer)) {
-              this.layerStack[this.layerStack.indexOf(newLayer)]= null;
-            }
-          }
-          catch (e) {
-            debug("error removing layer: " + e);
-          }
-        },
-        
+        addLayer: function() {
+            this.numLayers = this.numLayers + 1;
+            var newOpts = Object.clone(this.options.layerOptions);
+            newOpts.layerNumber = this.numLayers;
+            var newLayer = new WireIt.Layer(newOpts);
+            // this.addLayerMap(newLayer);
+            return newLayer;
+          },
         removeLayer: function(newLayer) {
           this.numLayers = this.numLayers - 1;
-          this.removeLayerMap(newLayer);
+          // this.removeLayerMap(newLayer);
           newLayer.removeAllContainers();
           newLayer = null;
           return null;
         },
-
-        addLayerMap: function(newLayer) {
-          this.layerStack.push(newLayer);
-          newLayer.layerMap.options.parentEl.appendChild(newLayer.layerMap.element);
-          // add listener to layer.layerMap                    
-          Event.addListener(newLayer.layerMap.element, 'mouseup', function (e,args) {
-             Event.stopEvent(e);
-             this.changeLayer(newLayer);
-          }, this, true);
-        },
-        
-      addLayer: function() {
-          this.numLayers = this.numLayers + 1;
-          var newOpts = Object.clone(this.options.layerOptions);
-          newOpts.layerNumber = this.numLayers;
-          var newLayer = new WireIt.Layer(newOpts);
-          this.addLayerMap(newLayer);
-          return newLayer;
-        },
-        
         changeLayer: function(newLayer) {
-          var index = this.layerStack.indexOf(newLayer);
-          if(index < 0) {
-            this.addLayerMap(newLayer);
-          }
-          // otherwise we remove all the layers under this one (search the tree?)
-          else {
-            for(var i = index+1; i < this.layerStack.size();i++) {
-              this.removeLayerMap(this.layerStack[i]);
-            }              
-            // after we have deleted things, we compact it:
-            this.layerStack = this.layerStack.compact();
-          }
-          this.setLayer(newLayer)
-          this.updateLayerInfo();
+             var index = this.layerStack.indexOf(newLayer);
+             if(index < 0) {
+               // this.addLayerMap(newLayer);
+             }
+             // otherwise we remove all the layers under this one (search the tree?)
+             else {
+               // for(var i = index+1; i < this.layerStack.size();i++) {
+               //   this.removeLayerMap(this.layerStack[i]);
+               // }              
+               // after we have deleted things, we compact it:
+               this.layerStack = this.layerStack.compact();
+             }
+             this.setLayer(newLayer)
+             // this.updateLayerInfo();
         },
-        
         setLayer:function(newLayer) {
           // kind of a hack, clean any bad wiring from the layer before we continue:
           this.cleanWiring(newLayer);
@@ -326,13 +272,50 @@
           var parentDom = this.layer.options.parentEl;
           parentDom.replaceChild(newLayer.el,this.layer.el);
           this.layer.el.hide();
-          
+         
           //this.layer.el.update(this.layer.options.layerNumber);//whats that going to do?
           this.layer = newLayer;
           this.layer.el.show();
           this.setDDLayer(this.layer);   
           this.hidePropEditor();
-        },
+       },
+        // 
+        // removeLayerMap: function(newLayer) {
+        //   try {
+        //     Event.removeListener(newLayer.layerMap.element, 'mouseup');
+        //     newLayer.layerMap.options.parentEl.removeChild(newLayer.layerMap.element);
+        //     if (this.layerStack.indexOf(newLayer)) {
+        //       this.layerStack[this.layerStack.indexOf(newLayer)]= null;
+        //     }
+        //   }
+        //   catch (e) {
+        //     debug("error removing layer Map: " + e);
+        //   }
+        // },
+        // 
+        // 
+        // addLayerMap: function(newLayer) {
+        //   this.layerStack.push(newLayer);
+        //   newLayer.layerMap.options.parentEl.appendChild(newLayer.layerMap.element);
+        //   // add listener to layer.layerMap                    
+        //   Event.addListener(newLayer.layerMap.element, 'mouseup', function (e,args) {
+        //      Event.stopEvent(e);
+        //      this.changeLayer(newLayer);
+        //   }, this, true);
+        // },
+        // 
+        // 
+        // 
+        // 
+        // updateLayerInfo: function() {
+        //   // var layerInfo = "<h3>current layer: " + this.layer.options.layerNumber +"</h3><ul>layer stack:";
+        //   // $A(this.layerStack).each( function(layer){
+        //   //   layerInfo += "<li>" + layer.options.layerNumber + "</li>";
+        //   // });
+        //   // layerInfo += "</li>";
+        //   // $('layer_info').update(layerInfo);
+        // },
+        // 
         cleanWiring: function(newLayer) {
           var i = 0;
           var size = newLayer.wires.length;
@@ -354,15 +337,7 @@
           }
         },
         
-        updateLayerInfo: function() {
-          // var layerInfo = "<h3>current layer: " + this.layer.options.layerNumber +"</h3><ul>layer stack:";
-          // $A(this.layerStack).each( function(layer){
-          //   layerInfo += "<li>" + layer.options.layerNumber + "</li>";
-          // });
-          // layerInfo += "</li>";
-          // $('layer_info').update(layerInfo);
-        },
-        
+
         hidePropEditor: function() {
           $('prop_form').hide();
         },
@@ -560,28 +535,28 @@
          /**
          * @method onPrint
          */
-         onShowJson: function(layer_object) {
-           var width = this.rootLayer.el.getWidth();
-           var height = this.rootLayer.el.getHeight();
-
-
-           $('JSON_DATA').update(
-             "<p><br><ul><li>width: " + width + 
-             "<li> height: " + height +
-            "</ul></p><code>" + [this.rootLayer.getWiring()].toJSON() + "</code>");
-           this.devPanel.render();
-           this.devPanel.show();
-
-         },
-         
-         
-        /**
-        * Create a help panel
-        * @method onHelp
-        */
-        onHelp: function() {
-            this.helpPanel.show();
-        },
+         // onShowJson: function(layer_object) {
+         //     var width = this.rootLayer.el.getWidth();
+         //     var height = this.rootLayer.el.getHeight();
+         // 
+         // 
+         //     $('JSON_DATA').update(
+         //       "<p><br><ul><li>width: " + width + 
+         //       "<li> height: " + height +
+         //      "</ul></p><code>" + [this.rootLayer.getWiring()].toJSON() + "</code>");
+         //     this.devPanel.render();
+         //     this.devPanel.show();
+         // 
+         //   },
+        //  
+        //  
+        // /**
+        // * Create a help panel
+        // * @method onHelp
+        // */
+        // onHelp: function() {
+        //     this.helpPanel.show();
+        // },
 
         /**
         * @method onNew
