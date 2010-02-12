@@ -14,8 +14,8 @@ MySystemPropEditor = function(options) {
 
 MySystemPropEditor.prototype = {
   updateFields: function() {
-    var subsTmpl = new Template ('<div class="inputBox"><label for="has_sub">sub systems?</label><input type="checkbox" #{checked} name="has_sub" value="1" id="has_sub"></div>')
-    var fieldTmpl = new Template('<div class="inputBox"><label for="#{name}">#{name}</label><input type="text" name="#{name}" value="#{value}" id="#{name}"></div>');
+    var subsTmpl  = new Template ('<div class="inputBox"><label for="has_sub">sub systems?</label><input type="checkbox" #{checked} name="has_sub" value="1" id="has_sub"></div>')
+    var fieldTmpl = new Template ('<div class="inputBox"><label for="#{name}">#{name}</label><input type="text" name="#{name}" value="#{value}" id="#{name}"></div>');
     var fields = [];
     $H(this.node.options.fields).keys().each(function (field_name) {
       if(field_name !='color') {
