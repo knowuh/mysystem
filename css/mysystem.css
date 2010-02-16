@@ -59,6 +59,23 @@ div.title {
   background-color: white
 }
 
+#prop_form_closer {
+  display:block;
+  float: right;
+  clear: both;
+  background-image: url(../images/close.png);
+  background-repeat: no-repeat;
+  background-position: top right;
+  padding: 0px;
+  margin: 0px;
+  width: 25px;
+  height: 15px;
+  cursor: pointer;
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+  filter:alpha(opacity=50);
+}
+
 #prop_form {
  opacity: 0.9;
  -moz-opacity: 0.9;
@@ -76,6 +93,12 @@ div.title {
  margin: 2px
  float: left;
 }
+
+#prop_fields tr td {
+ border: none;
+ width: 100%;
+}
+
 
 
 #palette {
