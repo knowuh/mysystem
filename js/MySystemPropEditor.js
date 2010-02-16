@@ -17,32 +17,50 @@ MySystemPropEditor.prototype = {
   
   updateFields: function() {
     this.clearFields();
-    var me = this;
+    var self =  this;
     $H(this.node.options.fields).each(function (pair) {
       var field_name = pair.key;
-      var _value = me.node.options.fields[field_name];
+      var _value = this.node.options.fields[field_name];
       if(field_name !='color') {
-        // fields.push (fieldTmpl.evaluate({name: field_name, value: this.node.options.fields[field_name]}));
-        me.addField(field_name,_value);
+        this.addField(field_name,_value);
       }
-    }.bind(me));
-  // });
-    // fields.push (subsTmpl.evaluate({checked: (this.node.has_sub ? 'checked="true"' : '')}));
-    // var fieldText = fields.join("<br/>")
-    // $('prop_fields').update(fieldText);
+    }.bind(this));
+
     if (this.node.title) {
       $('prop_name').update("info about " + this.node.title);
     }
     else {
       $('prop_name').update("info for flow");
     }
-
-    //try to activate the name field.
-    if ($('name')) {
-      $('name').activate();
-    }
+    $('prop_form_closer').observe('mouseover',function(e) {
+      self.opacity(0.99,'prop_form_closer');
+    });
+    $('prop_form_closer').observe('mouseout',function(e) {
+      self.opacity(0.5,'prop_form_closer');
+    });
+    $('prop_form_closer').observe('click',function(e) {
+      self.disable();
+    });
+    this.dom_entity.observe('keydown', function(e){
+      var code;
+      if (e.keyCode) code = e.keyCode;
+      else if (e.which) code = e.which;
+      if (code == 27) {
+        // e.stop();
+        self.disable(); 
+      }
+    });
   },
   
+  opacity: function(opacity, dom_id) {
+    var elem = $(dom_id);
+    elem.setStyle({
+      'opacity': opacity,
+      '-moz-opacity': opacity,
+      'filter': 'alpha(opacity=' + (opacity * 100) +')'
+    });
+
+  },
   clearFields: function() {
     $('prop_fields').update('');
   },
@@ -50,13 +68,14 @@ MySystemPropEditor.prototype = {
   addField: function(field_name,value) {
     var type = 'text';
     var fields = $('prop_fields');
-    debug(this + ": " + field_name + ": " + value);
     var label = new Element('label', {'for': field_name});
     label.update(field_name);
 
     var input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
 
-    var label_td = new Element('td', { 'class': 'input_label' });
+    var label_td = new Element('td', {'align': 'right', 'class': 'input_label' });
+    label_td.setStyle({'align': 'right'});
+    label_td.setStyle({'text-align': 'right'});
     label_td.insert({'bottom': label});
 
     var input_td = new Element('td', { 'class': 'input_field' });
@@ -67,8 +86,6 @@ MySystemPropEditor.prototype = {
     table_row.insert({'bottom': input_td});
 
     $('prop_fields').insert({'bottom': table_row});
-    debug('added: ' + field_name + ": " + value);
-
   },
   
   save_values: function() {
@@ -77,11 +94,11 @@ MySystemPropEditor.prototype = {
     theForm.getInputs('text').each(function (fe) {
       this.node.options.fields[fe.name] = fe.value;
     }.bind(this));
-    debug("set color "+ this.selected_color);
+  
     if (this.node.options.fields.color) {
       this.node.options.fields.color = this.selected_color;
     }
-    this.node.has_sub = $F('has_sub')
+    // this.node.has_sub = $F('has_sub')
     this.node.updateFields();
   },
   
@@ -92,34 +109,47 @@ MySystemPropEditor.prototype = {
      });
   },
   
-  
-  enableClickAway: function() {
-    var prop_editor = this;
-    var clickHandler = function(e) {
-      var clicked = e.element();
-      if ( clicked == prop_editor.dom_entity  
-        || clicked == prop_editor.node.bodyEl 
-        || clicked.descendantOf(prop_editor.dom_entity) 
-        || clicked.descendantOf(prop_editor.node.bodyEl)) {
-        // nothing;
-      }
-      else {
-        prop_editor.dom_entity.hide();
-        document.stopObserving('mousedown',clickHandler);
-      }
-    };
-    document.observe('mousedown', clickHandler);
-  },
-  
-
-  
-  show: function(node) {        
+  disable: function() {
+    this.dom_entity.hide();
+    this.deselect();
+    this.setNode(null);
+    this.deselect();
+    document.stopObserving('mousedown');
     if(this.form_observer !=null) {
       this.form_observer.stop();
       this.form_observer = null;
       $('palette').stopObserving('click');
     }
-    this.setNode(node);
+  },
+  
+  enableClickAway: function() {
+    var clickHandler = function(e) {
+      var close = true;
+      var clicked = e.element();
+      if (this.node) {
+        if (clicked == this.node_element || clicked.descendantOf(this.node_element)) {
+          close = false;
+        }
+      }
+      if ( clicked == this.dom_entity 
+        || clicked.descendantOf(this.dom_entity)) {
+          close = false;
+      }
+      if (close) {
+       this.disable();
+      }
+    };
+    document.observe('click', clickHandler.bind(this));
+  },
+  
+
+  show: function(nnode) {        
+    if(this.form_observer !=null) {
+      this.form_observer.stop();
+      this.form_observer = null;
+      $('palette').stopObserving('click');
+    }
+    this.setNode(nnode);
     this.updateFields();
 
     this.selected_color = this.node.options.fields.color || "color2";
@@ -128,27 +158,35 @@ MySystemPropEditor.prototype = {
       this.deselect();
       $(selected_pallete_item).addClassName('selected');
     }
-  
-    this.form_observer = new Form.Observer($(this.formName),0.3,this.save_values.bind(this));
+
     this.positionEditor();
     this.showPallet();
     this.positionIcon();
     this.enableClickAway();
+    this.form_observer = new Form.Observer($(this.formName),0.3,this.save_values.bind(this));
+    $(this.formName).focusFirstElement();
   },
   
   
-  setNode: function(node) {
+  setNode: function(n) {
     // deselect the last node:
-    if (this.node) {
-      if ($(this.node.bodyEl)) {
-        $(this.node.bodyEl).removeClassName('selected');
+    if (n && n.options){
+      if (this.node) {
+        if ($(this.node_element)) {
+          $(this.node_element).removeClassName('selected');
+        }
+        if (this.node.options.selected) {
+          this.node.options.selected=false;
+          this.node.redraw();
+        }
       }
-      if (this.node.options.selected) {
-        this.node.options.selected=false;
-        this.node.redraw();
-      }
+      this.node = n;
+      this.node_element = n.element;
     }
-    this.node = node;
+    else {
+      this.node = null;
+      this.node_element = null;
+    }
   },
   
   showPallet: function() {
@@ -172,16 +210,20 @@ MySystemPropEditor.prototype = {
   positionEditor: function() {
     this.dom_entity.show();
     this.dom_entity.absolutize();
-    this.dom_entity.clonePosition(this.node.bodyEl,{
+    this.dom_entity.clonePosition(this.node_element,{
       setWidth: false,
       setHeight: false,
-      offsetLeft: this.node.bodyEl.getWidth() / 2,
-      offsetTop:  this.node.bodyEl.getHeight() / 2
+      offsetLeft: this.node_element.getWidth() / 2,
+      offsetTop:  this.node_element.getHeight() / 2
     });
   },
   
+  nodeIsIcon: function(n) {
+    return (n.options && n.options.icon);
+  },
+  
   positionIcon: function() {
-    if (this.node.options.icon) {
+    if (this.nodeIsIcon(this.node)) {
       if($('icon_spot')) {
         $('icon_spot').update('<img src="' + this.node.options.icon + '" alt="icon" class="icon"/></br>');
       }
