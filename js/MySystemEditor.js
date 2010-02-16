@@ -92,7 +92,7 @@
               });
             } 
 
-            this._MySysEditor.addModule( new Copy( this ), pos );
+            this._MySysEditor.addModule(new Copy(this), pos );
         }
     });
 
