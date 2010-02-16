@@ -90,14 +90,15 @@ div.title {
  right: 50%;
  top: 50%;
  padding: 2px;
- margin: 2px
+ margin: 2px;
+ width 100%;
  float: left;
 }
 
 #prop_fields tr td {
  border: none;
- width: 100%;
 }
+
 
 
 
