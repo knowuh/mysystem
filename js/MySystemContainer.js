@@ -31,22 +31,29 @@ MySystemContainer = function(options, layer) {
      });
      
     }
-   // Adds a handler for mousedown so we can change layers in our editor
+   // Adds a handler for mousedown so we can change layers in our edito
    YAHOO.util.Event.addListener(this.el, "dblclick", this.onDblClick, this, true);
-   YAHOO.util.Event.addListener(this.el, "mouseup", this.onMouseUp, this, true);
+   // YAHOO.util.Event.addListener(this.el, "mouseup", this.onMouseUp, this, true);
+   //YAHOO.util.Event.addListener(this.el, "click", this.onClick, this, true);
    this.setTitle(this.options.fields.name);
+   this.element = this.el;
 };
 
 
 YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   onMouseUp: function(source) {
+    // MySystemContainer.openPropEditorFor.fire(this);
+  },
+  onClick: function(source) {
     MySystemContainer.openPropEditorFor.fire(this);
   },
-  
   onDblClick: function(source) {
-    if (this.has_sub) {
-      MySystemContainer.openContextFor.fire(this);
-    }
+    // if (this.has_sub) {
+    //   MySystemContainer.openContextFor.fire(this);
+    // }
+    // else {
+      MySystemContainer.openPropEditorFor.fire(this);
+    // }
   },
   
   setTitle: function(newTitle) {
