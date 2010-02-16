@@ -771,7 +771,6 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     */
    onWireClick: function(x,y) {
      debug('clicked');
-     this.openPropEditor();
    },
 
    onWireDblClick: function(x,y) {
