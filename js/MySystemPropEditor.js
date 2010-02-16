@@ -42,10 +42,14 @@ MySystemPropEditor.prototype = {
       self.disable();
     });
     this.dom_entity.observe('keydown', function(e){
+      
       var code;
+      var escapeKey = 27;
+      var returnKey = 13;
       if (e.keyCode) code = e.keyCode;
       else if (e.which) code = e.which;
-      if (code == 27) {
+      
+      if (code == escapeKey || code == returnKey) {
         // e.stop();
         self.disable(); 
       }
@@ -213,8 +217,7 @@ MySystemPropEditor.prototype = {
     this.dom_entity.clonePosition(this.node_element,{
       setWidth: false,
       setHeight: false,
-      offsetLeft: this.node_element.getWidth() / 2,
-      offsetTop:  this.node_element.getHeight() / 2
+      offsetLeft: this.node_element.getWidth(),
     });
   },
   
