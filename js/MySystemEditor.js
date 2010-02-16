@@ -73,6 +73,11 @@
               for( var i in par._module ){
                 this[ i ] = par._module[ i ];
               }
+              this.fields = {};
+              for( var i in par._module.fields ){
+                this.fields[i] = par._module.fields[ i ];
+              }
+              debug(this);
               var energyForm = {};
               energyForm[ par._module.fields.form ] = par._module.fields.efficiency;            
 
