@@ -33,7 +33,7 @@ WireIt.Wire = function( terminal1, terminal2, parentEl, options) {
     * @type HTMLElement
     */
    this.parentEl = parentEl;
-   
+
    /**
     * Source terminal
     * @property terminal1
@@ -63,6 +63,10 @@ WireIt.Wire = function( terminal1, terminal2, parentEl, options) {
    // Call addWire on both terminals
    this.terminal1.addWire(this);
    this.terminal2.addWire(this);
+   if (this.is_connected()) {
+     this.redraw();
+     this.openPropEditor();
+   }
 };
 
 
@@ -103,6 +107,14 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
        'width': this.options.width,
        'color': 'color1'
       };
+   },
+   
+   is_connected: function() {
+     return (
+          this.terminal1
+       && this.terminal1.container
+       && this.terminal2
+       && this.terminal2.container)
    },
    
    /**
@@ -759,21 +771,17 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     */
    onWireClick: function(x,y) {
      debug('clicked');
-     WireIt.Wire.openPropEditorFor.fire(this);
-     this.redraw;
-
-    // wd = this.options.width;
-    // nwd = wd + 2;
-    // this.options.width = nwd;
-    // this.redraw();
-
+     this.openPropEditor();
    },
 
    onWireDblClick: function(x,y) {
  	  debug('dbl-clicked');
-		// this.options.width = 3;
-    WireIt.Wire.openPropEditorFor.fire(this);
-		this.redraw;
+    this.openPropEditor();
+   },
+   
+   openPropEditor: function() {
+     WireIt.Wire.openPropEditorFor.fire(this);
+     this.redraw;
    }
 });
 
