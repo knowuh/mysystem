@@ -1,14 +1,14 @@
 // fake change to this file for git exmple...
 (function(){
   
-  this.MySystem = function( jsonURL ){ 
-    this.init( jsonURL );
+  this.MySystem = function( moduleUrl ){ 
+    this.init( moduleUrl );
     this.interceptKeys();
   };
   
   MySystem.prototype = {
     init: function( jsonURL ) {
-      this.loadModules( jsonURL );
+      this.loadPreferences( jsonURL );
     },
     
     setDataService: function(ds) {
@@ -43,20 +43,30 @@
       this.editor.dataService = this.dataService;
     },
     
-    loadModules: function(filename) {
+    loadPreferences: function(filename) {
       var self = this;
-      debug("calling loadModules (with GET)" + filename);
+      debug("calling loadPreferences (with GET)" + filename);
       new Ajax.Request(filename, {
         asynchronous: false,
         method: 'GET',
         onSuccess: function(rsp) {
           var text = rsp.responseText;
           var _data = eval(text);
-          debug("content: "+ text);
-          debug("data: " + _data);
+          var modules = _data.findAll(function(item) {
+            return (item.xtype && item.xtype == 'MySystemContainer');
+          });
+          debug("json text content: "+ text);
+          debug("modules: " + modules);
           self.data = new MySystemData();
-          self.data.setData(_data,[],true);
+          self.data.setData(modules,[],true);
           self.setEditor();
+          
+          var labelMap = _data.findAll(function(item) {
+            return (item.xtype && item.xtype == 'PropEditorFieldLabels');
+          });
+          if (labelMap.size() > 0) {
+            self.editor.propEditor.setFieldLabelMap(labelMap.entries()[0].labels);
+          }
           self.loaded=true;
         },
         onFailure: function(req,err) {

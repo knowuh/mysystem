@@ -1,4 +1,13 @@
 [
+  {
+    'xtype': 'PropEditorFieldLabels',
+    'labels':
+        {
+          'name': 'label'
+        }
+  },
+  
+
   	{
 
       'icon'				: "./images/thermodynamics/coldbowl.png",
@@ -6,7 +15,7 @@
       'xtype'				: "MySystemContainer",
   		'etype'				: 'source',
       'fields'			: {
-        								'name'				: 'Variable JSON Path working!',
+        								'name'	: 'a',
       									'efficiency'	: 1
       								}
   	},  	{
