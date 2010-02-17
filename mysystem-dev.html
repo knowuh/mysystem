@@ -47,7 +47,7 @@
   
   <!-- Data service adaptors -->
   <script type="text/javascript" src="js/RestDS.js"></script>
-  <script type="text/javascript" src="js/ds/ds/MocDS.js"></script>
+  <script type="text/javascript" src="js/ds/MocDS.js"></script>
   <script type="text/javascript" src="js/ds/GGearsDS.js"></script>
   <script type="text/javascript" src="js/ds/VleDS.js"></script>
   <script type="text/javascript" src="js/ds/CookieDS.js"></script>
@@ -77,10 +77,10 @@
         var myDataService;
         document.observe("dom:loaded", function() {
           mySystem = new MySystem( 'modules2.json' );
-          // myDataService = new MocDS(null,null);
+          myDataService = new MocDS(null,null);
           // myDataService = new VleDS(vle);
           // myDataService = new DSSService('read','wrtie');
-          myDataService = new GGearsDS('write','write','mysys');
+          // myDataService = new GGearsDS('write','write','mysys');
           //myDataService = new CookieDS(null,'write');
           mySystem.setDataService(myDataService);
           if (mySystem.editor) {
@@ -106,7 +106,7 @@
       <div class="logo">MySystem Demo</a></div>
       <div id="toolbar"></div>
       <div class="topright">
-        <span>Prototype</span>
+        <span id="goal">Goal</span>
       </div>
     </div>
 

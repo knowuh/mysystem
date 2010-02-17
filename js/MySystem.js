@@ -50,29 +50,38 @@
         asynchronous: false,
         method: 'GET',
         onSuccess: function(rsp) {
-          var text = rsp.responseText;
-          var _data = eval(text);
-          var modules = _data.findAll(function(item) {
-            return (item.xtype && item.xtype == 'MySystemContainer');
+          var _data = eval(rsp.responseText);
+          var modules = [];
+          var labels = null;
+          _data.each(function(item) {
+            if (item.xtype == 'MySystemContainer') {
+              modules.push(item);
+            }
+            else if (item.xtype == 'PropEditorFieldLabels') {
+              labels = item.labels;
+            }
+            else if (item.xtype == 'AssignmentInformation') {
+              self.loadAssignmentInfo(item);
+            }
           });
-          debug("json text content: "+ text);
-          debug("modules: " + modules);
-          self.data = new MySystemData();
-          self.data.setData(modules,[],true);
+          self.loadModules(modules);
           self.setEditor();
-          
-          var labelMap = _data.findAll(function(item) {
-            return (item.xtype && item.xtype == 'PropEditorFieldLabels');
-          });
-          if (labelMap.size() > 0) {
-            self.editor.propEditor.setFieldLabelMap(labelMap.entries()[0].labels);
-          }
-          self.loaded=true;
+          self.editor.propEditor.setFieldLabelMap(labels);
+          self.loaded = true;
         },
         onFailure: function(req,err) {
           debug("failed!");
         }
       });
+    },
+    
+    loadModules: function(modules) {
+      this.data = new MySystemData();
+      this.data.setData(modules, [], true);
+    },
+    
+    loadAssignmentInfo : function(item) {
+      $('goal').update(item.fields.goal);
     },
     
     /**
