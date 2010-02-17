@@ -41,7 +41,6 @@ input {
   clear: both;
   margin-top: 10px;
   padding: 2px;
-  width: 100%
   float: left;
 }
 
@@ -83,16 +82,17 @@ div.title {
  background-color: white;
  padding: 4px;
  color:  #3366CC;
- border: 2px solid  #DDDDAA;
- display: block;
+ border: 2px solid  #3366CC;
+ display: table-cell;
  z-index: 1000;  
  position: fixed; 
+ width: 240px;
  right: 50%;
  top: 50%;
  padding: 2px;
  margin: 2px;
- width 100%;
  float: left;
+ text-align: center;
 }
 
 #prop_fields tr td {
@@ -100,82 +100,30 @@ div.title {
 }
 
 
-
-
 #palette {
-  display: block;
-  width: auto;
-  height: auto;
-  float: left;
-  clear: both;
-  text-align: center;
+  width: 200px;
+  display: table;
+  text-align: left;
+  margin: 4px;
   background-color: white;
-  border: 1px solid black;
+} 
+
+.pallet_element {
+  display: block;
+  width: 20px;
+  height: 20px;
+  clear: none;
+  border: 1px solid gray;
   margin: 2px;
-  padding: 2px;
+  padding: 0px;
+  float: left;
 }
 
-#color1 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #490A3D;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
-
-#color2 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #BD1550;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
-#color3 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #E97F02;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
-#color4 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #F8CA00;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
-#color5 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #8A9B0F;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
 #layerMap {
   display: none;
 }
 .selected {
-  border: 2px solid #3366CC; !important;
+  border: 1px solid #3366CC; !important;
 }
 
 

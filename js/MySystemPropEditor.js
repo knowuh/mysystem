@@ -10,6 +10,22 @@ MySystemPropEditor = function(options) {
    this.dom_entity = $(this.domID);
    this.formName = options.formName || "prop_form_form";
    this.selected_color = "#000000"
+   var hexColors = [ '#490A3D', '#BD1550', '#E97F02', '#F8CA00', '#8A9B0F'];
+   this.setColorPallet(hexColors);
+  
+   var self =  this;
+   this.dom_entity.observe('keydown', function(e){
+     var code;
+     var escapeKey = 27;
+     var returnKey = 13;
+     if (e.keyCode) code = e.keyCode;
+     else if (e.which) code = e.which;
+     
+     if (code == escapeKey || code == returnKey) {
+       // e.stop();
+       self.disable(); 
+     }
+   });
 };
 
 
@@ -27,10 +43,10 @@ MySystemPropEditor.prototype = {
     }.bind(this));
 
     if (this.node.title) {
-      $('prop_name').update("info about " + this.node.title);
+      $('prop_name').update("edit details");
     }
     else {
-      $('prop_name').update("info for flow");
+      $('prop_name').update("edit energy flow");
     }
     $('prop_form_closer').observe('mouseover',function(e) {
       self.opacity(0.99,'prop_form_closer');
@@ -41,18 +57,14 @@ MySystemPropEditor.prototype = {
     $('prop_form_closer').observe('click',function(e) {
       self.disable();
     });
-    this.dom_entity.observe('keydown', function(e){
-      
-      var code;
-      var escapeKey = 27;
-      var returnKey = 13;
-      if (e.keyCode) code = e.keyCode;
-      else if (e.which) code = e.which;
-      
-      if (code == escapeKey || code == returnKey) {
-        // e.stop();
-        self.disable(); 
-      }
+  },
+  
+  setColorPallet: function(hexColors) {
+    var pallet = $('palette');
+    hexColors.each(function (c) {
+      var color_div = new Element('div', {'class': 'pallet_element' });
+      color_div.setStyle({backgroundColor: c});
+      pallet.insert({'bottom': color_div});
     });
   },
   
