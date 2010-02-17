@@ -26,11 +26,18 @@ MySystemPropEditor = function(options) {
        self.disable(); 
      }
    });
+   
+   // the default labelMap
+   this.setFieldLabelMap({
+     'name': 'label'
+   });
 };
 
 
 MySystemPropEditor.prototype = {
-  
+  setFieldLabelMap: function(_map) {
+    this.fieldLabelMap = _map;
+  },
   updateFields: function() {
     this.clearFields();
     var self =  this;
@@ -82,26 +89,30 @@ MySystemPropEditor.prototype = {
   },
   
   addField: function(field_name,value) {
-    var type = 'text';
-    var fields = $('prop_fields');
-    var label = new Element('label', {'for': field_name});
-    label.update(field_name);
+    
+    if(this.fieldLabelMap[field_name]) {
+      var type = 'text';
+      var fields = $('prop_fields');
+      var label = new Element('label', {'for': field_name});
+    
+      label.update(this.fieldLabelMap[field_name]);
 
-    var input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
+      var input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
 
-    var label_td = new Element('td', {'align': 'right', 'class': 'input_label' });
-    label_td.setStyle({'align': 'right'});
-    label_td.setStyle({'text-align': 'right'});
-    label_td.insert({'bottom': label});
+      var label_td = new Element('td', {'align': 'right', 'class': 'input_label' });
+      label_td.setStyle({'align': 'right'});
+      label_td.setStyle({'text-align': 'right'});
+      label_td.insert({'bottom': label});
 
-    var input_td = new Element('td', { 'class': 'input_field' });
-    input_td.insert({'bottom': input});
+      var input_td = new Element('td', { 'class': 'input_field' });
+      input_td.insert({'bottom': input});
 
-    var table_row = new Element('tr', { 'class': 'input_row'});
-    table_row.insert({'bottom': label_td});
-    table_row.insert({'bottom': input_td});
+      var table_row = new Element('tr', { 'class': 'input_row'});
+      table_row.insert({'bottom': label_td});
+      table_row.insert({'bottom': input_td});
 
-    $('prop_fields').insert({'bottom': table_row});
+      $('prop_fields').insert({'bottom': table_row});
+    }
   },
   
   save_values: function() {
