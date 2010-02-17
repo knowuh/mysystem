@@ -109,11 +109,6 @@
         this.numLayers = 1;
         this.propEditor = new MySystemPropEditor({});
         
-        /**
-        * Container DOM element
-        * @property el
-        */
-        this.el = Dom.get(data.parentEl);
         
         /**
        * @property layout
@@ -438,12 +433,12 @@
 
 
 
-            var helpButton = new widget.Button({
-                label: "help",
-                id: "WiringEditor-helpButton",
-                container: toolbar
-            });
-            helpButton.on("click", this.onHelp, this, true);
+            // var helpButton = new widget.Button({
+            //     label: "help",
+            //     id: "WiringEditor-helpButton",
+            //     container: toolbar
+            // });
+            // helpButton.on("click", this.onHelp, this, true);
         },
         /**
         * Enable the save and load buttons
