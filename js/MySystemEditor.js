@@ -510,7 +510,7 @@
         },
 
         /**
-         * @method onSave
+         * @method onLoad
          */
          onLoad: function() {
            if (this.dataService) {
