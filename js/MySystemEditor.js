@@ -127,6 +127,7 @@
         this.buildModulesList();
 
         // Render buttons
+        this.enableLoadAndSave();
         this.renderButtons();
     };
 
