@@ -60,7 +60,9 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     if(newTitle) {
       var this_el = this.el
       var title_el = $(this_el).down('.title')
-      this.title = newTitle;
+      title_el.absolutize();
+      var wordWrapChars = 30;
+      this.title = newTitle.wordWrap(wordWrapChars, "\n");
       this.options.name = this.title;
       this.options.fields.name = this.title;
       if(!title_el) {
@@ -68,19 +70,23 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
         this_el.insert(title_el);
       }
       title_el.update(this.title);
+      var leftOffset = 0;
+      if (title_el.getWidth() > title_el.up().getWidth()) {
+        leftOffset = (title_el.getWidth() - title_el.up().getWidth())/2;
+      }
+      title_el.clonePosition(title_el.up(), {setTop: false, setLeft:true, setWidth: false, setHeight: false,offsetLeft:leftOffset});
     }
   },
   createTitle: function() {
-    return new Element('div', { 
-      'class': 'title' 
-    });
+    return new Element('div', {'class': 'title' });
   },
   render: function() {
+    debug("render being called");
     MySystemContainer.superclass.render.call(this);
     var this_el = this.el
     var title_el = $(this_el).down('.title') 
     if(!title_el) {
-      title_el = this.createTitle()
+      title_el = this.createTitle();
       this_el.insert(title_el);
       title_el.update(this.title);
     }
