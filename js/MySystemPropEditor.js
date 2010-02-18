@@ -24,9 +24,12 @@ MySystemPropEditor = function(options) {
      else if (e.which) code = e.which;
      
      // disable default enter key
-     // (would close form)
+     // for submitting form, unless we are in
+     // textarea
      if (code == returnKey) {
-       e.stop();
+       if (! e.element().match('textarea')) {
+         e.stop(); // 
+       }
      }
      // escape key will close the window:
      if (code == escapeKey) {
@@ -47,6 +50,10 @@ MySystemPropEditor.prototype = {
     this.fieldLabelMap = _map;
   },
   
+  
+  // Create the dom elements
+  // to display the form fields
+  //
   updateFields: function() {
     this.clearFields();
     var self =  this;
@@ -62,6 +69,7 @@ MySystemPropEditor.prototype = {
       }
     }.bind(this));
     
+
     if (this.node.title) {
       $('prop_name').update("edit details");
     }
@@ -83,13 +91,23 @@ MySystemPropEditor.prototype = {
   showField: function(field_name,value) {
     
     if(this.fieldLabelMap[field_name]) {
-      var type = 'text';
+
       var fields = $('prop_fields');
       var label = new Element('label', {'for': field_name});
-      label.update(this.fieldLabelMap[field_name]);
-
-      var input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
-
+      label.update(this.fieldLabelMap[field_name].label);
+      var type = this.fieldLabelMap[field_name].type || 'text';      
+      var style = this.fieldLabelMap[field_name].style
+      var input;
+      if (type =='textarea') {
+        input = new Element('textarea', { 'name': field_name, 'id': field_name});
+        input.insert({'bottom': value});
+      }
+      else {
+        input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
+      }
+      if (style) {
+        input.addClassName(style);
+      }
       var label_td = new Element('td', {'align': 'right', 'class': 'input_label' });
       label_td.setStyle({'align': 'right'});
       label_td.setStyle({'text-align': 'right'});
@@ -134,13 +152,21 @@ MySystemPropEditor.prototype = {
   },
   
   
-  save_values: function() {
+  //
+  // save the form field values
+  // back into our node.
+  //
+  saveValues: function() {
     var theForm = $(this.formName);
-    var fieldNames = $H(this.node.options.fields).keys();
-    theForm.getInputs('text').each(function (fe) {
-      this.node.options.fields[fe.name] = fe.value;
-    }.bind(this));
-  
+    for (var name in this.fieldLabelMap) {
+      try {
+        this.node.options.fields[name] = theForm[name].getValue();
+      }
+      catch(e) {
+        debug("unable to save property " + name + " for " + this.node);
+      }
+    }
+
     if (this.node.options.fields.color) {
       this.node.options.fields.color = this.selected_color;
     }
@@ -209,7 +235,7 @@ MySystemPropEditor.prototype = {
     this.showPallet();
     this.positionIcon();
     this.enableClickAway();
-    this.form_observer = new Form.Observer($(this.formName),0.3,this.save_values.bind(this));
+    this.form_observer = new Form.Observer($(this.formName),0.3,this.saveValues.bind(this));
     $(this.formName).focusFirstElement();
   },
   
@@ -243,7 +269,7 @@ MySystemPropEditor.prototype = {
           var element = event.element();
           element.addClassName('selected');
           this.selected_color = element.identify();
-          this.save_values();
+          this.saveValues();
         }.bind(this));
         this.node.options.selected=true;
       }
