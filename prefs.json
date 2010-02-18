@@ -31,62 +31,59 @@
     }
   },
   
-  	{
+  {
 
-      'icon'				: "./images/thermodynamics/coldbowl.png",
-      'image'				: "./images/thermodynamics/coldbowl.png",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'source',
-      'fields'			: {
-        								'name'	: 'a',
-      									'efficiency'	: 1
-      								}
-  	},  	{
-
-      'icon'				: "./images/thermodynamics/hotbowl.png",
-      'image'				: "./images/thermodynamics/hotbowl.png",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'source',
-      'fields'			: {
-     									  'name'				: 'hot bowl',
-      									'energy'			: 100,
-      									'form'				: 'light',
-      									'efficiency'	: 1
-      								}
-  	},  	{
-
-      'icon'				: "./images/thermodynamics/hotcup.png",
-      'image'				: "./images/thermodynamics/hotcup.png",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'source',
-      'fields'			: {
-  		                  'name'				: 'hot cup',
-      									'energy'			: 100,
-      									'form'				: 'light',
-      									'efficiency'	: 1
-      								}
-  	},  	{
-      'icon'				: "./images/thermodynamics/table.png",
-      'image'				: "./images/thermodynamics/table.png",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'source',
-      'fields'			: {
-									  		'name'				: 'table',
-      									'energy'			: 100,
-      									'form'				: 'light',
-      									'efficiency'	: 1
-      								}
-  	},
-  	  	{
-      'icon'				: "./images/thermodynamics/thumb.png",
-      'image'				: "./images/thermodynamics/thumb.png",
-      'xtype'				: "MySystemContainer",
-  		'etype'				: 'source',
-      'fields'			: {
-    							  		'name'				: 'thumb',
-      									'energy'			: 100,
-      									'form'				: 'light',
-      									'efficiency'	: 1
-      								}
-  	},
+    'icon'        : "./images/At-Concord-Fall/Genecon_tn.png",
+    'image'       : "./images/At-Concord-Fall/Genecon_tn.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'Generator',
+                      'efficiency'  : 1
+                    }
+  },    
+  {
+    'icon'        : "./images/At-Concord-Fall/clay_red_tn.png",
+    'image'       : "./images/At-Concord-Fall/clay_red_tn.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'Clay',
+                      'energy'      : 100,
+                      'efficiency'  : 1
+                    }
+  },    
+  {
+    'icon'        : "./images/At-Concord-Fall/hand_tn.png",
+    'image'       : "./images/At-Concord-Fall/hand_tn.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'Hand',  
+                      'energy'      : 100,
+                      'efficiency'  : 1
+                    }
+  },    
+  {
+    'icon'        : "./images/At-Concord-Fall/lightbulb_tn.png",
+    'image'       : "./images/At-Concord-Fall/lightbulb_tn.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'Lightbulb',
+                      'energy'      : 100,
+                      'efficiency'  : 1
+                    }
+  },
+  {
+    'icon'        : "./images/world-transp.png",
+    'image'       : "./images/world-transp.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'World',
+                      'energy'      : 100,
+                      'efficiency'  : 1
+                    }
+  },
 ]
