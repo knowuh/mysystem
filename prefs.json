@@ -2,7 +2,7 @@
 
   {
     'xtype': 'AssignmentInformation',
-    'fields':
+    'fields': 
       {
         'goal': 'You will learn how energy flows',
         'more_info': 'Part of the energy is lost from the system each time'
@@ -10,13 +10,11 @@
   },
   {
     'xtype' : 'PropEditorFieldLabels',
-    'labels' : 
-    {
-        'name': 'label'
-    },
-    'types' : 
-    {
-        'name' : 'textarea '
+    'labels' : {
+      'name': {
+          'label': 'label',
+          'type': 'textarea'
+      }
     }
   },
   
