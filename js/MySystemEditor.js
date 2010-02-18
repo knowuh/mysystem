@@ -122,7 +122,6 @@
         this.buildModulesList();
 
         // Render buttons
-        this.enableLoadAndSave();
         this.renderButtons();
     };
 
@@ -432,7 +431,9 @@
             newButton.on("click", this.onNew, this, true);
 
 
-
+            //
+            // We do not use a help button anymore.
+            // 
             // var helpButton = new widget.Button({
             //     label: "help",
             //     id: "WiringEditor-helpButton",
