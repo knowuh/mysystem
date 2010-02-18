@@ -23,10 +23,12 @@ MySystemPropEditor = function(options) {
      if (e.keyCode) code = e.keyCode;
      else if (e.which) code = e.which;
      
-     // enter key usual
+     // disable default enter key
+     // (would close form)
      if (code == returnKey) {
        e.stop();
      }
+     // escape key will close the window:
      if (code == escapeKey) {
        // e.stop();
        self.disable(); 
@@ -59,8 +61,6 @@ MySystemPropEditor.prototype = {
         this.showField(field_name,_value);
       }
     }.bind(this));
-    
-    // this.formName.insert({'bottom': this.formTable});
     
     if (this.node.title) {
       $('prop_name').update("edit details");
@@ -144,7 +144,6 @@ MySystemPropEditor.prototype = {
     if (this.node.options.fields.color) {
       this.node.options.fields.color = this.selected_color;
     }
-    // this.node.has_sub = $F('has_sub')
     this.node.updateFields();
   },
   
