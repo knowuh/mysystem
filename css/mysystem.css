@@ -56,6 +56,10 @@ input {
   float: left;
 }
 
+textarea {
+  vertical-align: top;
+  height: 100px;
+}
 
 div.title {
   display: block;  
@@ -99,9 +103,7 @@ div.title {
  z-index: 1000;  
  position: fixed; 
  width: 240px;
- min-height: 240px;
  right: 50%;
- top: 50%;
  padding: 2px;
  margin: 2px;
  float: left;
@@ -110,12 +112,13 @@ div.title {
 
 #form_table tr td {
  border: none;
+ vertical-align: top;
 }
 
 
 #palette {
   width: 200px;
-  height: 265px;
+/*  height: 265px;*/
   display: table;
   text-align: left;
   margin: 4px;
