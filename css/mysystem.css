@@ -2,6 +2,18 @@ div.WireIt-ImageContainer {
 	width: auto; /* Prevent the modules from scratching on the right */
 	height: auto;
 }
+div.WireIt-ImageContainer div.title{
+	display: block;
+	max-width: 300 !important; /* Prevent the modules from scratching on the right */
+	height: auto;
+  float: left;
+	border: 1px solid gray;
+  white-space: pre;
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+  filter:alpha(opacity=50);
+	z-index: 2000;
+}
 // huh?
 div.WireIt-Container div.inputEx-Group div.inputEx-label {
 	width: auto;
