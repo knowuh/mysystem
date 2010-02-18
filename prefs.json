@@ -1,29 +1,36 @@
 [
+
   {
-    'xtype': 'PropEditorFieldLabels',
-    'labels':
+    'xtype': 'AssignmentInformation',
+    'fields':
       {
+        'goal': 'You will learn how energy flows',
+        'more_info': 'Part of the energy is lost from the system each time'
+      }
+  },
+  {
+    'xtype' : 'PropEditorFieldLabels',
+    'labels' : 
+    {
         'name': 'label'
-      }
-    'types':
-      {
-        'name': 'textarea '
-      }
+    },
+    'types' : 
+    {
+        'name' : 'textarea '
+    }
   },
   
   {
     'xtype': 'PropEditorArrows',
-    'arrows':
-        {
+    'arrows': {
           '#490A3D': 'infrared radiation',
           '#BD1550': 'thermal energy',
           '#E97F02': 'solar radiation',
           '#F8CA00': 'kinetic energy',
           '#8A9B0F': 'light energy'
-        }
+    }
   },
   
-
   	{
 
       'icon'				: "./images/thermodynamics/coldbowl.png",
@@ -82,4 +89,4 @@
       									'efficiency'	: 1
       								}
   	},
-  ];
+]
