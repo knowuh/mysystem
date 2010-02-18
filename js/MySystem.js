@@ -45,28 +45,39 @@
     
     loadPreferences: function(filename) {
       var self = this;
-      debug("calling loadPreferences (with GET)" + filename);
+      debug("calling loadPreferences (with GET) " + filename);
       new Ajax.Request(filename, {
         asynchronous: false,
         method: 'GET',
         onSuccess: function(rsp) {
-          var _data = eval(rsp.responseText);
+          var _data = null;
           var modules = [];
           var labels = null;
-          _data.each(function(item) {
-            if (item.xtype == 'MySystemContainer') {
-              modules.push(item);
-            }
-            else if (item.xtype == 'PropEditorFieldLabels') {
-              labels = item.labels;
-            }
-            else if (item.xtype == 'AssignmentInformation') {
-              self.loadAssignmentInfo(item);
-            }
-          });
+          try {
+            var _data = rsp.responseText.evalJSON();
+            var modules = [];
+            var labels = null;
+            _data.each(function(item) {
+              if (item.xtype == 'MySystemContainer') {
+                modules.push(item);
+              }
+              else if (item.xtype == 'PropEditorFieldLabels') {
+                labels = item.labels;
+              }
+              else if (item.xtype == 'AssignmentInformation') {
+                self.loadAssignmentInfo(item);
+              }
+            });
+          }
+          catch(exception) {
+            debug("unable to load / read file: " + filename);
+            debug(exception);
+          }
           self.loadModules(modules);
           self.setEditor();
-          self.editor.propEditor.setFieldLabelMap(labels);
+          if (labels) {
+            self.editor.propEditor.setFieldLabelMap(labels);
+          }
           self.loaded = true;
         },
         onFailure: function(req,err) {

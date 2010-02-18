@@ -1,0 +1,85 @@
+[
+  {
+    'xtype': 'PropEditorFieldLabels',
+    'labels':
+      {
+        'name': 'label'
+      }
+    'types':
+      {
+        'name': 'textarea '
+      }
+  },
+  
+  {
+    'xtype': 'PropEditorArrows',
+    'arrows':
+        {
+          '#490A3D': 'infrared radiation',
+          '#BD1550': 'thermal energy',
+          '#E97F02': 'solar radiation',
+          '#F8CA00': 'kinetic energy',
+          '#8A9B0F': 'light energy'
+        }
+  },
+  
+
+  	{
+
+      'icon'				: "./images/thermodynamics/coldbowl.png",
+      'image'				: "./images/thermodynamics/coldbowl.png",
+      'xtype'				: "MySystemContainer",
+  		'etype'				: 'source',
+      'fields'			: {
+        								'name'	: 'a',
+      									'efficiency'	: 1
+      								}
+  	},  	{
+
+      'icon'				: "./images/thermodynamics/hotbowl.png",
+      'image'				: "./images/thermodynamics/hotbowl.png",
+      'xtype'				: "MySystemContainer",
+  		'etype'				: 'source',
+      'fields'			: {
+     									  'name'				: 'hot bowl',
+      									'energy'			: 100,
+      									'form'				: 'light',
+      									'efficiency'	: 1
+      								}
+  	},  	{
+
+      'icon'				: "./images/thermodynamics/hotcup.png",
+      'image'				: "./images/thermodynamics/hotcup.png",
+      'xtype'				: "MySystemContainer",
+  		'etype'				: 'source',
+      'fields'			: {
+  		                  'name'				: 'hot cup',
+      									'energy'			: 100,
+      									'form'				: 'light',
+      									'efficiency'	: 1
+      								}
+  	},  	{
+      'icon'				: "./images/thermodynamics/table.png",
+      'image'				: "./images/thermodynamics/table.png",
+      'xtype'				: "MySystemContainer",
+  		'etype'				: 'source',
+      'fields'			: {
+									  		'name'				: 'table',
+      									'energy'			: 100,
+      									'form'				: 'light',
+      									'efficiency'	: 1
+      								}
+  	},
+  	  	{
+      'icon'				: "./images/thermodynamics/thumb.png",
+      'image'				: "./images/thermodynamics/thumb.png",
+      'xtype'				: "MySystemContainer",
+  		'etype'				: 'source',
+      'fields'			: {
+    							  		'name'				: 'thumb',
+      									'energy'			: 100,
+      									'form'				: 'light',
+      									'efficiency'	: 1
+      								}
+  	},
+  ];
