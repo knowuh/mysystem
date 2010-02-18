@@ -83,10 +83,11 @@ div.title {
  padding: 4px;
  color:  #3366CC;
  border: 2px solid  #3366CC;
- display: table-cell;
+ display: block;
  z-index: 1000;  
  position: fixed; 
  width: 240px;
+ min-height: 240px;
  right: 50%;
  top: 50%;
  padding: 2px;
@@ -95,7 +96,7 @@ div.title {
  text-align: center;
 }
 
-#prop_fields tr td {
+#form_table tr td {
  border: none;
 }
 

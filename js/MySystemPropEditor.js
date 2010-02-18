@@ -9,7 +9,9 @@ MySystemPropEditor = function(options) {
    this.domID = options.domID || "prop_form";
    this.dom_entity = $(this.domID);
    this.formName = options.formName || "prop_form_form";
-   this.selected_color = "#000000"
+   this.selected_color = "#000000";
+   this.formTable = $('form_table');
+   
    var hexColors = [ '#490A3D', '#BD1550', '#E97F02', '#F8CA00', '#8A9B0F'];
    this.setColorPallet(hexColors);
   
@@ -21,7 +23,11 @@ MySystemPropEditor = function(options) {
      if (e.keyCode) code = e.keyCode;
      else if (e.which) code = e.which;
      
-     if (code == escapeKey || code == returnKey) {
+     // enter key usual
+     if (code == returnKey) {
+       e.stop();
+     }
+     if (code == escapeKey) {
        // e.stop();
        self.disable(); 
      }
@@ -38,17 +44,24 @@ MySystemPropEditor.prototype = {
   setFieldLabelMap: function(_map) {
     this.fieldLabelMap = _map;
   },
+  
   updateFields: function() {
     this.clearFields();
     var self =  this;
+    
+
+    // this.formTable = new Element('table', {'id': 'prop_form_table'});
+
     $H(this.node.options.fields).each(function (pair) {
       var field_name = pair.key;
       var _value = this.node.options.fields[field_name];
       if(field_name !='color') {
-        this.addField(field_name,_value);
+        this.showField(field_name,_value);
       }
     }.bind(this));
-
+    
+    // this.formName.insert({'bottom': this.formTable});
+    
     if (this.node.title) {
       $('prop_name').update("edit details");
     }
@@ -65,6 +78,33 @@ MySystemPropEditor.prototype = {
       self.disable();
     });
   },
+  
+  
+  showField: function(field_name,value) {
+    
+    if(this.fieldLabelMap[field_name]) {
+      var type = 'text';
+      var fields = $('prop_fields');
+      var label = new Element('label', {'for': field_name});
+      label.update(this.fieldLabelMap[field_name]);
+
+      var input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
+
+      var label_td = new Element('td', {'align': 'right', 'class': 'input_label' });
+      label_td.setStyle({'align': 'right'});
+      label_td.setStyle({'text-align': 'right'});
+      label_td.insert({'bottom': label});
+
+      var input_td = new Element('td', { 'class': 'input_field' });
+      input_td.insert({'bottom': input});
+
+      var table_row = new Element('tr', { 'class': 'input_row'});
+      table_row.insert({'bottom': label_td});
+      table_row.insert({'bottom': input_td});
+      this.formTable.insert({'bottom': table_row});
+    }
+  },
+  
   
   setColorPallet: function(hexColors) {
     var pallet = $('palette');
@@ -84,36 +124,15 @@ MySystemPropEditor.prototype = {
     });
 
   },
+  
   clearFields: function() {
-    $('prop_fields').update('');
+    if (this.formTable && this.formTable.up()) {
+      this.formTable.remove();
+    }
+    this.formTable = new Element('table', {'id': 'form_table'});
+    $(this.formName).insert({'bottom': this.formTable});
   },
   
-  addField: function(field_name,value) {
-    
-    if(this.fieldLabelMap[field_name]) {
-      var type = 'text';
-      var fields = $('prop_fields');
-      var label = new Element('label', {'for': field_name});
-    
-      label.update(this.fieldLabelMap[field_name]);
-
-      var input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
-
-      var label_td = new Element('td', {'align': 'right', 'class': 'input_label' });
-      label_td.setStyle({'align': 'right'});
-      label_td.setStyle({'text-align': 'right'});
-      label_td.insert({'bottom': label});
-
-      var input_td = new Element('td', { 'class': 'input_field' });
-      input_td.insert({'bottom': input});
-
-      var table_row = new Element('tr', { 'class': 'input_row'});
-      table_row.insert({'bottom': label_td});
-      table_row.insert({'bottom': input_td});
-
-      $('prop_fields').insert({'bottom': table_row});
-    }
-  },
   
   save_values: function() {
     var theForm = $(this.formName);
@@ -186,6 +205,7 @@ MySystemPropEditor.prototype = {
       $(selected_pallete_item).addClassName('selected');
     }
 
+    
     this.positionEditor();
     this.showPallet();
     this.positionIcon();
@@ -237,6 +257,7 @@ MySystemPropEditor.prototype = {
   positionEditor: function() {
     this.dom_entity.show();
     this.dom_entity.absolutize();
+
     this.dom_entity.clonePosition(this.node_element,{
       setWidth: false,
       setHeight: false,
