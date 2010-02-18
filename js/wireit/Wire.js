@@ -122,10 +122,11 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @method remove
     */
    remove: function() {
-   
+
+      this.parentEl.removeChild(this.getLabel().up());   
       // Remove the canvas from the dom
       this.parentEl.removeChild(this.element);
-   
+
       // Remove the wire reference from the connected terminals
       if(this.terminal1 && this.terminal1.removeWire) {
          this.terminal1.removeWire(this);
@@ -363,13 +364,16 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
         var lastWidth = ctxt.lineWidth;
         var lastStrokeStyle = ctxt.strokeStyle;
         
-        ctxt.lineWidth=1;
-        ctxt.fillStyle = "rgba(255,255,255,0.85)";
-        ctxt.fillRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
-        
-        ctxt.fillStyle = this.options.color;
-        ctxt.strokeRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
-        ctxt.drawTextCenter("sans", fontSize, center.x-hp, center.y-hp, this.options.fields.name);
+
+    
+        // NOAH: Lets try to do it in the dom instead?
+        // ctxt.lineWidth=1;
+        // ctxt.fillStyle = "rgba(255,255,255,0.85)";
+        // ctxt.fillRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
+        // ctxt.fillStyle = this.options.color;
+        // ctxt.strokeRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
+        // ctxt.drawTextCenter("sans", fontSize, center.x-hp, center.y-hp, this.options.fields.name);
+        this.drawText();
         
         ctxt.fillStyle = lastFillStyle;
         ctxt.lineWidth = lastWidth;
@@ -646,6 +650,27 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       else {
          throw new Error("WireIt.Wire unable to find '"+this.drawingMethod+"' drawing method.");
       }
+   },
+   
+   getLabel: function() {
+     var container = this.element.next('.WireIt-Label-Box');
+     if (! container) {
+       container = new Element('div',{'class': 'WireIt-Label-Box'});
+       this.element.insert({'after': container});
+       container.absolutize();
+     }
+     container.clonePosition(this.element);
+     result = container.down('.WireIt-Label')
+     if (! result) {
+       var result = new Element('div',{'class': 'WireIt-Label'});
+       container.insert({'bottom': result});
+     }
+     return result;
+   },
+   
+   drawText: function() {
+      this.getLabel().update(this.options.fields.name);
+      this.getLabel().setStyle({'color': this.options.color});
    },
    
    /**
