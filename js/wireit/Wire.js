@@ -669,7 +669,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
    },
    
    drawText: function() {
-      this.getLabel().update(this.options.fields.name);
+      this.getLabel().update(this.options.fields.name.wordWrap(45));
       this.getLabel().setStyle({'color': this.options.color});
    },
    
