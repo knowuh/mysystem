@@ -78,8 +78,8 @@
         document.observe("dom:loaded", function() {
           mySystem = new MySystem('prefs.json');
           myDataService = new MocDS(null,null);
-          // myDataService = new VleDS(vle);
-          // myDataService = new DSSService('read','wrtie');
+          //myDataService = new VleDS(vle);
+          //myDataService = new RestDS('','');
           // myDataService = new GGearsDS('write','write','mysys');
           //myDataService = new CookieDS(null,'write');
           mySystem.setDataService(myDataService);
