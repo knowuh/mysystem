@@ -52,6 +52,7 @@
         onSuccess: function(rsp) {
           var _data = null;
           var modules = [];
+          var arrows = null;
           var labels = null;
           try {
             var _data = rsp.responseText.evalJSON();
@@ -64,6 +65,9 @@
               }
               else if (item.xtype == 'PropEditorFieldLabels') {
                 labels = item.labels;
+              }
+              else if (item.xtype == 'PropEditorArrows') {
+                arrows = item.arrows;
               }
               else if (item.xtype == 'AssignmentInformation') {
                 self.loadAssignmentInfo(item);
@@ -78,6 +82,9 @@
           self.setEditor();
           if (labels) {
             self.editor.propEditor.setFieldLabelMap(labels);
+          }
+          if (arrows) {
+            self.editor.propEditor.setArrows(arrows);            
           }
           self.loaded = true;
         },
