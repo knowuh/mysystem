@@ -70,12 +70,8 @@ MySystemPropEditor.prototype = {
     }.bind(this));
     
 
-    if (this.node.title) {
-      $('prop_name').update("edit details");
-    }
-    else {
-      $('prop_name').update("edit energy flow");
-    }
+    this.setEditorName(this.node);
+    
     $('prop_form_closer').observe('mouseover',function(e) {
       self.opacity(0.99,'prop_form_closer');
     });
@@ -87,6 +83,20 @@ MySystemPropEditor.prototype = {
     });
   },
   
+  setEditorName: function(node) {
+    var xtype = node.xtype || node.options.xtype || 'default';
+    var domName = 'prop_name';
+    var nodeTypeMap = {
+      'default'           : 'Poperties',
+      'MySystemNote'      : 'Note Info',
+      'MySystemContainer' : 'Information',
+      'WireIt-Wire'       : 'Energy Flow Information'
+    };
+    var domThing = $(domName);
+    if (domThing) {
+      domThing.update(nodeTypeMap[xtype]);
+    }
+  },
   
   showField: function(field_name,value) {
     
