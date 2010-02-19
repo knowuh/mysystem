@@ -250,15 +250,15 @@ MySystemPropEditor.prototype = {
     this.updateFields();
 
     this.selected_color = this.node.options.fields.color || "color2";
-    var selected_pallete_item = $(this.selected_color);
-    if (selected_pallete_item) {
+    var selected_palette_item = $(this.selected_color);
+    if (selected_palette_item) {
       this.deselect();
-      $(selected_pallete_item).addClassName('selected');
+      $(selected_palette_item).addClassName('selected');
     }
 
     
     this.positionEditor();
-    this.showPallet();
+    this.showPalette();
     this.positionIcon();
     this.enableClickAway();
     this.form_observer = new Form.Observer($(this.formName),0.3,this.saveValues.bind(this));
@@ -287,7 +287,7 @@ MySystemPropEditor.prototype = {
     }
   },
   
-  showPallet: function() {
+  showPalette: function() {
     if (this.node.options.fields.color) {
         $('palette').show();
         $('palette').observe('click', function (event) {
