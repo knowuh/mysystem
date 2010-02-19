@@ -76,7 +76,6 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     return new Element('div', {'class': 'title' });
   },
   render: function() {
-    debug("render being called");
     MySystemContainer.superclass.render.call(this);
     var this_el = this.el
     var title_el = $(this_el).down('.title') 
