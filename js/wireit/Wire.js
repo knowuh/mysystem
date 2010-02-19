@@ -796,11 +796,9 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @param {Integer} y top position of the mouse (relative to the canvas)
     */
    onWireClick: function(x,y) {
-     debug('clicked');
    },
 
    onWireDblClick: function(x,y) {
- 	  debug('dbl-clicked');
     this.openPropEditor();
    },
    

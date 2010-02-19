@@ -88,7 +88,6 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     
   },
   updateFields: function() {
-    debug(($H(this.options.fields).inspect()));
     this.setTitle(this.options.fields.name || this.options.name );
   },
   
