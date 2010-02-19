@@ -171,20 +171,21 @@ div.title {
   width: 20px;
   height: 20px;
   clear: none;
-  border: 1px solid gray;
+  border: 2px solid white;
   margin: 2px;
   padding: 0px;
   padding-left: 1em;
   padding-right: 1em;
   margin-left: 2em;
   float: left;
+  cursor: pointer;
 }
 
 #layerMap {
   display: none;
 }
 .selected {
-  border: 1px solid #3366CC; !important;
+  border: 2px solid #3366CC; !important;
 }
 
 
