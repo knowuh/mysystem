@@ -58,7 +58,8 @@
             var modules = [];
             var labels = null;
             _data.each(function(item) {
-              if (item.xtype == 'MySystemContainer') {
+              if (item.xtype == 'MySystemContainer'
+              ||  item.xtype == 'MySystemNote') {
                 modules.push(item);
               }
               else if (item.xtype == 'PropEditorFieldLabels') {

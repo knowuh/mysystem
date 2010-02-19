@@ -19,6 +19,35 @@ div.WireIt-Container div.inputEx-Group div.inputEx-label {
 	width: auto;
 }
 
+div.MySystemNote {
+  width: auto;
+  height: auto;
+  min-width: 100px;
+  min-height: 100px;
+  display: block;
+  background-color: white;
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  filter:alpha(opacity=80);
+  position: absolute;
+  border: 2px solid  #DDDDAA;
+}
+div.content {
+  display: block;
+  position: absolute;
+  clear: both;
+  width: auto;
+  margin: 4px;
+  margin-top: 30px;
+  margin-bottom: 2px;
+  top: 1em;
+  bottom: 1em;
+  text-align: top;
+  vertical-align: top;
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+
 div.inputEx-TypeField-PropertiesPanel {
 	z-index: 7;
 }

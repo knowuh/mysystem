@@ -14,6 +14,10 @@
       'name': {
           'label': 'label',
           'type': 'textarea'
+      },
+      'content': {
+          'label': 'note',
+          'type': 'textarea'
       }
     }
   },
@@ -30,7 +34,16 @@
   },
   
   {
-
+    'xtype'       : "MySystemNote",
+    'className'   : "MySystemNote",
+    'image'       : "./images/note.png",
+    'name'        : 'Note',
+    'fields'      : {
+                      'content'     : '(write your note here)'
+                    }
+  },
+  
+  {
     'icon'        : "./images/At-Concord-Fall/Genecon_tn.png",
     'image'       : "./images/At-Concord-Fall/Genecon_tn.png",
     'xtype'       : "MySystemContainer",
