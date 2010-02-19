@@ -160,7 +160,9 @@ MySystemPropEditor.prototype = {
     var theForm = $(this.formName);
     for (var name in this.fieldLabelMap) {
       try {
-        this.node.options.fields[name] = theForm[name].getValue();
+        if (this.node.options.fields[name]) {
+          this.node.options.fields[name] = theForm[name].getValue();
+        }
       }
       catch(e) {
         debug("unable to save property " + name + " for " + this.node);
