@@ -12,8 +12,14 @@ MySystemPropEditor = function(options) {
    this.selected_color = "#000000";
    this.formTable = $('form_table');
    
-   var hexColors = [ '#490A3D', '#BD1550', '#E97F02', '#F8CA00', '#8A9B0F'];
-   this.setColorPallet(hexColors);
+   var hexColors = { 
+     '#490A3D' : '', 
+     '#BD1550' : '', 
+     '#E97F02' : '', 
+     '#F8CA00' : '', 
+     '#8A9B0F' : ''
+    };
+   this.setArrows(hexColors);
   
    var self =  this;
    this.dom_entity.observe('keydown', function(e){
@@ -134,13 +140,21 @@ MySystemPropEditor.prototype = {
   },
   
   
-  setColorPallet: function(hexColors) {
+  setArrows: function(arrows) {
     var pallet = $('palette');
-    hexColors.each(function (c) {
+    pallet.update('<h4>Flow Type</h4>');
+    var arrow = null;
+    for (arrow in arrows) {
       var color_div = new Element('div', {'class': 'pallet_element' });
-      color_div.setStyle({backgroundColor: c});
+
+      color_div.setStyle({backgroundColor: arrow});
+      if(arrows[arrow]) {
+        color_div.setStyle({'width' : 'auto'});
+        color_div.setStyle({'color' : 'white'});
+        color_div.update(arrows[arrow]);
+      }
       pallet.insert({'bottom': color_div});
-    });
+    }
   },
   
   opacity: function(opacity, dom_id) {
