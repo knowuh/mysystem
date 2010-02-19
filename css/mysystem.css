@@ -140,6 +140,17 @@ div.title {
  text-align: center;
 }
 
+#prop_bar {
+  display: block;
+  float: left;
+  width: 100%;
+  height: auto;
+  background-color: #3366CC;
+  color: white;
+  margin: 0px;
+  margin-bottom: 1em;
+}
+
 #form_table tr td {
  border: none;
  vertical-align: top;
