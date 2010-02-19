@@ -50,7 +50,7 @@
     'xtype'       : "MySystemContainer",
     'etype'       : 'source',
     'fields'      : {
-                      'name'        : 'Generator with a big name',
+                      'name'        : 'Generator',
                       'efficiency'  : 1
                     }
   },    
