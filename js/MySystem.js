@@ -1,13 +1,14 @@
 // fake change to this file for git exmple...
 (function(){
   
-  this.MySystem = function( jsonURL ){ 
-    this.init( jsonURL );
+  this.MySystem = function( moduleUrl ){ 
+    this.init( moduleUrl );
+    this.interceptKeys();
   };
   
   MySystem.prototype = {
     init: function( jsonURL ) {
-      this.loadModules( jsonURL );
+      this.loadPreferences( jsonURL );
     },
     
     setDataService: function(ds) {
@@ -17,6 +18,19 @@
       }
     },
     
+    interceptKeys: function() {
+      document.observe('keydown', function(e){
+        var code;
+        var element = $(e.element());
+        if (e.keyCode) code = e.keyCode;
+        else if (e.which) code = e.which;
+        if (code == 8 || code == 127) {
+          if ((! element.match('input')) && (! element.match('textarea'))) {
+              e.stop();
+          } 
+        }
+      });
+    },
     setEditor: function(_editor) {
       debug("new editor being set");
       if (_editor) {  
@@ -29,25 +43,56 @@
       this.editor.dataService = this.dataService;
     },
     
-    loadModules: function(filename) {
+    loadPreferences: function(filename) {
       var self = this;
-      debug("calling loadModules (with GET)" + filename);
+      debug("calling loadPreferences (with GET) " + filename);
       new Ajax.Request(filename, {
         asynchronous: false,
         method: 'GET',
         onSuccess: function(rsp) {
-          var text = rsp.responseText;
-          var _data = eval(text);
-          debug("content: "+ text);
-          debug("data: " + _data);
-          self.data = new MySystemData();
-          self.data.setData(_data,[],true);
+          var _data = null;
+          var modules = [];
+          var labels = null;
+          try {
+            var _data = rsp.responseText.evalJSON();
+            var modules = [];
+            var labels = null;
+            _data.each(function(item) {
+              if (item.xtype == 'MySystemContainer') {
+                modules.push(item);
+              }
+              else if (item.xtype == 'PropEditorFieldLabels') {
+                labels = item.labels;
+              }
+              else if (item.xtype == 'AssignmentInformation') {
+                self.loadAssignmentInfo(item);
+              }
+            });
+          }
+          catch(exception) {
+            debug("unable to load / read file: " + filename);
+            debug(exception);
+          }
+          self.loadModules(modules);
           self.setEditor();
+          if (labels) {
+            self.editor.propEditor.setFieldLabelMap(labels);
+          }
+          self.loaded = true;
         },
         onFailure: function(req,err) {
           debug("failed!");
         }
       });
+    },
+    
+    loadModules: function(modules) {
+      this.data = new MySystemData();
+      this.data.setData(modules, [], true);
+    },
+    
+    loadAssignmentInfo : function(item) {
+      $('goal').update(item.fields.goal);
     },
     
     /**

@@ -32,6 +32,7 @@
     },
     // write the data
     save: function(_data) {
+        this.writeKey = prompt("Please enter a model name or key: ", this.writeKey);
         this.data = _data;
         var post_to = this.postPath + this.writeKey;
         var xmlhttp = HTTP.newRequest();
@@ -42,6 +43,9 @@
         debug("readKey written: " + this.readKey);
     },
     
+    promptKey: function() {
+      
+    },
     load: function(context,callback) {
       if (this.readKey) {
         var key = prompt("Please enter the model to load: ", this.readKey);

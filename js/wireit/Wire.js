@@ -33,7 +33,7 @@ WireIt.Wire = function( terminal1, terminal2, parentEl, options) {
     * @type HTMLElement
     */
    this.parentEl = parentEl;
-   
+
    /**
     * Source terminal
     * @property terminal1
@@ -63,6 +63,10 @@ WireIt.Wire = function( terminal1, terminal2, parentEl, options) {
    // Call addWire on both terminals
    this.terminal1.addWire(this);
    this.terminal2.addWire(this);
+   if (this.is_connected()) {
+     this.redraw();
+     this.openPropEditor();
+   }
 };
 
 
@@ -105,15 +109,24 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       };
    },
    
+   is_connected: function() {
+     return (
+          this.terminal1
+       && this.terminal1.container
+       && this.terminal2
+       && this.terminal2.container)
+   },
+   
    /**
     * Remove a Wire from the Dom
     * @method remove
     */
    remove: function() {
-   
+
+      this.parentEl.removeChild(this.getLabel().up());   
       // Remove the canvas from the dom
       this.parentEl.removeChild(this.element);
-   
+
       // Remove the wire reference from the connected terminals
       if(this.terminal1 && this.terminal1.removeWire) {
          this.terminal1.removeWire(this);
@@ -351,13 +364,16 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
         var lastWidth = ctxt.lineWidth;
         var lastStrokeStyle = ctxt.strokeStyle;
         
-        ctxt.lineWidth=1;
-        ctxt.fillStyle = "rgba(255,255,255,0.85)";
-        ctxt.fillRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
-        
-        ctxt.fillStyle = this.options.color;
-        ctxt.strokeRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
-        ctxt.drawTextCenter("sans", fontSize, center.x-hp, center.y-hp, this.options.fields.name);
+
+    
+        // NOAH: Lets try to do it in the dom instead?
+        // ctxt.lineWidth=1;
+        // ctxt.fillStyle = "rgba(255,255,255,0.85)";
+        // ctxt.fillRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
+        // ctxt.fillStyle = this.options.color;
+        // ctxt.strokeRect(center.x - hp - (tWidth/2),center.y - hp - tHeight + desc, tWidth, tHeight);
+        // ctxt.drawTextCenter("sans", fontSize, center.x-hp, center.y-hp, this.options.fields.name);
+        this.drawText();
         
         ctxt.fillStyle = lastFillStyle;
         ctxt.lineWidth = lastWidth;
@@ -636,6 +652,27 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       }
    },
    
+   getLabel: function() {
+     var container = this.element.next('.WireIt-Label-Box');
+     if (! container) {
+       container = new Element('div',{'class': 'WireIt-Label-Box'});
+       this.element.insert({'after': container});
+       container.absolutize();
+     }
+     container.clonePosition(this.element);
+     result = container.down('.WireIt-Label')
+     if (! result) {
+       var result = new Element('div',{'class': 'WireIt-Label'});
+       container.insert({'bottom': result});
+     }
+     return result;
+   },
+   
+   drawText: function() {
+      this.getLabel().update(this.options.fields.name.wordWrap(45));
+      this.getLabel().setStyle({'color': this.options.color});
+   },
+   
    /**
     * @method wireDrawnAt
     * @return {Boolean} true if the wire is at x,y
@@ -759,21 +796,16 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     */
    onWireClick: function(x,y) {
      debug('clicked');
-     WireIt.Wire.openPropEditorFor.fire(this);
-     this.redraw;
-
-    // wd = this.options.width;
-    // nwd = wd + 2;
-    // this.options.width = nwd;
-    // this.redraw();
-
    },
 
    onWireDblClick: function(x,y) {
  	  debug('dbl-clicked');
-		// this.options.width = 3;
-    WireIt.Wire.openPropEditorFor.fire(this);
-		this.redraw;
+    this.openPropEditor();
+   },
+   
+   openPropEditor: function() {
+     WireIt.Wire.openPropEditorFor.fire(this);
+     this.redraw;
    }
 });
 

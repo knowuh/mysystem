@@ -380,7 +380,7 @@ lang.extend(WireIt.TerminalProxy, util.DDProxy, {
         my.reset();
         my.cycle();
         my.list();
-
+        w.redraw();
 
         /*
         NOAH: Removed this for Berklee Demo.

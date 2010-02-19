@@ -342,8 +342,6 @@ WireIt.Container.prototype = {
       if( WireIt.indexOf(wire, this.wires) == -1 ) {
          this.wires.push(wire);
          this.eventAddWire.fire(wire);
-         //TODO: Move me to monkey patched code:
-         WireIt.Wire.openPropEditorFor.fire(wire);
       } 
    },
 

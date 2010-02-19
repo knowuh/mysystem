@@ -2,6 +2,18 @@ div.WireIt-ImageContainer {
 	width: auto; /* Prevent the modules from scratching on the right */
 	height: auto;
 }
+div.WireIt-ImageContainer div.title{
+	display: block;
+	max-width: 300 !important; /* Prevent the modules from scratching on the right */
+	height: auto;
+  float: left;
+	border: 1px solid gray;
+  white-space: pre;
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+  filter:alpha(opacity=50);
+	z-index: 2000;
+}
 // huh?
 div.WireIt-Container div.inputEx-Group div.inputEx-label {
 	width: auto;
@@ -27,30 +39,26 @@ div.ComposedModule {
 }
 
 label {
-  text-align: right;
-  height: auto;
-  float: left;
-  clear: left;
-  margin: 4px;
-  margin-left: 0px;
   color: #3366CC;
+  font-weight: bold;
 }
 
 input {
-  margin: 5px;
-  text-align: left:
+  border: 1px solid  #DDDDAA;
+  float: right;
 }
 
-div.inputBox {
+.inputBox {
   display: block;
   clear: both;
-  margin: 1px;
-  margin-top: 4px
+  margin-top: 10px;
+  padding: 2px;
   float: left;
-  clear: none;
 }
-input {
-  width: 80px;
+
+textarea {
+  vertical-align: top;
+  height: 100px;
 }
 
 div.title {
@@ -66,90 +74,73 @@ div.title {
   background-color: white
 }
 
+#prop_form_closer {
+  display:block;
+  float: right;
+  clear: both;
+  background-image: url(../images/close.png);
+  background-repeat: no-repeat;
+  background-position: top right;
+  padding: 0px;
+  margin: 0px;
+  width: 25px;
+  height: 15px;
+  cursor: pointer;
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+  filter:alpha(opacity=50);
+}
+
 #prop_form {
+ opacity: 0.9;
+ -moz-opacity: 0.9;
+ filter:alpha(opacity=90);
+ background-color: white;
+ padding: 4px;
+ color:  #3366CC;
+ border: 2px solid  #3366CC;
  display: block;
- clear: both;
- padding: 10px;
- margin: 10px;
- border: 1px solid #3366CC;
+ z-index: 1000;  
+ position: fixed; 
+ width: 240px;
+ right: 50%;
+ padding: 2px;
+ margin: 2px;
  float: left;
+ text-align: center;
+}
+
+#form_table tr td {
+ border: none;
+ vertical-align: top;
 }
 
 
 #palette {
-  display: block;
-  width: auto;
-  height: auto;
-  float: left;
-  clear: both;
-  text-align: center;
+  width: 200px;
+/*  height: 265px;*/
+  display: table;
+  text-align: left;
+  margin: 4px;
   background-color: white;
-  border: 1px solid black;
+} 
+
+.pallet_element {
+  display: block;
+  width: 20px;
+  height: 20px;
+  clear: none;
+  border: 1px solid gray;
   margin: 2px;
-  padding: 2px;
+  padding: 0px;
+  float: left;
 }
 
-#color1 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #490A3D;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
-
-#color2 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #BD1550;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
-#color3 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #E97F02;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
-#color4 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #F8CA00;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
-#color5 {
-  display: block;
-  width: 20px;
-  height: 20px;
-  float: left;
-  clear: none;
-  background-color: #8A9B0F;
-  border: 1px solid gray;
-  margin: 2px;
-  padding: 0px;
-}
 #layerMap {
   display: none;
 }
 .selected {
-  border: 2px solid black !important;
+  border: 1px solid #3366CC; !important;
 }
 
 

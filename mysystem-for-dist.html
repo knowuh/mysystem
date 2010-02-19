@@ -22,143 +22,71 @@
 
 
 </head>
-
 <body class="yui-skin-sam">
 
   <script>
+
         var mySystem;
         var myDataService;
         document.observe("dom:loaded", function() {
-          mySystem = new MySystem("modules2.json");
-          // myDataService = new MocDS(null,null);
-          myDataService = new VleDS(vle);
-          // myDataService = new DSSService('read','wrtie');
-          // myDataService = new GGearsDS('write','write','mysystem');
-          // myDataService = new CookieDS(null,'write');
+          mySystem = new MySystem('prefs.json');
+          //myDataService = new MocDS(null,null);
+          // myDataService = new VleDS(vle);
+          myDataService = new RestDS('','');
+          // myDataService = new GGearsDS('write','write','mysys');
+          //myDataService = new CookieDS(null,'write');
           mySystem.setDataService(myDataService);
+          if (mySystem.editor) {
+            mySystem.editor.enableLoadAndSave();
+          }
           mySystem.load();
+
         });
-        
         
         onExit = function () {
             debug("saving mystem data before we leave");
             mySystem.save();
             debug("saved!");
         }
+      
         // window.onbeforeunload = onExit;
-  
-  
+
   </script>
 
-  <div id="top">
-    <div class="logo">MySystem Demo</a></div>
-    <div id="toolbar"></div>
-    <div class="topright">
-      <span>Pre-Prototype Version</span>
-    </div>
-  </div>
-
-
-  <div id="left">
-  </div>
-  
-  <div id="right">
-        <div id="layer_info"></div>
-        <div id="prop_form" display="hidden">
-          <div id="icon_spot"></div>
-          <h3><span id="prop_name"></span></h3>
-          <form id="prop_form_form">
-            <div id="prop_fields"></div>
-        </form>
-        <div id="palette">
-          <h2>wire color:</h2>
-          <div>
-            <div id="color1"></div>
-            <div id="color2" class="selected"></div>
-            <div id="color3"></div>
-            <div id="color4"></div>
-            <div id="color5"></div>
-          </div>
-Clear DiagramLoadSaveMore Info
-Pre-Prototy
-        </div>
-        
+  <div id="editing_window">
+    <div id="top">
+      <div class="logo">MySystem</div>
+      <div id="toolbar"></div>
+      <div class="topright">
+        <span id="goal">Goal</span>
       </div>
-      <br/>
-    
-    <div id="layerMap">
-      <h2>Minimap</h2>
     </div>
-    <div style="font-size: 14px; padding: 10px 10px 0px 10px;"><b>MySystem Pre-prototype Demo</b></div>
-    <div id="Explanation" style="padding: 10px 10px 10px 20px; font-size: 12px">
-      <p>To try the demo out,
-        drag the objects at left into the main field, then connect them with arrows by dragging from one
-        t to another. Try using this
-        demo space to create a MySystem diagram for the energy story
-        below:</p><br/>
 
-        <p>"Jimmy made some breakfast on a lazy Saturday morning. He turned
-        on the stove, put some water in a pot and heated it until it
-        boiled. He took an egg out of the refrigerator and put it in the
-        boiling water. When he was done, he enjoyed a perfect
-        hard-boiled egg."</p><br/>
-
-        <p>Make a diagram showing how energy was transformed from one form
-        to another and transferred from one place to another <b>while the
-        egg was in the boiling water</b>. Add a label to each energy
-        transformation describing the process. Also label each arrow
-        with the form of energy being transferred.</p><br/>
-
-        <p><i>Note: Where energy is lost to the surroundings, indicate this
-        loss by showing energy being transferred to the world image.</i></p>
-    </div>
-  </div>
-
-  <div id="center">
-  </div>
+    <div id="left"></div>
   
-  <div id="props">
-    <!-- modal floating property editor for nodes (AKA modules, AKA containers...) -->
-  </div>
-
-  <div id="helpPanel">
-      <div class="hd">Welcome to the MySystem pre-prototype demo</div>
-      <div class="bd" style="text-align: left;">
-          <br />
-          <p style="font-weight: bold;">What this example does :</p>
-          <ul style="margin-left: 20px;">
-            <li>* Provides a field for composing a MySystem diagram</li>
-            <li>* Provides sample images of objects where energy is transformed</li>  
-            <li>* Enables objects to be connected by arrows to show how energy
-              is transferred</li>
-            <li>* Provides comment boxes</li>
-          </ul>
-          <br />
-          <p style="font-weight: bold;">How to use it :</p>
-          <ul style="margin-left: 20px;">
-            <li>* Drag and drop objects from the left-hand sidebar to the main
-              field.</li>
-            <li>* Connect the modules with arrows by dragging from one
-              button to another.</li>
-          </ul>
-          <br />
-          <p style="font-weight: bold;">Planned features for the beta and final versions:</p>
-          <ul style="margin-left: 20px;">
-            <li>* Diagrams will be able to be saved, shared and embedded into blogs or Web pages</li>
-            <li>* Embedded assessment is integrated into the diagramming process</li>
-            <li>* A library of images will be available, with the ability to upload images</li>
-            <li>* Blocks and connecting arrows will be label-able</li>  
-            <li>* Arrow widths will be able to be varied to indicate quantities</li>
-            <li>* Colors or textures of arrows will be changeable to indicate the type of energy transferred</li>
-            <li>* Objects will be able to contain subsystems within them, and students will zoom in to view and edit these subsystems</li>
-            <li>* Quantities of energy and efficiencies of
-              transformation will be displayable</li>
-            <li>* Units will be able to be tracked and converted</li>
-          </ul>
-          <br />
+  
+    <div id="prop_form" display="hidden">
+      <div id="prop_form_closer"></div>
+      <div id="icon_spot"></div>
+      <h3><span id="prop_name"></span></h3>
+      <form id="prop_form_form" name="prop_form_form">
+        <table id="prop_fields"></table>
+      </form>
+      <div id="palette">
+        <h3>arrow color:</h3>
       </div>
-  </div>
+    </div>
 
+    <div id="center"></div>
+  </div> <!-- editing window end -->
+
+  <div id="print_window" style="display:none;width:100%;height:100%;z-index:100;">
+    Nothing to see here.  Move along.
+    <div class="hd">Printing Canvas (beta)</div>
+    <div class="bd" style="text-align: left;">
+      <canvas id="printing_canvas" width="300" height "300"></canvas>
+    </div>
+  </div>
 
 </body>
 </html>

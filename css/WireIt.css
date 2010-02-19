@@ -4,8 +4,28 @@
 
 canvas.WireIt-Wire {
    position: absolute;
-   border: 0;
-   z-index: 0;
+   z-index: 2;
+   opacity: 0.60;
+   filter: alpha(opacity = 60);
+}
+
+/*label for above WireIt-Wires*/
+div.WireIt-Label-Box {
+  width: 80%;
+  display: table;
+  vertical-align: middle;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  z-index: 1;
+  white-space: pre;
+
+}
+div.WireIt-Label {
+  display: table-cell;
+  vertical-align: middle;
+  height: auto;
+  font-weight: bold;
 }
 
 canvas.WireIt-Wire-editing {

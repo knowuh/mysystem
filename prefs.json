@@ -1,0 +1,87 @@
+[
+
+  {
+    'xtype': 'AssignmentInformation',
+    'fields': 
+      {
+        'goal': 'You will learn how energy flows',
+        'more_info': 'Part of the energy is lost from the system each time'
+      }
+  },
+  {
+    'xtype' : 'PropEditorFieldLabels',
+    'labels' : {
+      'name': {
+          'label': 'label',
+          'type': 'textarea'
+      }
+    }
+  },
+  
+  {
+    'xtype': 'PropEditorArrows',
+    'arrows': {
+          '#490A3D': 'infrared radiation',
+          '#BD1550': 'thermal energy',
+          '#E97F02': 'solar radiation',
+          '#F8CA00': 'kinetic energy',
+          '#8A9B0F': 'light energy'
+    }
+  },
+  
+  {
+
+    'icon'        : "./images/At-Concord-Fall/Genecon_tn.png",
+    'image'       : "./images/At-Concord-Fall/Genecon_tn.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'Generator with a big name',
+                      'efficiency'  : 1
+                    }
+  },    
+  {
+    'icon'        : "./images/At-Concord-Fall/clay_red_tn.png",
+    'image'       : "./images/At-Concord-Fall/clay_red_tn.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'Clay',
+                      'energy'      : 100,
+                      'efficiency'  : 1
+                    }
+  },    
+  {
+    'icon'        : "./images/At-Concord-Fall/hand_tn.png",
+    'image'       : "./images/At-Concord-Fall/hand_tn.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'Hand',  
+                      'energy'      : 100,
+                      'efficiency'  : 1
+                    }
+  },    
+  {
+    'icon'        : "./images/At-Concord-Fall/lightbulb_tn.png",
+    'image'       : "./images/At-Concord-Fall/lightbulb_tn.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'Lightbulb',
+                      'energy'      : 100,
+                      'efficiency'  : 1
+                    }
+  },
+  {
+    'icon'        : "./images/world-transp.png",
+    'image'       : "./images/world-transp.png",
+    'xtype'       : "MySystemContainer",
+    'etype'       : 'source',
+    'fields'      : {
+                      'name'        : 'World',
+                      'energy'      : 100,
+                      'efficiency'  : 1
+                    }
+  },
+]

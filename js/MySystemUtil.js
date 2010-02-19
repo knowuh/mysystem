@@ -75,5 +75,32 @@
     };
   };
   
+  /**
+  * Wraps buffer to selected number of characters using string break char
+  * Modified from: http://phpjs.org/functions/wordwrap (License: MIT || GPL)
+  * @method wordWrap(m,b,c)
+  * @args 
+  *   wrap_width = how many characters to wrap at, 
+  *   break_character = character to use for line breaks.
+  *   cut_words = whether to allow splitting of words. (does this work)
+  *
+  */
+  String.prototype.wordWrap = function(wrap_width, break_character, cut_words){
+      var m = ((arguments.length >= 1) ? arguments[0] : 75   );
+      var b = ((arguments.length >= 3) ? arguments[1] : "\n" );    
+      var c = ((arguments.length >= 4) ? arguments[2] : false);
+    
+      var i, j, s, r = this.split("\n");
+      if(m > 0) for(i in r){
+          for(s = r[i], r[i] = ""; s.length > m;
+              j = c ? m : (j = s.substr(0, m).match(/\S*$/)).input.length - j[0].length
+              || m,
+              r[i] += s.substr(0, j) + ((s = s.substr(j)).length ? b : "")
+          );
+          r[i] += s;
+      }
+      return r.join("\n");
+  };
+  
   
 })();

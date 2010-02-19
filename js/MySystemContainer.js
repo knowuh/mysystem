@@ -31,29 +31,38 @@ MySystemContainer = function(options, layer) {
      });
      
     }
-   // Adds a handler for mousedown so we can change layers in our editor
+   // Adds a handler for mousedown so we can change layers in our edito
    YAHOO.util.Event.addListener(this.el, "dblclick", this.onDblClick, this, true);
-   YAHOO.util.Event.addListener(this.el, "mouseup", this.onMouseUp, this, true);
+   // YAHOO.util.Event.addListener(this.el, "mouseup", this.onMouseUp, this, true);
+   //YAHOO.util.Event.addListener(this.el, "click", this.onClick, this, true);
    this.setTitle(this.options.fields.name);
+   this.element = this.el;
 };
 
 
 YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   onMouseUp: function(source) {
+    // MySystemContainer.openPropEditorFor.fire(this);
+  },
+  onClick: function(source) {
     MySystemContainer.openPropEditorFor.fire(this);
   },
-  
   onDblClick: function(source) {
-    if (this.has_sub) {
-      MySystemContainer.openContextFor.fire(this);
-    }
+    // if (this.has_sub) {
+    //   MySystemContainer.openContextFor.fire(this);
+    // }
+    // else {
+      MySystemContainer.openPropEditorFor.fire(this);
+    // }
   },
   
   setTitle: function(newTitle) {
     if(newTitle) {
       var this_el = this.el
       var title_el = $(this_el).down('.title')
-      this.title = newTitle;
+      title_el.absolutize();
+      var wordWrapChars = 30;
+      this.title = newTitle.wordWrap(wordWrapChars, "\n");
       this.options.name = this.title;
       this.options.fields.name = this.title;
       if(!title_el) {
@@ -61,19 +70,23 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
         this_el.insert(title_el);
       }
       title_el.update(this.title);
+      var leftOffset = 0;
+      if (title_el.getWidth() > title_el.up().getWidth()) {
+        leftOffset = (title_el.getWidth() - title_el.up().getWidth())/2;
+      }
+      title_el.clonePosition(title_el.up(), {setTop: false, setLeft:true, setWidth: false, setHeight: false,offsetLeft:leftOffset});
     }
   },
   createTitle: function() {
-    return new Element('div', { 
-      'class': 'title' 
-    });
+    return new Element('div', {'class': 'title' });
   },
   render: function() {
+    debug("render being called");
     MySystemContainer.superclass.render.call(this);
     var this_el = this.el
     var title_el = $(this_el).down('.title') 
     if(!title_el) {
-      title_el = this.createTitle()
+      title_el = this.createTitle();
       this_el.insert(title_el);
       title_el.update(this.title);
     }
