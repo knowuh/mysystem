@@ -1,10 +1,30 @@
 // RAPHWIRE
 (function(){
 
+  ////// GLOBALS ///////////////////////////////////////////////////////////////   
+
+  var paper; // The Raphael Paper object
+
+
   ////// DEFAULTS //////////////////////////////////////////////////////////////   
   var defs = {
-    rightAngle: Math.PI / 2
-  }
+    
+    //##### MATH DEFAULTS #####//
+    rightAngle: Math.PI / 2,
+    
+    //##### ARROW DEFAULTS #####//
+    arrow: { 
+      
+      name: 'ArrowModule',
+      
+      // Arrow style
+      style: {
+        'stroke-width': 5,
+         stroke: 'red'
+      }
+    }
+   
+  };
   
   
   
@@ -22,6 +42,8 @@
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
   };
 
+
+
   ////// RAPHAEL ///////////////////////////////////////////////////////////////  
 
   // Accepts SVGData core objects
@@ -30,6 +52,10 @@
     for( var i in data ){
       for( var j in data[i] ){
         path += j;
+        /* TO ADD:
+             1) functionality for single var path commmands
+             2) inting, floating and dec-place limiting
+        */
         for( var k=0, l=data[i][j].length; k < l; k+=2 ){
           path+= data[i][j][k]+","+ data[i][j][k+1]+" ";
         }        
@@ -37,16 +63,60 @@
       };
     };
     return path;
-  }
+  };
 
 
   ////// ARROW-OBJECT //////////////////////////////////////////////////////////
-  var Arrow = function Arrow( props ){
-    mergeMembers( this, props );
-    this.calcPath();
+  var Arrow = function ArrowModule( props ){
+
+    // Copy Arrow defaults into this Arrow instance
+    mergeMembers( this, defs.arrow );       
+    
+    this.overloadFilter.apply( this, arguments );
+    
+    // Calculate the path of the arrow based on start[] end[] points passed
+    this.calcPath();  
+  
+    // Create Raphael object built from this instance of Arrow object
+    this.raphaelObject = paper.path( this.path );
+    
+    // Link back to arrow inside raphael object for easy access to object module
+    this.raphaelObject.module = this;
+    
+    // Attach set as an interface to this module on the  
+    this.raphaelObject.set = this.set;
+    
+    // Return the Raphael object complete with applied styles
+    return this.raphaelObject.attr( this.style );
+  
+  };  
+  
+  // Handle overloading for instancing with prop object or start/end-point numbers
+  Arrow.prototype.overloadFilter = function( props ){
+      
+    if( typeof props === 'object' ){
+
+      // Copy passed property arguments to new instance's member variables, ( will over-write copied defaults )
+      mergeMembers( this, props );
+
+    } else if ( typeof props === 'number' ){
+     
+      // Set the start and end points
+      this.start  = [ arguments[0], arguments[1] ];
+      this.end    = [ arguments[2], arguments[3] ];
+
+      // If a props object is passed as 5th argument, merge props to member vars
+      if( typeof arguments[5] === 'object' ){
+        mergeMembers( this, arguments[5] );
+      }
+    
+    }
+    
     return this;
+  
   };
   
+   
   // Calculate the path of the arrow
   Arrow.prototype.calcPath = function(){
       
@@ -87,25 +157,63 @@
     this.path = pathAssemblySuperCore( this.SVGData );
 
     return this;
+
+  };
+ 
+  // Re calculate and set the Arrow's path, called from the context of the Raphael Ojbect
+  Arrow.prototype.set = function( props ){
+    
+    // Merge any new properties, styles into the Arrow-module of the Raphael object
+    this.module.overloadFilter.apply( this.module, arguments );
+    
+    // Re-calculate the Arrow's path
+    this.module.calcPath();
+    
+    // Update the DOM attributes for the SVG object and return the Raphael instance
+    return this.attr({ path: this.module.path }).attr( this.module.style );
+
   };
 
+ 
  
   ////// TEST CODE /////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
   var init = function(){
     var paperElem = $('#paper')[0];  
     var width = $(paperElem).width(), height = $(paperElem).width();
-    var paper = new Raphael( paperElem, width, height );    
+    paper = new Raphael( paperElem, width, height );    
 
-    var myArrow = new Arrow({ start:[100,100], end:[500,100] });
-    
-    paper.path(myArrow.path);
+    var arrow = new Arrow(100,100,200,50);
+       
+    /////////
+    function attach(elem, type, fn) {
+      if (elem.addEventListener) {
+        elem.addEventListener(type, fn, false);
+      } else {
+        elem.attachEvent("on" + type, fn);
+      }
+    };
+
+    var mouseX = 0, mouseY = 0;
+    var curElement = document.getElementById('paper');
+      
+    attach(curElement, "mousemove", function(e) {
+      var scrollX = (window.scrollX !== null && typeof window.scrollX !== 'undefined') ? window.scrollX : window.pageXOffset;
+      var scrollY = (window.scrollY !== null && typeof window.scrollY !== 'undefined') ? window.scrollY : window.pageYOffset;
+      mouseX = e.clientX - curElement.offsetLeft + scrollX;
+      mouseY = e.clientY - curElement.offsetTop + scrollY;    
+
+      arrow.set(100,100,mouseX,mouseY);           
+
+    });
+  
+  
   };
   var loader = document.addEventListener( 'DOMContentLoaded', function(){ init() }, false );
   //////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
-
+  
 
   ////// MYOBJECTS /////////////////////////////////////////////////////////////
   // An array to store all the objects the students drage to the work-area
