@@ -38,6 +38,7 @@
     'className'   : "MySystemNote",
     'image'       : "./images/note.png",
     'name'        : 'Note',
+    'terminals'   : {},
     'fields'      : {
                       'content'     : '(write your note here)'
                     }

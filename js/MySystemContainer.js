@@ -42,18 +42,13 @@ MySystemContainer = function(options, layer) {
 
 YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   onMouseUp: function(source) {
-    // MySystemContainer.openPropEditorFor.fire(this);
+  
   },
   onClick: function(source) {
-    MySystemContainer.openPropEditorFor.fire(this);
+    
   },
   onDblClick: function(source) {
-    // if (this.has_sub) {
-    //   MySystemContainer.openContextFor.fire(this);
-    // }
-    // else {
-      MySystemContainer.openPropEditorFor.fire(this);
-    // }
+    MySystemContainer.openPropEditorFor.fire(this);
   },
   
   setTitle: function(newTitle) {
