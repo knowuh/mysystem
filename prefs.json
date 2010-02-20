@@ -13,6 +13,10 @@
       'name': {
           'label': 'label',
           'type': 'textarea'
+      },
+      'content': {
+          'label': 'note',
+          'type': 'textarea'
       }
     }
   },
@@ -29,13 +33,23 @@
   },
   
   {
-
+    'xtype'       : "MySystemNote",
+    'className'   : "MySystemNote",
+    'image'       : "./images/note.png",
+    'name'        : 'Note',
+    'terminals'   : {},
+    'fields'      : {
+                      'content'     : '(write your note here)'
+                    }
+  },
+  
+  {
     'icon'        : "./images/At-Concord-Fall/Genecon_tn.png",
     'image'       : "./images/At-Concord-Fall/Genecon_tn.png",
     'xtype'       : "MySystemContainer",
     'etype'       : 'source',
     'fields'      : {
-                      'name'        : 'Generator with a big name',
+                      'name'        : 'Generator',
                       'efficiency'  : 1
                     }
   },    

@@ -52,17 +52,22 @@
         onSuccess: function(rsp) {
           var _data = null;
           var modules = [];
+          var arrows = null;
           var labels = null;
           try {
             var _data = rsp.responseText.evalJSON();
             var modules = [];
             var labels = null;
             _data.each(function(item) {
-              if (item.xtype == 'MySystemContainer') {
+              if (item.xtype == 'MySystemContainer'
+              ||  item.xtype == 'MySystemNote') {
                 modules.push(item);
               }
               else if (item.xtype == 'PropEditorFieldLabels') {
                 labels = item.labels;
+              }
+              else if (item.xtype == 'PropEditorArrows') {
+                arrows = item.arrows;
               }
               else if (item.xtype == 'AssignmentInformation') {
                 self.loadAssignmentInfo(item);
@@ -77,6 +82,9 @@
           self.setEditor();
           if (labels) {
             self.editor.propEditor.setFieldLabelMap(labels);
+          }
+          if (arrows) {
+            self.editor.propEditor.setArrows(arrows);            
           }
           self.loaded = true;
         },
