@@ -92,7 +92,7 @@
     },
     
     loadAssignmentInfo : function(item) {
-      $('goal').update(item.fields.goal);
+      $('goal_panel_text').update(item.fields.goal);
     },
     
     /**
