@@ -27,6 +27,7 @@ require 'spec/rake/spectask'
   js/MySystemData.js  
   js/MySystemEditor.js  
   js/MySystem.js
+  js/GoalPanel.js
 }
 
 @wire_it = %w{
