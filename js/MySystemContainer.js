@@ -42,18 +42,13 @@ MySystemContainer = function(options, layer) {
 
 YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   onMouseUp: function(source) {
-    // MySystemContainer.openPropEditorFor.fire(this);
+  
   },
   onClick: function(source) {
-    MySystemContainer.openPropEditorFor.fire(this);
+    
   },
   onDblClick: function(source) {
-    // if (this.has_sub) {
-    //   MySystemContainer.openContextFor.fire(this);
-    // }
-    // else {
-      MySystemContainer.openPropEditorFor.fire(this);
-    // }
+    MySystemContainer.openPropEditorFor.fire(this);
   },
   
   setTitle: function(newTitle) {
@@ -81,7 +76,6 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     return new Element('div', {'class': 'title' });
   },
   render: function() {
-    debug("render being called");
     MySystemContainer.superclass.render.call(this);
     var this_el = this.el
     var title_el = $(this_el).down('.title') 
@@ -93,7 +87,6 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     
   },
   updateFields: function() {
-    debug(($H(this.options.fields).inspect()));
     this.setTitle(this.options.fields.name || this.options.name );
   },
   

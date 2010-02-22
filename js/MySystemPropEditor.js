@@ -12,8 +12,14 @@ MySystemPropEditor = function(options) {
    this.selected_color = "#000000";
    this.formTable = $('form_table');
    
-   var hexColors = [ '#490A3D', '#BD1550', '#E97F02', '#F8CA00', '#8A9B0F'];
-   this.setColorPallet(hexColors);
+   var hexColors = { 
+     '#490A3D' : '', 
+     '#BD1550' : '', 
+     '#E97F02' : '', 
+     '#F8CA00' : '', 
+     '#8A9B0F' : ''
+    };
+   this.setArrows(hexColors);
   
    var self =  this;
    this.dom_entity.observe('keydown', function(e){
@@ -70,12 +76,8 @@ MySystemPropEditor.prototype = {
     }.bind(this));
     
 
-    if (this.node.title) {
-      $('prop_name').update("edit details");
-    }
-    else {
-      $('prop_name').update("edit energy flow");
-    }
+    this.setEditorName(this.node);
+    
     $('prop_form_closer').observe('mouseover',function(e) {
       self.opacity(0.99,'prop_form_closer');
     });
@@ -87,6 +89,20 @@ MySystemPropEditor.prototype = {
     });
   },
   
+  setEditorName: function(node) {
+    var xtype = node.xtype || node.options.xtype || 'default';
+    var domName = 'prop_name';
+    var nodeTypeMap = {
+      'default'           : 'Poperties',
+      'MySystemNote'      : 'Note Info',
+      'MySystemContainer' : 'Information',
+      'WireIt-Wire'       : 'Energy Flow Information'
+    };
+    var domThing = $(domName);
+    if (domThing) {
+      domThing.update(nodeTypeMap[xtype]);
+    }
+  },
   
   showField: function(field_name,value) {
     
@@ -124,13 +140,21 @@ MySystemPropEditor.prototype = {
   },
   
   
-  setColorPallet: function(hexColors) {
+  setArrows: function(arrows) {
     var pallet = $('palette');
-    hexColors.each(function (c) {
+    pallet.update('<h4>Flow Type</h4>');
+    var arrow = null;
+    for (arrow in arrows) {
       var color_div = new Element('div', {'class': 'pallet_element' });
-      color_div.setStyle({backgroundColor: c});
+
+      color_div.setStyle({backgroundColor: arrow});
+      if(arrows[arrow]) {
+        color_div.setStyle({'width' : 'auto'});
+        color_div.setStyle({'color' : 'white'});
+        color_div.update(arrows[arrow]);
+      }
       pallet.insert({'bottom': color_div});
-    });
+    }
   },
   
   opacity: function(opacity, dom_id) {
@@ -160,7 +184,9 @@ MySystemPropEditor.prototype = {
     var theForm = $(this.formName);
     for (var name in this.fieldLabelMap) {
       try {
-        this.node.options.fields[name] = theForm[name].getValue();
+        if (this.node.options.fields[name]) {
+          this.node.options.fields[name] = theForm[name].getValue();
+        }
       }
       catch(e) {
         debug("unable to save property " + name + " for " + this.node);
@@ -224,15 +250,15 @@ MySystemPropEditor.prototype = {
     this.updateFields();
 
     this.selected_color = this.node.options.fields.color || "color2";
-    var selected_pallete_item = $(this.selected_color);
-    if (selected_pallete_item) {
+    var selected_palette_item = $(this.selected_color);
+    if (selected_palette_item) {
       this.deselect();
-      $(selected_pallete_item).addClassName('selected');
+      $(selected_palette_item).addClassName('selected');
     }
 
     
     this.positionEditor();
-    this.showPallet();
+    this.showPalette();
     this.positionIcon();
     this.enableClickAway();
     this.form_observer = new Form.Observer($(this.formName),0.3,this.saveValues.bind(this));
@@ -261,7 +287,7 @@ MySystemPropEditor.prototype = {
     }
   },
   
-  showPallet: function() {
+  showPalette: function() {
     if (this.node.options.fields.color) {
         $('palette').show();
         $('palette').observe('click', function (event) {

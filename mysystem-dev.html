@@ -57,10 +57,11 @@
   <script type="text/javascript" src="js/MySystemPropEditor.js"></script>
   <script type="text/javascript" src="js/MySystemWireLabel.js"></script>
   <script type="text/javascript" src="js/MySystemContainer.js"></script>
+  <script type="text/javascript" src="js/MySystemNote.js"></script>
   <script type="text/javascript" src="js/MySystemData.js"></script>
   <script type="text/javascript" src="js/MySystemEditor.js"></script>
   <script type="text/javascript" src="js/MySystem.js"></script>
-  
+  <script type="text/javascript" src="js/GoalPanel.js"></script>
 
   <!-- My Engine -->
   <script type="text/javascript" src="engine/mysystem-engine.js"></script>
@@ -100,31 +101,34 @@
 
   </script>
 
+  <div id="goal_panel">
+    <span id="goal_panel_text"></span>
+    <img id="goal_panel_icon"/>
+  </div>
 
   <div id="editing_window">
     <div id="top">
-      <div class="logo">MySystem Demo</a></div>
+      <div class="logo">MySystem</div>
       <div id="toolbar"></div>
       <div class="topright">
-        <span id="goal">Goal</span>
       </div>
     </div>
-
 
     <div id="left">
     </div>
   
   
     <div id="prop_form" display="hidden">
-      <div id="prop_form_closer"></div>
+      <div id="prop_bar">
+        <div id="prop_form_closer"></div>
+        <h4><span id="prop_name"></span></h4>
+      </div>
       <div id="icon_spot"></div>
-      <h3><span id="prop_name"></span></h3>
+
       <form id="prop_form_form" name="prop_form_form">
         <table id="prop_fields"></table>
       </form>
-      <div id="palette">
-        <h3>arrow color:</h3>
-      </div>
+      <div id="palette"></div>
     </div>
 
     <div id="center"></div>

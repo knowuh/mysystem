@@ -22,11 +22,13 @@ require 'spec/rake/spectask'
   js/ds/MocDS.js
   js/ds/CookieDS.js
   js/MySystemPropEditor.js
-  js/MySystemWireLabel.js  
-  js/MySystemContainer.js  
+  js/MySystemWireLabel.js
+  js/MySystemContainer.js
+  js/MySystemNote.js
   js/MySystemData.js  
   js/MySystemEditor.js  
   js/MySystem.js
+  js/GoalPanel.js
 }
 
 @wire_it = %w{

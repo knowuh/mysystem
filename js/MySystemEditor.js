@@ -124,6 +124,9 @@
         // Render buttons
         // this.enableLoadAndSave();
         this.renderButtons();
+
+        this.goalPanel = new GoalPanel('goal_panel', 'goal_panel_icon');
+        this.goalPanel.render();
     };
 
     MySystemEditor.prototype = {
@@ -359,12 +362,12 @@
                 className: "WiringEditor-module"
             });
 
-            if (module.icon) {
+            if (module.image) {
                 var div = WireIt.cn('div', {
                     className: "WiringEditor-icon-module"
                 });
                 div.appendChild(WireIt.cn('img', {
-                    src: module.icon
+                    src: module.image
                 }));
             } else {
                 var div = WireIt.cn('div', {

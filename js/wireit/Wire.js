@@ -63,6 +63,7 @@ WireIt.Wire = function( terminal1, terminal2, parentEl, options) {
    // Call addWire on both terminals
    this.terminal1.addWire(this);
    this.terminal2.addWire(this);
+   this.xtype = "WireIt-Wire";
    if (this.is_connected()) {
      this.redraw();
      this.openPropEditor();
@@ -795,11 +796,9 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     * @param {Integer} y top position of the mouse (relative to the canvas)
     */
    onWireClick: function(x,y) {
-     debug('clicked');
    },
 
    onWireDblClick: function(x,y) {
- 	  debug('dbl-clicked');
     this.openPropEditor();
    },
    

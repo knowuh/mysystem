@@ -14,9 +14,39 @@ div.WireIt-ImageContainer div.title{
   filter:alpha(opacity=50);
 	z-index: 2000;
 }
-// huh?
+
 div.WireIt-Container div.inputEx-Group div.inputEx-label {
 	width: auto;
+}
+
+div.MySystemNote {
+  width: auto;
+  height: auto;
+  min-width: 100px;
+  min-height: 100px;
+  display: block;
+  background-color: white;
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  filter:alpha(opacity=80);
+  position: absolute;
+  border: 2px solid  #DDDDAA;
+}
+
+div.content {
+  display: block;
+  position: absolute;
+  clear: both;
+  width: auto;
+  margin: 4px;
+  margin-top: 30px;
+  margin-bottom: 2px;
+  top: 1em;
+  bottom: 1em;
+  text-align: top;
+  vertical-align: top;
+  white-space: pre-wrap;
+  overflow: hidden;
 }
 
 div.inputEx-TypeField-PropertiesPanel {
@@ -110,6 +140,17 @@ div.title {
  text-align: center;
 }
 
+#prop_bar {
+  display: block;
+  float: left;
+  width: 100%;
+  height: auto;
+  background-color: #3366CC;
+  color: white;
+  margin: 0px;
+  margin-bottom: 1em;
+}
+
 #form_table tr td {
  border: none;
  vertical-align: top;
@@ -130,17 +171,21 @@ div.title {
   width: 20px;
   height: 20px;
   clear: none;
-  border: 1px solid gray;
+  border: 2px solid white;
   margin: 2px;
   padding: 0px;
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-left: 2em;
   float: left;
+  cursor: pointer;
 }
 
 #layerMap {
   display: none;
 }
 .selected {
-  border: 1px solid #3366CC; !important;
+  border: 2px solid #3366CC; !important;
 }
 
 
