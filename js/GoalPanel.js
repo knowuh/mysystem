@@ -19,6 +19,7 @@
       else {
         self.collapse();
       }
+      event.stop();
     });
     
     this.expand();
