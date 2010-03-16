@@ -115,7 +115,7 @@ MySystemPropEditor.prototype = {
       var style = this.fieldLabelMap[field_name].style
       var input;
       if (type =='textarea') {
-        input = new Element('textarea', { 'name': field_name + 'asdasd', 'id': field_name});
+        input = new Element('textarea', { 'name': field_name, 'id': field_name});
         input.insert({'bottom': value});
       }
       else {
