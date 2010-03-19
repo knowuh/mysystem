@@ -30,7 +30,8 @@ YAHOO.extend(WireIt.util.DD, YAHOO.util.DD, {
     * @method onDrag
     */
    onDrag: function(e) {
-   
+
+      // Contrain to edges so that nodes do not become lost/wedged outside of the window : Story 2810117
       if(this._domRef.offsetTop<0){
         this._domRef.style.top=0;
       }
