@@ -183,6 +183,7 @@ WireIt.Container.prototype = {
       Event.addListener(this.el, "mousedown", this.onMouseDown, this, true);
    
       if(this.options.ddHandle) {
+
          // Create the drag/drop handle
       	this.ddHandle = WireIt.cn('div', {className: this.options.ddHandleClassName});
       	this.el.appendChild(this.ddHandle);

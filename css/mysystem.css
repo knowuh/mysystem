@@ -25,7 +25,7 @@ div.MySystemNote {
   min-width: 100px;
   min-height: 100px;
   display: block;
-  background-color: white;
+  background:#fff url(../images/icons/resize.gif) no-repeat bottom right;
   opacity: 0.8;
   -moz-opacity: 0.8;
   filter:alpha(opacity=80);
