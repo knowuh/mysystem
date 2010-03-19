@@ -30,6 +30,14 @@ YAHOO.extend(WireIt.util.DD, YAHOO.util.DD, {
     * @method onDrag
     */
    onDrag: function(e) {
+   
+      if(this._domRef.offsetTop<0){
+        this._domRef.style.top=0;
+      }
+      if(this._domRef.offsetLeft<0){
+        this._domRef.style.left=0;
+      }
+
       // Make sure terminalList is an array
       var terminalList = YAHOO.lang.isArray(this._WireItTerminals) ? this._WireItTerminals : (this._WireItTerminals.isWireItTerminal ? [this._WireItTerminals] : []);
       // Redraw all the wires
