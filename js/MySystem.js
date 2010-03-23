@@ -71,6 +71,13 @@
         try {
           
           var _data = JSON.parse(jsonString);
+          
+          // Look for an object named "modules".
+          // if present we are being loaded from wise4
+          if (typeof _data.modules != "undefined") {
+            _data = _data.modules;
+          }
+          
           var modules = [];
           var labels = null;
           _data.each(function(item) {
