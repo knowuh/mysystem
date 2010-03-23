@@ -39,7 +39,7 @@
         xmlhttp.open('PUT', post_to, false);
         xmlhttp.send(this.data);
         this.readKey = this.writeKey;
-        $('readKey').update("Your Key:" + this.readKey);
+        // $('readKey').update("Your Key:" + this.readKey);
         debug("readKey written: " + this.readKey);
     },
     
