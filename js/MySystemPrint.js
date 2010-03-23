@@ -361,11 +361,12 @@
     this.sizeChangeDetector = function() {
       var width = self.container.getWidth();
       var height = self.container.getHeight();
+      debug("calling sizeChange detector");
       if (width != self.width || height != self.height) {
         self.redraw();
       }
     };
-    setInterval(self.sizeChangeDetector, 1150);
+    this.redrawInterval = setInterval(self.sizeChangeDetector, 1150);
 
     this.nodes.each(function(node) {
       self.drawNode(node);
@@ -470,6 +471,10 @@
   
   MySystemPrint.prototype.redraw = function() {
     var container = $(this.domId);
+    if (typeof container == "undefined" || container == null) {
+      clearInterval(this.redrawInterval);
+      return;
+    }
     var width = container.getWidth();
     var height = container.getHeight();
     var self = this;
