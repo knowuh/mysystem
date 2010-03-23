@@ -2,7 +2,9 @@
 (function(){
   
   this.MySystem = function( moduleUrl ){ 
-    this.init( moduleUrl );
+    if (moduleUrl != null) { 
+      this.init( moduleUrl );
+    }
     this.interceptKeys();
   };
   
@@ -31,6 +33,7 @@
         }
       });
     },
+    
     setEditor: function(_editor) {
       debug("new editor being set");
       if (_editor) {  
@@ -94,6 +97,17 @@
       });
     },
     
+    loadModulesFromJSON: function(jsonString) {
+      var self = this;
+      debug("calling loadModulesFromJSON:" + jsonString);
+      var jsonObj = JSON.parse(jsonString);
+      var _data = jsonObj.modules;
+      debug("data: " + _data);
+      self.data = new MySystemData();
+      self.data.setData(_data,[],true);
+      self.setEditor();
+    },
+      
     loadModules: function(modules) {
       this.data = new MySystemData();
       this.data.setData(modules, [], true);
