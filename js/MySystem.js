@@ -53,43 +53,7 @@
         asynchronous: false,
         method: 'GET',
         onSuccess: function(rsp) {
-          var _data = null;
-          var modules = [];
-          var arrows = null;
-          var labels = null;
-          try {
-            var _data = rsp.responseText.evalJSON();
-            var modules = [];
-            var labels = null;
-            _data.each(function(item) {
-              if (item.xtype == 'MySystemContainer'
-              ||  item.xtype == 'MySystemNote') {
-                modules.push(item);
-              }
-              else if (item.xtype == 'PropEditorFieldLabels') {
-                labels = item.labels;
-              }
-              else if (item.xtype == 'PropEditorArrows') {
-                arrows = item.arrows;
-              }
-              else if (item.xtype == 'AssignmentInformation') {
-                self.loadAssignmentInfo(item);
-              }
-            });
-          }
-          catch(exception) {
-            debug("unable to load / read file: " + filename);
-            debug(exception);
-          }
-          self.loadModules(modules);
-          self.setEditor();
-          if (labels) {
-            self.editor.propEditor.setFieldLabelMap(labels);
-          }
-          if (arrows) {
-            self.editor.propEditor.setArrows(arrows);            
-          }
-          self.loaded = true;
+          self.loadModulesFromJSON(rsp.responseText);
         },
         onFailure: function(req,err) {
           debug("failed!");
@@ -98,15 +62,57 @@
     },
     
     loadModulesFromJSON: function(jsonString) {
-      var self = this;
-      debug("calling loadModulesFromJSON:" + jsonString);
-      var jsonObj = JSON.parse(jsonString);
-      var _data = jsonObj.modules;
-      debug("data: " + _data);
-      self.data = new MySystemData();
-      self.data.setData(_data,[],true);
-      self.setEditor();
+        debug("calling loadModulesFromJSON:" + jsonString);
+        var _data = null;
+        var modules = [];
+        var arrows = null;
+        var labels = null;
+        var self = this;
+        try {
+          
+          var _data = JSON.parse(jsonString);
+          var modules = [];
+          var labels = null;
+          _data.each(function(item) {
+            if (item.xtype == 'MySystemContainer'
+            ||  item.xtype == 'MySystemNote') {
+              modules.push(item);
+            }
+            else if (item.xtype == 'PropEditorFieldLabels') {
+              labels = item.labels;
+            }
+            else if (item.xtype == 'PropEditorArrows') {
+              arrows = item.arrows;
+            }
+            else if (item.xtype == 'AssignmentInformation') {
+              self.loadAssignmentInfo(item);
+            }
+          });
+        }
+        catch(exception) {
+          debug("unable to load / read file: " + filename);
+          debug(exception);
+        }
+        self.loadModules(modules);
+        self.setEditor();
+        if (labels) {
+          self.editor.propEditor.setFieldLabelMap(labels);
+        }
+        if (arrows) {
+          self.editor.propEditor.setArrows(arrows);            
+        }
+        self.loaded = true;
     },
+    // loadModulesFromJSON: function(jsonString) {
+    //   var self = this;
+    //   debug("calling loadModulesFromJSON:" + jsonString);
+    //   var jsonObj = JSON.parse(jsonString);
+    //   var _data = jsonObj.modules;
+    //   debug("data: " + _data);
+    //   self.data = new MySystemData();
+    //   self.data.setData(_data,[],true);
+    //   self.setEditor();
+    // },
       
     loadModules: function(modules) {
       this.data = new MySystemData();
