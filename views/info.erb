@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>info</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Noah Paessel">
+	<!-- Date: 2009-08-19 -->
+</head>
+<body>
+  Whats up here? in <strong><%= RUBY_PLATFORM %></strong> land?
+  <TABLE width="50%">
+  <% @env.keys.each do |key| %>
+    <TR>
+      <td width="%50"><%= key %></td>
+      <td><%= @env[key] %></td>
+    </TR>
+  <% end %>
+  </TABLE>
+</body>
+</html>

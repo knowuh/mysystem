@@ -1,3 +1,12 @@
+h1. Overview
+
+This project consists of two components: MySystem and the Sinatra app. MySystem is
+the core product that described below in the section "MySystem", and it resides
+in the "public" folder. The whole thing is a sinatra app (called MySystem-Sinatra here on)
+that gets deployed to the Google App Engine. 
+
+<hr/>
+
 h1. MySystem
 
 Part of the CLEAR project, MySystem is a system diagraming tool. Part of the goal is to be a light-weight javascript
@@ -7,15 +16,13 @@ See the basecamp docs for the project description for "CLEAR":http://concordcons
 See Alex' Narratives in "this spreadsheet":http://concordconsortium.basecamphq.com/projects/2939067/file/30061007/CLEAR%20Narrative%20Linking%205_28.xls
 
 
-h2. Dependencies
+h3. Dependencies
 
 Based on "WireIt":http://http://javascript.neyric.com/wireit/
 Which uses "YUI":http://developer.yahoo.com/yui/
 
 (note: that currently all dependent libraries are included in this repo, and thats not good....)
 (note: We are working on reducing dependancies on these libraries.)
-
-h2. Developer notes:
 
 h3. Building:
 
@@ -38,7 +45,7 @@ All test can be run by opening ./test/spec.dev.html in a browser.
 After you have built the dist directory, you can run test on the dist opening ./test/spec.dist.html.
 
 
-h2. Todo
+h3. Todo
 
 # authorable pallet of icons / node types.
 # decouple view from models
@@ -50,3 +57,30 @@ h2. Todo
 # Clean up dependencies on YUI if possible.
 # restructure this repository
 # ?? more!
+
+<hr/>
+
+h1. MySystem-Sinatra
+
+This is a simple server container / backend for the mysystem pre-prototype demo.
+It uses google app engine, and DataMapper.
+
+
+h3. Dependencies
+
+Uses "Google App Engine":http://rails-primer.appspot.com/  Gem: 
+sudo gem install google-appengine
+
+Uses "DataMapper":http://datamapper.org/
+
+
+h3. Info
+
+Gems installed by editing Gemfile and running 'appcfg.rb bundle .' are checked into github. (these gems are local in ./.gems/gems/)
+
+# install the google-appengine gem : sudo gem install google-appengine
+# Follow other instructions at http://code.google.com/p/appengine-jruby/wiki/GettingStarted
+# try out the app with ruby ./app.rb  or at the console with irb require 'config'
+# run in developer mode with "dev_appserver.rb ." (intsalled with google-appengine gem)
+# deploy the application with "appcfg.rb update ."
+# the application will be available at http://ccmysystem.appspot.com/mysystem.html
