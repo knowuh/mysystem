@@ -16,7 +16,24 @@ See the basecamp docs for the project description for "CLEAR":http://concordcons
 See Alex' Narratives in "this spreadsheet":http://concordconsortium.basecamphq.com/projects/2939067/file/30061007/CLEAR%20Narrative%20Linking%205_28.xls
 
 
-h3. Dependencies
+
+h3. Ruby & Gem dependencies
+
+The application uses bundler to manage gem dependencies. This is required to run on googles app engine.  
+You can also run sinatra locally using the bundled gems using 
+<code><pre>
+  bundler exec ruby app.rb
+</pre></code>
+
+You can also setup a gemset using rvm
+<code><pre>
+  rvm use <your favorite ruby version>
+  rvm gemset create mysystem
+  rvm gemset use mysystem
+  rvm gemset import mysystem.gems
+</pre></code>
+
+h3. Javascript Dependencies
 
 Based on "WireIt":http://http://javascript.neyric.com/wireit/
 Which uses "YUI":http://developer.yahoo.com/yui/
