@@ -11,6 +11,8 @@ end
 
 Then /^(?:|I )should see "([^\"]*)" on the screen(?: within "([^\"]*)")?$/ do |text, selector|
   with_scope(selector) do
-    page.find(:xpath, "//*[contains(text(), '#{text}')]").should be_visible
+    elem = page.find(:xpath, "//*[contains(text(), '#{text}')]")
+    elem.should_not == nil
+    elem.should be_visible
   end
 end
