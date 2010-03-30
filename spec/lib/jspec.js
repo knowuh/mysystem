@@ -1,20 +1,21 @@
 
 // JSpec - Core - Copyright TJ Holowaychuk <tj@vision-media.ca> (MIT Licensed)
 
-(function(){
+;(function(){
 
   JSpec = {
-
-    version   : '2.8.4',
+    version   : '4.1.0',
+    assert    : true,
     cache     : {},
     suites    : [],
     modules   : [],
     allSuites : [],
+		sharedBehaviors: [],
     matchers  : {},
     stubbed   : [],
+    options   : {},
     request   : 'XMLHttpRequest' in this ? XMLHttpRequest : null,
-    stats     : { specs : 0, assertions : 0, failures : 0, passes : 0, specsFinished : 0, suitesFinished : 0 },
-    options   : { profile : false },
+    stats     : { specs: 0, assertions: 0, failures: 0, passes: 0, specsFinished: 0, suitesFinished: 0 },
 
     /**
      * Default context in which bodies are evaluated.
@@ -51,15 +52,12 @@
       },
       
       /**
-       * Load fixture at _path_. This utility function
-       * supplies the means to resolve, and cache fixture contents
-       * via the DOM or Rhino.
+       * Load fixture at _path_.
        *
        * Fixtures are resolved as:
        *
        *  - <path>
-       *  - fixtures/<path>
-       *  - fixtures/<path>.html
+       *  - <path>.html
        *
        * @param  {string} path
        * @return {string}
@@ -69,21 +67,82 @@
       fixture : function(path) {
         if (JSpec.cache[path]) return JSpec.cache[path]
         return JSpec.cache[path] = 
-          JSpec.tryLoading(path) ||
-          JSpec.tryLoading('fixtures/' + path) ||
-          JSpec.tryLoading('fixtures/' + path + '.html') ||
-          JSpec.tryLoading('spec/' + path) ||
-          JSpec.tryLoading('spec/fixtures/' + path) ||
-          JSpec.tryLoading('spec/fixtures/' + path + '.html')
+          JSpec.tryLoading(JSpec.options.fixturePath + '/' + path) ||
+          JSpec.tryLoading(JSpec.options.fixturePath + '/' + path + '.html')
+      },
+      
+      /**
+       * Load json fixture at _path_.
+       *
+       * JSON fixtures are resolved as:
+       *
+       *  - <path>
+       *  - <path>.json
+       *
+       * @param  {string} path
+       * @return {object}
+       * @api public
+       */
+      
+      json_fixture: function(path) {
+        if (!JSpec.cache['json:' + path])
+          JSpec.cache['json:' + path] =
+            JSpec.tryLoading(JSpec.options.fixturePath + '/' + path) ||
+            JSpec.tryLoading(JSpec.options.fixturePath + '/' + path + '.json')
+        try {
+          return eval('(' + JSpec.cache['json:' + path] + ')')
+        } catch (e) {
+          throw 'json_fixture("' + path + '"): ' + e
+        }
       }
     },
 
     // --- Objects
     
-    formatters : {
+    reporters : {
+      
+      /**
+       * Report to server.
+       * 
+       * Options:
+       *  - uri           specific uri to report to.
+       *  - verbose       weither or not to output messages
+       *  - failuresOnly  output failure messages only
+       *
+       * @api public
+       */
+      
+      Server : function(results, options) {
+        var uri = options.uri || 'http://' + window.location.host + '/results'
+        JSpec.post(uri, {
+          stats: JSpec.stats,
+          options: options,
+          results: map(results.allSuites, function(suite) {
+            if (suite.isExecutable())
+              return {
+                description: suite.description,
+                specs: map(suite.specs, function(spec) {
+                  return {
+                    description: spec.description,
+                    message: !spec.passed() ? spec.failure().message : null,
+                    status: spec.requiresImplementation() ? 'pending' :
+                              spec.passed() ? 'pass' :
+                                'fail',
+                    assertions: map(spec.assertions, function(assertion){
+                      return {
+                        passed: assertion.passed  
+                      }
+                    })
+                  }
+                })
+              }
+          })
+        })
+  			if ('close' in main) main.close()
+      },
 
       /**
-       * Default formatter, outputting to the DOM.
+       * Default reporter, outputting to the DOM.
        *
        * Options:
        *   - reportToId    id of element to output reports to, defaults to 'jspec'
@@ -93,150 +152,97 @@
        */
 
       DOM : function(results, options) {
-        var id = option('reportToId') || 'jspec'
-        var report = document.getElementById(id)
-        var failuresOnly = option('failuresOnly')
-        var classes = results.stats.failures ? 'has-failures' : ''
+        var id = option('reportToId') || 'jspec',
+            report = document.getElementById(id),
+            failuresOnly = option('failuresOnly'),
+            classes = results.stats.failures ? 'has-failures' : ''
         if (!report) throw 'JSpec requires the element #' + id + ' to output its reports'
-
-        var markup =
-        '<div id="jspec-report" class="' + classes + '"><div class="heading">           \
-        <span class="passes">Passes: <em>' + results.stats.passes + '</em></span>       \
-        <span class="failures">Failures: <em>' + results.stats.failures + '</em></span> \
-        </div><table class="suites">'
         
-        bodyContents = function(body) {
+        function bodyContents(body) {
           return JSpec.
             escape(JSpec.contentsOf(body)).
             replace(/^ */gm, function(a){ return (new Array(Math.round(a.length / 3))).join(' ') }).
-            replace("\n", '<br/>')
+            replace(/\r\n|\r|\n/gm, '<br/>')
         }
         
-        renderSuite = function(suite) {
+        report.innerHTML = '<div id="jspec-report" class="' + classes + '"><div class="heading"> \
+        <span class="passes">Passes: <em>' + results.stats.passes + '</em></span>                \
+        <span class="failures">Failures: <em>' + results.stats.failures + '</em></span>          \
+        <span class="passes">Duration: <em>' + results.duration + '</em> ms</span>          \
+        </div><table class="suites">' + map(results.allSuites, function(suite) {
           var displaySuite = failuresOnly ? suite.ran && !suite.passed() : suite.ran
-          if (displaySuite && suite.hasSpecs()) {
-            markup += '<tr class="description"><td colspan="2">' + escape(suite.description) + '</td></tr>'
-            each(suite.specs, function(i, spec){
-              markup += '<tr class="' + (i % 2 ? 'odd' : 'even') + '">'
-              if (spec.requiresImplementation())
-                markup += '<td class="requires-implementation" colspan="2">' + escape(spec.description) + '</td>'
-              else if (spec.passed() && !failuresOnly)
-                markup += '<td class="pass">' + escape(spec.description)+ '</td><td>' + spec.assertionsGraph() + '</td>'
-              else if(!spec.passed())
-                markup += '<td class="fail">' + escape(spec.description) + ' <em>' + spec.failure().message + '</em>' + '</td><td>' + spec.assertionsGraph() + '</td>'
-              markup += '<tr class="body"><td colspan="2"><pre>' + bodyContents(spec.body) + '</pre></td></tr>'
-            })
-            markup += '</tr>'
-          }
-        }  
-        
-        renderSuites = function(suites) {
-          each(suites, function(suite){
-            renderSuite(suite)
-            if (suite.hasSuites()) renderSuites(suite.suites)
-          })
-        }
-        
-        renderSuites(results.suites)
-        markup += '</table></div>'
-        report.innerHTML = markup
+          if (displaySuite && suite.isExecutable())
+            return '<tr class="description"><td colspan="2">' + escape(suite.description) + '</td></tr>' +
+              map(suite.specs, function(i, spec) {
+                return '<tr class="' + (i % 2 ? 'odd' : 'even') + '">' +
+                  (spec.requiresImplementation() ?
+                    '<td class="requires-implementation" colspan="2">' + escape(spec.description) + '</td>' :
+                      (spec.passed() && !failuresOnly) ?
+                        '<td class="pass">' + escape(spec.description)+ '</td><td>' + spec.assertionsGraph() + '</td>' :
+                          !spec.passed() ?
+                            '<td class="fail">' + escape(spec.description) + 
+  													map(spec.failures(), function(a){ return '<em>' + escape(a.message) + '</em>' }).join('') +
+ 														'</td><td>' + spec.assertionsGraph() + '</td>' :
+                              '') +
+                  '<tr class="body"><td colspan="2"><pre>' + bodyContents(spec.body) + '</pre></td></tr>'
+              }).join('') + '</tr>'
+        }).join('') + '</table></div>'
       },
       
       /**
-       * Terminal formatter.
+       * Terminal reporter.
        *
        * @api public
        */
        
        Terminal : function(results, options) {
-         failuresOnly = option('failuresOnly')
+         var failuresOnly = option('failuresOnly')
          print(color("\n Passes: ", 'bold') + color(results.stats.passes, 'green') + 
-              color(" Failures: ", 'bold') + color(results.stats.failures, 'red') + "\n")
+               color(" Failures: ", 'bold') + color(results.stats.failures, 'red') +
+               color(" Duration: ", 'bold') + color(results.duration, 'green') + " ms \n")
               
-         indent = function(string) {
+         function indent(string) {
            return string.replace(/^(.)/gm, '  $1')
          }
-
-         renderSuite = function(suite) {
-           displaySuite = failuresOnly ? suite.ran && !suite.passed() : suite.ran
-           if (displaySuite && suite.hasSpecs()) {
-             print(color(' ' + suite.description, 'bold'))
-             each(suite.specs, function(spec){
-               var assertionsGraph = inject(spec.assertions, '', function(graph, assertion){
-                 return graph + color('.', assertion.passed ? 'green' : 'red')
-               })
-               if (spec.requiresImplementation())
-                 print(color('  ' + spec.description, 'blue') + assertionsGraph)
-               else if (spec.passed() && !failuresOnly)
-                 print(color('  ' + spec.description, 'green') + assertionsGraph)
-               else if (!spec.passed())
-                 print(color('  ' + spec.description, 'red') + assertionsGraph + 
-                       "\n" + indent(spec.failure().message) + "\n")
-             })
-             print("")
-           }          
-         }
-
-         renderSuites = function(suites) {
-           each(suites, function(suite){
-             renderSuite(suite)
-             if (suite.hasSuites()) renderSuites(suite.suites)
-           })
-         }
-
-         renderSuites(results.suites)
-       },
-
-      /**
-       * Console formatter, tested with Firebug and Safari 4.
-       *
-       * @api public
-       */
-
-      Console : function(results, options) {
-        console.log('')
-        console.log('Passes: ' + results.stats.passes + ' Failures: ' + results.stats.failures)
-        
-        renderSuite = function(suite) {
-          if (suite.ran) {
-            console.group(suite.description)
-            each(suite.specs, function(spec){
-              var assertionCount = spec.assertions.length + ':'
-              if (spec.requiresImplementation())
-                console.warn(spec.description)
-              else if (spec.passed())
-                console.log(assertionCount + ' ' + spec.description)
-              else 
-                console.error(assertionCount + ' ' + spec.description + ', ' + spec.failure().message)
-            })
-            console.groupEnd()
-          }          
-        }
-        
-        renderSuites = function(suites) {
-          each(suites, function(suite){
-            renderSuite(suite)
-            if (suite.hasSuites()) renderSuites(suite.suites)
-          })
-        }
-        
-        renderSuites(results.suites)
-      }
+         
+         each(results.allSuites, function(suite) {
+           var displaySuite = failuresOnly ? suite.ran && !suite.passed() : suite.ran
+            if (displaySuite && suite.isExecutable()) {
+              print(color(' ' + suite.description, 'bold'))
+              each(suite.specs, function(spec){
+                var assertionsGraph = inject(spec.assertions, '', function(graph, assertion){
+                  return graph + color('.', assertion.passed ? 'green' : 'red')
+                })
+                if (spec.requiresImplementation())
+                  print(color('  ' + spec.description, 'blue') + assertionsGraph)
+                else if (spec.passed() && !failuresOnly)
+                  print(color('  ' + spec.description, 'green') + assertionsGraph)
+                else if (!spec.passed())
+                  print(color('  ' + spec.description, 'red') + assertionsGraph + 
+                        "\n" + indent(map(spec.failures(), function(a){ return a.message }).join("\n")) + "\n")
+              })
+              print("")
+            }
+         })
+         
+         quit(results.stats.failures)
+       }
     },
     
     Assertion : function(matcher, actual, expected, negate) {
       extend(this, {
-        message : '',
-        passed : false,
-        actual : actual,
-        negate : negate,
-        matcher : matcher,
-        expected : expected,
+        message: '',
+        passed: false,
+        actual: actual,
+        negate: negate,
+        matcher: matcher,
+        expected: expected,
         
         // Report assertion results
         
         report : function() {
-          this.passed ? JSpec.stats.passes++ : JSpec.stats.failures++
+          if (JSpec.assert) 
+            this.passed ? JSpec.stats.passes++ : JSpec.stats.failures++
           return this
         },
         
@@ -260,7 +266,7 @@
       // Proxy
       
       object[method] = function(){
-        args = argumentsToArray(arguments)
+        args = toArray(arguments)
         result = old.apply(object, args)
         self.calls.push({ args : args, result : result })
         return result
@@ -269,18 +275,18 @@
       // Times
       
       this.times = {
-        'once'  : 1,
-        'twice' : 2
+        once  : 1,
+        twice : 2
       }[times] || times || 1
       
       extend(this, {
-        calls : [],
-        message : '',
-        defer : true,
-        passed : false,
-        negate : negate,
-        object : object,
-        method : method,
+        calls: [],
+        message: '',
+        defer: true,
+        passed: false,
+        negate: negate,
+        object: object,
+        method: method,
         
         // Proxy return value
         
@@ -292,7 +298,7 @@
         // Proxy arguments passed
         
         with_args : function() {
-          this.expectedArgs = argumentsToArray(arguments)
+          this.expectedArgs = toArray(arguments)
           return this
         },
         
@@ -302,7 +308,7 @@
           return any(this.calls, function(call){
             return self.expectedResult.an_instance_of ?
                      call.result.constructor != self.expectedResult.an_instance_of:
-                       hash(self.expectedResult) != hash(call.result)
+                       !equal(self.expectedResult, call.result)
           })
         },
         
@@ -312,7 +318,7 @@
           return any(this.calls, function(call){
             return self.expectedResult.an_instance_of ?
                      call.result.constructor == self.expectedResult.an_instance_of:
-                       hash(self.expectedResult) == hash(call.result)
+                       equal(self.expectedResult, call.result)
           })
         },
         
@@ -336,7 +342,7 @@
               if (arg == null) return call.args[i] == null
               return arg.an_instance_of ?
                        call.args[i].constructor != arg.an_instance_of:
-                         hash(arg) != hash(call.args[i])
+                         !equal(arg, call.args[i])
                        
             })
           })
@@ -349,7 +355,7 @@
             return any(self.expectedArgs, function(i, arg){
               return arg.an_instance_of ?
                        call.args[i].constructor == arg.an_instance_of:
-                         hash(arg) == hash(call.args[i])
+                         equal(arg, call.args[i])
                        
             })
           })
@@ -370,7 +376,8 @@
         // Report assertion results
         
         report : function() {
-          this.passed ? JSpec.stats.passes++ : JSpec.stats.failures++
+          if (JSpec.assert) 
+            this.passed ? ++JSpec.stats.passes : ++JSpec.stats.failures
           return this
         },
         
@@ -380,7 +387,7 @@
           var methodString = 'expected ' + object.toString() + '.' + method + '()' + (negate ? ' not' : '' )
           
           function times(n) {
-            return n > 2 ?  n + ' times' : { 1 : 'once', 2 : 'twice' }[n]
+            return n > 2 ?  n + ' times' : { 1: 'once', 2: 'twice' }[n]
           }
           
           if (this.expectedResult != null && (negate ? this.anyResultsPass() : this.anyResultsFail()))
@@ -391,7 +398,7 @@
             this.message = methodString + ' to be called with ' + puts.apply(this, this.expectedArgs) +
              ' but was' + (negate ? '' : ' called with ' + puts.apply(this, this.failingArgs()))
 
-          if (negate ? !this.expectedResult && !this.expectedArgs && this.calls.length == this.times : this.calls.length != this.times)
+          if (negate ? !this.expectedResult && !this.expectedArgs && this.calls.length >= this.times : this.calls.length != this.times)
             this.message = methodString + ' to be called ' + times(this.times) + 
             ', but ' +  (this.calls.length == 0 ? ' was not called' : ' was called ' + times(this.calls.length))
                 
@@ -411,17 +418,21 @@
      * @api private
      */
 
-    Suite : function(description, body) {
+    Suite : function(description, body, isShared) {
       var self = this
       extend(this, {
         body: body,
         description: description,
         suites: [],
+				sharedBehaviors: [],
         specs: [],
         ran: false,
-        hooks: { 'before' : [], 'after' : [], 'before_each' : [], 'after_each' : [] },
+				shared: isShared, 
+				hooks: { 	'before' : [], 'after' : [], 
+									'before_each' : [], 'after_each' : [],
+									'before_nested' : [], 'after_nested' : []},
         
-        // Add a spec to the suite
+				// Add a spec to the suite
 
         addSpec : function(description, body) {
           var spec = new JSpec.Spec(description, body)
@@ -430,16 +441,30 @@
           spec.suite = this
         },
 
-        // Add a hook to the suite
+        // Add a before hook to the suite
 
+        addBefore : function(options, body) {
+					body.options = options || {}
+          this.befores.push(body)
+        },
+
+        // Add an after hook to the suite
+
+        addAfter : function(options, body) {
+					body.options = options || {}
+          this.afters.unshift(body)
+        },
+
+        // Add a hook to the suite
+ 
         addHook : function(hook, body) {
           this.hooks[hook].push(body)
         },
 
         // Add a nested suite
 
-        addSuite : function(description, body) {
-          var suite = new JSpec.Suite(description, body)
+        addSuite : function(description, body, isShared) {
+          var suite = new JSpec.Suite(description, body, isShared)
           JSpec.allSuites.push(suite)
           suite.name = suite.description
           suite.description = this.description + ' ' + suite.description
@@ -447,15 +472,17 @@
           suite.suite = this
         },
 
-        // Invoke a hook in context to this suite
+				// Invoke a hook in context to this suite
 
         hook : function(hook) {
-          if (this.suite) this.suite.hook(hook)
+					if (hook != 'before' && hook != 'after')	
+          	if (this.suite) this.suite.hook(hook)
+
           each(this.hooks[hook], function(body) {
             JSpec.evalBody(body, "Error in hook '" + hook + "', suite '" + self.description + "': ")
           })
         },
-
+				
         // Check if nested suites are present
 
         hasSuites : function() {
@@ -474,7 +501,15 @@
           return !any(this.specs, function(spec){
             return !spec.passed() 
           })
-        }
+        },
+
+				isShared : function(){
+					return this.shared
+				},
+
+				isExecutable : function() {
+					return !this.isShared() && this.hasSpecs()
+				}
       })
     },
     
@@ -488,22 +523,22 @@
 
     Spec : function(description, body) {
       extend(this, {
-        body : body,
-        description : description,
-        assertions : [],
+        body: body,
+        description: description,
+        assertions: [],
         
         // Add passing assertion
         
         pass : function(message) {
-          this.assertions.push({ passed : true, message : message })
-          ++JSpec.stats.passes
+          this.assertions.push({ passed: true, message: message })
+          if (JSpec.assert) ++JSpec.stats.passes
         },
         
         // Add failing assertion
         
         fail : function(message) {
-          this.assertions.push({ passed : false, message : message })
-          ++JSpec.stats.failures
+          this.assertions.push({ passed: false, message: message })
+          if (JSpec.assert) ++JSpec.stats.failures
         },
                 
         // Run deferred assertions
@@ -556,6 +591,63 @@
       extend(this, methods)
     },
     
+    JSON : {
+      
+      /**
+       * Generic sequences.
+       */
+      
+      meta : {
+        '\b' : '\\b',
+        '\t' : '\\t',
+        '\n' : '\\n',
+        '\f' : '\\f',
+        '\r' : '\\r',
+        '"'  : '\\"',
+        '\\' : '\\\\'
+      },
+      
+      /**
+       * Escapable sequences.
+       */
+      
+      escapable : /[\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+      
+      /**
+       * JSON encode _object_.
+       *
+       * @param  {mixed} object
+       * @return {string}
+       * @api private
+       */
+       
+      encode : function(object) {
+        var self = this
+        if (object == undefined || object == null) return 'null'
+        if (object === true) return 'true'
+        if (object === false) return 'false'
+        switch (typeof object) {
+          case 'number': return object
+          case 'string': return this.escapable.test(object) ?
+            '"' + object.replace(this.escapable, function (a) {
+              return typeof self.meta[a] === 'string' ? self.meta[a] :
+                '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4)
+            }) + '"' :
+            '"' + object + '"'
+          case 'object':  
+            if (object.constructor == Array)
+              return '[' + map(object, function(val){
+                return self.encode(val)
+              }).join(', ') + ']'
+            else if (object)
+              return '{' + map(object, function(key, val){
+                return self.encode(key) + ':' + self.encode(val)
+              }).join(', ') + '}'
+        }
+        return 'null'
+      }
+    },
+    
     // --- DSLs
     
     DSLs : {
@@ -565,7 +657,7 @@
         },
 
         describe : function(description, body) {
-          return JSpec.currentSuite.addSuite(description, body)
+          return JSpec.currentSuite.addSuite(description, body, false)
         },
 
         it : function(description, body) {
@@ -575,19 +667,31 @@
         before : function(body) {
           return JSpec.currentSuite.addHook('before', body)
         },
-
+ 
         after : function(body) {
           return JSpec.currentSuite.addHook('after', body)
         },
-
+ 
         before_each : function(body) {
           return JSpec.currentSuite.addHook('before_each', body)
         },
-
+ 
         after_each : function(body) {
           return JSpec.currentSuite.addHook('after_each', body)
         },
+
+				before_nested : function(body) {
+					return JSpec.currentSuite.addHook('before_nested', body)
+				},
+				
+				after_nested : function(body){
+					return JSpec.currentSuite.addhook('after_nested', body)
+				},
         
+				shared_behaviors_for : function(description, body){
+				  return JSpec.currentSuite.addSuite(description, body, true)
+				},
+
         should_behave_like : function(description) {
           return JSpec.shareBehaviorsOf(description)
         }
@@ -612,7 +716,7 @@
     /**
      * Include _object_ which may be a hash or Module instance.
      *
-     * @param  {has, Module} object
+     * @param  {hash, Module} object
      * @return {JSpec}
      * @api public
      */
@@ -623,6 +727,7 @@
       if ('init' in module) module.init()
       if ('utilities' in module) extend(this.defaultContext, module.utilities)
       if ('matchers' in module) this.addMatchers(module.matchers)
+      if ('reporters' in module) extend(this.reporters, module.reporters)
       if ('DSLs' in module)
         each(module.DSLs, function(name, methods){
           JSpec.DSLs[name] = JSpec.DSLs[name] || {}
@@ -643,7 +748,7 @@
      */
     
     hook : function(name, args) {
-      args = argumentsToArray(arguments, 1)
+      args = toArray(arguments, 1)
       return inject(JSpec.modules, [], function(results, module){
         if (typeof module[name] == 'function')
           results.push(JSpec.evalHook(module, name, args))
@@ -662,14 +767,8 @@
      */
     
     evalHook : function(module, name, args) {
-      var context = this.context || this.defaultContext
-      var contents = this.contentsOf(module[name])
-      var params = this.paramsFor(module[name])
-      module.utilities = module.utilities || {}
-      params.unshift('context'); args.unshift(context)
-      hook('evaluatingHookBody', module, name, context)
-      try { return new Function(params.join(), 'with (this.utilities) { with (context) { with (JSpec) {  ' + contents + ' }}}').apply(module, args) }
-      catch(e) { error('Error in hook ' + module.name + "." + name + ': ', e) }
+      hook('evaluatingHookBody', module, name)
+      return module[name].apply(module, args)
     },
     
     /**
@@ -692,19 +791,69 @@
     },
     
     /**
-     * Find a suite by its description or name.
+     * Find a shared example suite by its description or name.
+     * First searches parent tree of suites for shared behavior
+     * before falling back to global scoped nested behaviors.
      *
      * @param  {string} description
      * @return {Suite}
      * @api private
      */
     
-    findSuite : function(description) {
-      return find(this.allSuites, function(suite){
-        return suite.name == description || suite.description == description
-      })
+    findSharedBehavior : function(description) {
+      var behavior
+      return (behavior = JSpec.findLocalSharedBehavior(description))
+        ? behavior
+        : JSpec.findGlobalSharedBehavior(description)
     },
+
+    /**
+     * Find a shared example suite within the current suite's
+     * parent tree by its description or name.
+     *
+     * @param  {string} description
+     * @return {Suite}
+     * @api private
+     */
+     
+		findLocalSharedBehavior : function(description) {
+			var behavior,
+			    currentSuite = JSpec.currentSuite.suite
+			while (currentSuite)
+				if (behavior = find(currentSuite.suites, JSpec.suiteDescriptionPredicate(description)))
+				  return behavior
+				else
+				  currentSuite = currentSuite.suite
+		},
+		
+    /**
+     * Find a shared example suite within the global
+     * scope by its description or name.
+     *
+     * @param  {string} description
+     * @return {Suite}
+     * @api private
+     */
+     
+		findGlobalSharedBehavior : function(description) {
+	   return find(JSpec.suites, JSpec.suiteDescriptionPredicate(description))
+		},
     
+    /**
+     * Build a predicate that will match a suite based on name or description
+     *
+     * @param  {string} description
+     * @return {function}
+     * @api private
+     */
+     
+		suiteDescriptionPredicate : function(description) {
+			return function(suite){
+			  return suite.name === description ||
+			         suite.description === description
+			}
+		},
+
     /**
      * Share behaviors (specs) of the given suite with
      * the current suite.
@@ -714,24 +863,13 @@
      */
     
     shareBehaviorsOf : function(description) {
-      if (suite = this.findSuite(description)) this.copySpecs(suite, this.currentSuite)
-      else throw 'failed to share behaviors. ' + puts(description) + ' is not a valid Suite name'
+      var suite = JSpec.findSharedBehavior(description)
+      if (suite)
+        JSpec.evalBody(suite.body)
+      else
+        throw new Error("failed to find shared behaviors named `" + description + "'")
     },
     
-    /**
-     * Copy specs from one suite to another. 
-     *
-     * @param  {Suite} fromSuite
-     * @param  {Suite} toSuite
-     * @api public
-     */
-    
-    copySpecs : function(fromSuite, toSuite) {
-      each(fromSuite.specs, function(spec){
-        spec.assertions = []
-        toSuite.specs.push(spec)
-      })
-    },
     
     /**
      * Convert arguments to an array.
@@ -742,7 +880,7 @@
      * @api public
      */
     
-    argumentsToArray : function(arguments, offset) {
+    toArray : function(arguments, offset) {
       return Array.prototype.slice.call(arguments, offset || 0)
     },
     
@@ -779,7 +917,9 @@
       return 'expected ' + puts(actual) + ' to ' + 
                (negate ? 'not ' : '') + 
                   name.replace(/_/g, ' ') +
-                    ' ' + puts.apply(this, expected.slice(1))
+                    ' ' + (expected.length > 1 ?
+                      puts.apply(this, expected.slice(1)) :
+                        '')
     },
     
     /**
@@ -820,10 +960,10 @@
         case String:
           if (captures = body.match(/^alias (\w+)/)) return JSpec.matchers[last(captures)]
           if (body.length < 4) body = 'actual ' + body + ' expected'
-          return { match : function(actual, expected) { return eval(body) }}  
+          return { match: function(actual, expected) { return eval(body) }}  
           
         case Function:
-          return { match : body }
+          return { match: body }
           
         default:
           return body
@@ -844,34 +984,35 @@
        return (value = query(key)) !== null ? value :
                 JSpec.options[key] || null
      },
-
-    /**
-     * Generates a hash of the object passed.
-     *
-     * @param  {object} object
-     * @return {string}
-     * @api private
-     */
-
-    hash : function(object) {
-      if (object == null) return 'null'
-      if (object == undefined) return 'undefined'
-      serialize = function(prefix) {
-        return inject(object, prefix + ':', function(buffer, key, value){
-          return buffer += hash(value)
-        })
-      }
-      switch (object.constructor) {
-        case Array : return serialize('a')
-        case RegExp: return 'r:' + object.toString()
-        case Number: return 'n:' + object.toString()
-        case String: return 's:' + object.toString()
-        case Object: return 'o:' + inject(object, [], function(array, key, value){
-          array.push([key, hash(value)])
-        }).sort()
-        default: return object.toString()
-      }
-    },
+     
+     /**
+      * Check if object _a_, is equal to object _b_.
+      *
+      * @param  {object} a
+      * @param  {object} b
+      * @return {bool}
+      * @api private
+      */
+     
+     equal: function(a, b) {
+       if (typeof a != typeof b) return
+       if (a === b) return true
+       if (a instanceof RegExp)
+         return a.toString() === b.toString()
+       if (a instanceof Date)
+         return Number(a) === Number(b)
+       if (typeof a != 'object') return
+       if (a.length !== undefined)
+         if (a.length !== b.length) return
+         else
+           for (var i = 0, len = a.length; i < len; ++i)
+             if (!equal(a[i], b[i]))
+               return
+       for (var key in a)
+         if (!equal(a[key], b[key]))
+           return
+       return true
+     },
 
     /**
      * Return last element of an array.
@@ -894,33 +1035,38 @@
      */
 
     puts : function(object) {
-      if (arguments.length > 1) {
-        return map(argumentsToArray(arguments), function(arg){
+      if (arguments.length > 1)
+        return map(toArray(arguments), function(arg){
           return puts(arg)
         }).join(', ')
-      }
-      if (object === undefined) return ''
+      if (object === undefined) return 'undefined'
       if (object === null) return 'null'
       if (object === true) return 'true'
       if (object === false) return 'false'
       if (object.an_instance_of) return 'an instance of ' + object.an_instance_of.name
-      if (object.jquery && object.selector.length > 0) return 'selector ' + puts(object.selector) + ''
-      if (object.jquery) return escape(object.html())
-      if (object.nodeName) return escape(object.outerHTML)
+      if (object.jquery && object.selector.length > 0) return 'selector ' + puts(object.selector)
+      if (object.jquery) return object.get(0).outerHTML
+      if (object.nodeName) return object.outerHTML
       switch (object.constructor) {
-        case String: return "'" + escape(object) + "'"
-        case Number: return object
         case Function: return object.name || object 
-        case Array : 
+        case String: 
+          return '"' + object
+            .replace(/"/g,  '\\"')
+            .replace(/\n/g, '\\n')
+            .replace(/\t/g, '\\t')
+            + '"'
+        case Array: 
           return inject(object, '[', function(b, v){
             return b + ', ' + puts(v)
           }).replace('[,', '[') + ' ]'
         case Object:
+          object.__hit__ = true
           return inject(object, '{', function(b, k, v) {
-            return b + ', ' + puts(k) + ' : ' + puts(v)
+            if (k == '__hit__') return b
+            return b + ', ' + k + ': ' + (v && v.__hit__ ? '<circular reference>' : puts(v))
           }).replace('{,', '{') + ' }'
         default: 
-          return escape(object.toString())
+          return object.toString()
       }
     },
 
@@ -933,11 +1079,11 @@
      */
 
      escape : function(html) {
-       return html.toString().
-         replace(/&/gmi, '&amp;').
-         replace(/"/gmi, '&quot;').
-         replace(/>/gmi, '&gt;').
-         replace(/</gmi, '&lt;')
+       return html.toString()
+         .replace(/&/gmi, '&amp;')
+         .replace(/"/gmi, '&quot;')
+         .replace(/>/gmi, '&gt;')
+         .replace(/</gmi, '&lt;')
      },
      
      /**
@@ -961,7 +1107,7 @@
       */
      
      does : function(actual, matcher, expected) {
-       var assertion = new JSpec.Assertion(JSpec.matchers[matcher], actual, argumentsToArray(arguments, 2))
+       var assertion = new JSpec.Assertion(JSpec.matchers[matcher], actual, toArray(arguments, 2))
        return assertion.run().result
      },
 
@@ -978,8 +1124,8 @@
      */
 
     expect : function(actual) {
-      assert = function(matcher, args, negate) {
-        var expected = argumentsToArray(args, 1)
+      function assert(matcher, args, negate) {
+        var expected = toArray(args, 1)
         matcher.negate = negate  
         assertion = new JSpec.Assertion(matcher, actual, expected, negate)
         hook('beforeAssertion', assertion)
@@ -988,11 +1134,11 @@
         return assertion.result
       }
       
-      to = function(matcher) {
+      function to(matcher) {
         return assert(matcher, arguments, false)
       }
       
-      not_to = function(matcher) {
+      function not_to(matcher) {
         return assert(matcher, arguments, true)
       }
       
@@ -1051,17 +1197,20 @@
      /**
       * Iterate an object, invoking the given callback.
       *
-      * @param  {hash, array, string} object
+      * @param  {hash, array} object
       * @param  {function} callback
       * @return {JSpec}
       * @api public
       */
 
      each : function(object, callback) {
-       if (typeof object == 'string') object = object.split(' ')
-       for (key in object) 
-         if (object.hasOwnProperty(key))
-           callIterator(callback, key, object[key])
+       if (object.constructor == Array)
+         for (var i = 0, len = object.length; i < len; ++i)
+           callIterator(callback, i, object[i])
+       else
+         for (var key in object) 
+           if (object.hasOwnProperty(key))
+             callIterator(callback, key, object[key])
      },
 
      /**
@@ -1230,12 +1379,27 @@
      */
     
     describe : function(description, body) {
-      var suite = new JSpec.Suite(description, body)
+      var suite = new JSpec.Suite(description, body, false)
       hook('addingSuite', suite)
       this.allSuites.push(suite)
       this.suites.push(suite)
     },
     
+    /**
+     * Add a shared example suite to JSpec.
+     *
+     * @param  {string} description
+     * @param  {body} function
+     * @api public
+     */
+    
+    shared_behaviors_for : function(description, body) {
+      var suite = new JSpec.Suite(description, body, true)
+      hook('addingSuite', suite)
+      this.allSuites.push(suite)
+      this.suites.push(suite)
+    },
+
     /**
      * Return the contents of a function body.
      *
@@ -1246,18 +1410,6 @@
     
     contentsOf : function(body) {
       return body.toString().match(/^[^\{]*{((.*\n*)*)}/m)[1]
-    },
-    
-    /**
-     * Return param names for a function body.
-     *
-     * @param  {function} body
-     * @return {array}
-     * @api public
-     */
-    
-    paramsFor : function(body) {
-      return body.toString().match(/\((.*?)\)/)[1].match(/[\w]+/g) || []
     },
 
     /**
@@ -1274,9 +1426,8 @@
       var matchers = this.matchers
       var context = this.context || this.defaultContext
       var contents = this.contentsOf(body)
-      hook('evaluatingBody', dsl, matchers, context, contents)
-      try { eval('with (dsl){ with (context) { with (matchers) { ' + contents + ' }}}') }
-      catch(e) { error(errorMessage, e) }
+			hook('evaluatingBody', dsl, matchers, context, contents)
+      with (dsl){ with (context) { with (matchers) { eval(contents) }}}
     },
 
     /**
@@ -1288,19 +1439,24 @@
      */
 
     preprocess : function(input) {
+      if (typeof input != 'string') return
       input = hookImmutable('preprocessing', input)
       return input.
+        replace(/\t/g, '  ').
+        replace(/\r\n|\n|\r/g, '\n').
+        split('__END__')[0].
         replace(/([\w\.]+)\.(stub|destub)\((.*?)\)$/gm, '$2($1, $3)').
         replace(/describe\s+(.*?)$/gm, 'describe($1, function(){').
+        replace(/shared_behaviors_for\s+(.*?)$/gm, 'shared_behaviors_for($1, function(){').
         replace(/^\s+it\s+(.*?)$/gm, ' it($1, function(){').
-        replace(/^(?: *)(before_each|after_each|before|after)(?= |\n|$)/gm, 'JSpec.currentSuite.addHook("$1", function(){').
+				replace(/^ *(before_nested|after_nested|before_each|after_each|before|after)(?= |\n|$)/gm, 'JSpec.currentSuite.addHook("$1", function(){').
         replace(/^\s*end(?=\s|$)/gm, '});').
         replace(/-\{/g, 'function(){').
         replace(/(\d+)\.\.(\d+)/g, function(_, a, b){ return range(a, b) }).
         replace(/\.should([_\.]not)?[_\.](\w+)(?: |;|$)(.*)$/gm, '.should$1_$2($3)').
         replace(/([\/\s]*)(.+?)\.(should(?:[_\.]not)?)[_\.](\w+)\((.*)\)\s*;?$/gm, '$1 expect($2).$3($4, $5)').
-        replace(/, \)/gm, ')').
-        replace(/should\.not/gm, 'should_not')
+        replace(/, \)/g, ')').
+        replace(/should\.not/g, 'should_not')
     },
 
     /**
@@ -1326,8 +1482,10 @@
      */
 
     report : function() {
+      this.duration = Number(new Date) - this.start
       hook('reporting', JSpec.options)
-      new (JSpec.options.formatter || JSpec.formatters.DOM)(JSpec, JSpec.options)
+      print('XXXXXX reporter=' + JSpec.options.reporter);
+      new (JSpec.options.reporter || JSpec.reporters.DOM)(JSpec, JSpec.options)
     },
 
     /**
@@ -1342,9 +1500,8 @@
     run : function(options) {
       if (any(hook('running'), haveStopped)) return this
       if (options) extend(this.options, options)
-      if (option('profile')) console.group('Profile')
+      this.start = Number(new Date)
       each(this.suites, function(suite) { JSpec.runSuite(suite) })
-      if (option('profile')) console.groupEnd()
       return this
     },
     
@@ -1356,25 +1513,28 @@
      */
 
     runSuite : function(suite) {
-      this.currentSuite = suite
-      this.evalBody(suite.body)
-      suite.ran = true
-      hook('beforeSuite', suite), suite.hook('before')
-      each(suite.specs, function(spec) {
-        hook('beforeSpec', spec)
-        suite.hook('before_each')
-        JSpec.runSpec(spec)
-        hook('afterSpec', spec)
-        suite.hook('after_each')
-      })
-      if (suite.hasSuites()) {
-        each(suite.suites, function(suite) {
-          JSpec.runSuite(suite)
-        })
-      }
-      hook('afterSuite', suite), suite.hook('after')
-      this.stats.suitesFinished++
-    },
+			if (!suite.isShared())
+			{
+	      this.currentSuite = suite
+	      this.evalBody(suite.body)
+	      suite.ran = true
+	      hook('beforeSuite', suite), suite.hook('before'), suite.hook('before_nested')
+	      each(suite.specs, function(spec) {
+	        hook('beforeSpec', spec)
+	        suite.hook('before_each')
+	        JSpec.runSpec(spec)
+	        hook('afterSpec', spec)
+	        suite.hook('after_each')
+	      })
+	      if (suite.hasSuites()) {
+	        each(suite.suites, function(suite) {
+	          JSpec.runSuite(suite)
+	        })
+	      }
+	      hook('afterSuite', suite), suite.hook('after_nested'), suite.hook('after')
+	      this.stats.suitesFinished++
+			}	
+		},
          
     /**
      * Report a failure for the current spec.
@@ -1407,10 +1567,8 @@
 
     runSpec : function(spec) {
       this.currentSpec = spec
-      if (option('profile')) console.time(spec.description)
       try { this.evalBody(spec.body) }
       catch (e) { fail(e) }
-      if (option('profile')) console.timeEnd(spec.description)
       spec.runDeferredAssertions()
       destub()
       this.stats.specsFinished++
@@ -1452,56 +1610,51 @@
     },
 
     /**
-     * Throw a JSpec related error.
-     *
-     * @param {string} message
-     * @param {Exception} e
-     * @api public
-     */
-
-    error : function(message, e) {
-      throw (message ? message : '') + e.toString() + 
-              (e.line ? ' near line ' + e.line : '')
-    },
-    
-    /**
      * Ad-hoc POST request for JSpec server usage.
      *
-     * @param  {string} url
+     * @param  {string} uri
      * @param  {string} data
      * @api private
      */
     
-    post : function(url, data) {
-      if (any(hook('posting', url, data), haveStopped)) return
+    post : function(uri, data) {
+      if (any(hook('posting', uri, data), haveStopped)) return
       var request = this.xhr()
-      request.open('POST', url, false)
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-      request.send(data)
+      request.open('POST', uri, false)
+      request.setRequestHeader('Content-Type', 'application/json')
+      request.send(JSpec.JSON.encode(data))
     },
 
     /**
-     * Report to server with statistics.
-     *
-     * @param  {string} url
-     * @api private
-     */
-    
-    reportToServer : function(url) {
-      if (any(hook('reportingToServer', url), haveStopped)) return
-      JSpec.post(url || 'http://localhost:4444', 'passes=' + JSpec.stats.passes + '&failures=' + JSpec.stats.failures)
-			if ('close' in main) main.close()
-    },
-    
-    /**
      * Instantiate an XMLHttpRequest.
+     *
+     * Here we utilize IE's lame ActiveXObjects first which
+     * allow IE access serve files via the file: protocol, otherwise
+     * we then default to XMLHttpRequest.
      *
      * @return {XMLHttpRequest, ActiveXObject}
      * @api private
      */
     
     xhr : function() {
-      return new (JSpec.request || ActiveXObject("Microsoft.XMLHTTP"))
+      return this.ieXhr() || new JSpec.request
+    },
+    
+    /**
+     * Return Microsoft piece of crap ActiveXObject.
+     *
+     * @return {ActiveXObject}
+     * @api public
+     */
+    
+    ieXhr : function() {
+      function object(str) {
+        try { return new ActiveXObject(str) } catch(e) {}
+      }
+      return object('Msxml2.XMLHTTP.6.0') ||
+        object('Msxml2.XMLHTTP.3.0') ||
+        object('Msxml2.XMLHTTP') ||
+        object('Microsoft.XMLHTTP')
     },
     
     /**
@@ -1525,8 +1678,7 @@
      */
     
     tryLoading : function(file) {
-      try { return JSpec.load(file) }
-      catch (e) {}
+      try { return JSpec.load(file) } catch (e) {}
     },
 
     /**
@@ -1541,15 +1693,18 @@
     load : function(file, callback) {
       if (any(hook('loading', file), haveStopped)) return
       if ('readFile' in main)
-        return callback ? readFile(file, callback) : readFile(file)
+        return readFile(file)
       else if (this.hasXhr()) {
         var request = this.xhr()
         request.open('GET', file, false)
         request.send(null)
-        if (request.readyState == 4) return request.responseText
+        if (request.readyState == 4 && 
+           (request.status == 0 || 
+            request.status.toString().charAt(0) == 2)) 
+          return request.responseText
       }
       else
-        error("failed to load `" + file + "'")
+        throw new Error("failed to load `" + file + "'")
     },
 
     /**
@@ -1562,29 +1717,32 @@
 
     exec : function(file) {
       if (any(hook('executing', file), haveStopped)) return this
-      if ('node' in main)
-        this.load(file, function(contents){
-          eval('with (JSpec){ ' + JSpec.preprocess(contents) + ' }')
-        })
-      else
-        eval('with (JSpec){' + this.preprocess(this.load(file)) + '}')
+      eval('with (JSpec){' + this.preprocess(this.load(file)) + '}')
       return this
     }
   }
-
+  
+  // --- Node.js support
+  
+  if (typeof GLOBAL === 'object' && typeof exports === 'object')
+    quit = process.exit,
+    print = require('sys').puts,
+    readFile = require('fs').readFileSync
+  
   // --- Utility functions
 
-  var main = this
-  var find = JSpec.any
-  var utils = 'haveStopped stub hookImmutable hook destub map any last pass fail range each option inject select \
-               error escape extend puts hash query strip color does addMatchers callIterator argumentsToArray'.split(/\s+/)
-  while (utils.length) util = utils.shift(), eval('var ' + util + ' = JSpec.' + util)
+  var main = this,
+      find = JSpec.any,
+      utils = 'haveStopped stub hookImmutable hook destub map any last pass fail range each option inject select \
+               error escape extend puts query strip color does addMatchers callIterator toArray equal'.split(/\s+/)
+  while (utils.length) eval('var ' + utils[0] + ' = JSpec.' + utils.shift())
   if (!main.setTimeout) main.setTimeout = function(callback){ callback() }
 
   // --- Matchers
 
   addMatchers({
     equal              : "===",
+    eql                : "equal(actual, expected)",
     be                 : "alias equal",
     be_greater_than    : ">",
     be_less_than       : "<",
@@ -1603,13 +1761,6 @@
     have_length        : "actual.length == expected",
     be_within          : "actual >= expected[0] && actual <= last(expected)",
     have_length_within : "actual.length >= expected[0] && actual.length <= last(expected)",
-
-    eql : function(actual, expected) {
-      return actual.constructor == Array ||
-               actual instanceof Object ? 
-                 hash(actual) == hash(expected):
-                   actual == expected
-    },
     
     receive : { defer : true, match : function(actual, method, times) {
       proxy = new JSpec.ProxyAssertion(actual, method, times, this.negate)
@@ -1632,7 +1783,7 @@
           case Number:
           case RegExp:
           case Function:
-            state = actual.toString().match(arg.toString())
+            state = actual.toString().indexOf(arg) !== -1
             break
          
           case Object:
@@ -1640,7 +1791,7 @@
             break
           
           case Array: 
-            state = any(actual, function(value){ return hash(value) == hash(arg) })
+            state = any(actual, function(value){ return equal(value, arg) })
             break
         }
         if (!state) return false
@@ -1654,9 +1805,9 @@
         this.e = e
         var assert = function(arg) {
           switch (arg.constructor) {
-            case RegExp   : return arg.test(e)
+            case RegExp   : return arg.test(e.message || e.toString())
             case String   : return arg == (e.message || e.toString())
-            case Function : return (e.name || 'Error') == arg.name
+            case Function : return e instanceof arg || e.name == arg.name
           }
         }
         return message ? assert(expected) && assert(message) :
@@ -1710,6 +1861,4 @@
     }
   })
   
-  if ('exports' in main) exports.JSpec = JSpec
-
 })()

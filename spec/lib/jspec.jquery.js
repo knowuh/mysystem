@@ -4,18 +4,19 @@
 JSpec
 .requires('jQuery', 'when using jspec.jquery.js')
 .include({
+  name: 'jQuery',
   
   // --- Initialize
   
   init : function() {
-    jQuery.ajaxSetup({ async : false })
+    jQuery.ajaxSetup({ async: false })
   },
   
   // --- Utilities
   
   utilities : {
-    element : jQuery,
-    elements : jQuery,
+    element:  jQuery,
+    elements: jQuery,
     sandbox : function() {
       return jQuery('<div class="sandbox"></div>')
     }
@@ -24,14 +25,15 @@ JSpec
   // --- Matchers
   
   matchers : {
-    have_tag      : "jQuery(expected, actual).length == 1",
+    have_tag      : "jQuery(expected, actual).length === 1",
     have_one      : "alias have_tag",
     have_tags     : "jQuery(expected, actual).length > 1",
     have_many     : "alias have_tags",
-    have_child    : "jQuery(actual).children(expected).length == 1",
+    have_any      : "alias have_tags",
+    have_child    : "jQuery(actual).children(expected).length === 1",
     have_children : "jQuery(actual).children(expected).length > 1",
-    have_text     : "jQuery(actual).text() == expected",
-    have_value    : "jQuery(actual).val() == expected",
+    have_text     : "jQuery(actual).text() === expected",
+    have_value    : "jQuery(actual).val() === expected",
     be_enabled    : "!jQuery(actual).attr('disabled')",
     have_class    : "jQuery(actual).hasClass(expected)",
     
@@ -46,7 +48,7 @@ JSpec
     },
 
     have_classes : function(actual) {
-      return !JSpec.any(JSpec.argumentsToArray(arguments, 1), function(arg){
+      return !JSpec.any(JSpec.toArray(arguments, 1), function(arg){
         return !JSpec.does(actual, 'have_class', arg)
       })
     },

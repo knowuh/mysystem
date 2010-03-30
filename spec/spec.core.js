@@ -1,7 +1,7 @@
-
 describe 'MySystem'
   before
     mySystem = new MySystem();
+    print('HELOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
   end
 
   it 'return value of MySystem should not be null'
