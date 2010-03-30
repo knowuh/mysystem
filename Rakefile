@@ -1,3 +1,5 @@
+require 'rubygems'
+
 load 'lib/tasks/hudson.rake'
 load 'lib/tasks/mysystem.rake'
 load 'lib/tasks/selenium-test.rake'

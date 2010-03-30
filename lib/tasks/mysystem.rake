@@ -1,5 +1,4 @@
-require 'rubygems'
-require 'Sprockets'
+require 'sprockets'
 
 @dist_dir = 'public'
 
