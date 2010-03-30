@@ -1,6 +1,7 @@
-.DS_Store
-.project
-logs
-*~
-dist
+rerun.txt
+test-reports/**
+*.log
 tmp
+.project
+.DS_Store
+*~
