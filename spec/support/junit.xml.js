@@ -3,9 +3,6 @@
         name: 'JUnit',
         reporters: {
             JUnit: function(results, options) {
-            var w = new java.io.FileWriter('test-reports/jspec.xml');
-            w.write('<?xml version="1.0" encoding="UTF-8"?>\n');
-            w.write('<testsuites>\n');
             JSpec.each(results.allSuites, function(suite) {
                 var attribs = {
                     name: suite.description,
@@ -25,6 +22,8 @@
                     content += ' </testcase> \n';
                     return content;
                 });
+                var w = new java.io.FileWriter('test-reports/' + suite.description + '.xml');
+                w.write('<?xml version="1.0" encoding="UTF-8"?>\n');
                 w.write(' <testsuite');
                 for (var key in attribs) {
                     w.write(' ' + key + '="' + attribs[key] + '"');
@@ -32,9 +31,8 @@
                 w.write('>\n');
                 w.write(content);
                 w.write(' </testsuite>\n');
+                w.close();
             });
-            w.write('</testsuites>\n');
-            w.close();
             quit(results.stats.failures);
             }
         }
