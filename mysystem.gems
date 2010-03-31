@@ -1,0 +1,24 @@
+# mysystem.gems generated gem export file. Note that any env variable settings will be missing. Append these after using a ';' field separator
+addressable -v2.1.1
+appengine-apis -v0.0.12
+appengine-jruby-jars -v0.0.6
+appengine-rack -v0.0.6
+appengine-sdk -v1.3.1
+appengine-tools -v0.0.10.1
+builder -v2.1.2
+bundler08 -v0.8.5
+cucumber -v0.6.4
+diff-lcs -v1.1.2
+dm-appengine -v0.0.7
+dm-core -v0.10.2
+extlib -v0.9.14
+jruby-openssl -v0.6
+json_pure -v1.2.3
+polyglot -v0.3.1
+rack -v1.1.0
+rake -v0.8.7
+rubyzip -v0.9.4
+sinatra -v1.0
+sprockets -v1.0.2
+term-ansicolor -v1.0.5
+treetop -v1.4.5
