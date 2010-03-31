@@ -55,6 +55,7 @@ load('src/js/MySystem.js');
 load('src/engine/mysystem-engine.js');
 load('lib/http.js');
 
-var specResults = JSpec.exec('spec/spec.core.js')
+var specResults = JSpec
+.exec('spec/spec.core.js')
 //.exec('spec/spec.DataService.js') //FIXME GGears test not working in rhino mode
 .exec('spec/spec.Util.js');
