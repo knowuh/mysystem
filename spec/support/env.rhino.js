@@ -2940,14 +2940,14 @@ __extend__(Attr.prototype, {
  * @param  ownerDocument : The Document object associated with this node.
  */
 
-//skim: dom3: kludge to fix name conflict betwin envjs and prototype.js
-this.dom3 = {};
-dom3.Element = function(ownerDocument) {
+//skim: cc_envjs is a kludge to fix name conflict betwin envjs and prototype.js
+cc_envjs = {};
+cc_envjs.Element = function(ownerDocument) {
     Node.apply(this, arguments);
     this.attributes = new NamedNodeMap(this.ownerDocument, this);
 };
-dom3.Element.prototype = new Node;
-this.Element = dom3.Element;
+cc_envjs.Element.prototype = new Node;
+this.Element = cc_envjs.Element;
 
 __extend__(Element.prototype, {	
     // The name of the element.
@@ -3994,7 +3994,7 @@ __extend__(Document.prototype,{
                 && (!__isValidName__(tagName))) {
             throw(new DOMException(DOMException.INVALID_CHARACTER_ERR));
         }
-        var node = new dom3.Element(this);
+        var node = new cc_envjs.Element(this);
         node.nodeName = tagName;
         return node;
     },
@@ -4018,7 +4018,7 @@ __extend__(Document.prototype,{
                 throw(new DOMException(DOMException.INVALID_CHARACTER_ERR));
             }
         }
-        var node  = new dom3.Element(this);
+        var node  = new cc_envjs.Element(this);
         var qname = __parseQName__(qualifiedName);
         node.namespaceURI = namespaceURI;
         node.prefix       = qname.prefix;
@@ -6311,9 +6311,7 @@ var  __mouseout__ = function(element){
 * HTMLElement - DOM Level 2
 */
 HTMLElement = function(ownerDocument) {
-    //Element.apply(this, arguments);
-    //skim: kludge to fix name conflict betwin envjs and prototype.js
-    dom3.Element.apply(this, arguments);
+    cc_envjs.Element.apply(this, arguments);
 };
 HTMLElement.prototype = new Element;
 //TODO: Not sure where HTMLEvents belongs in the chain
