@@ -1484,7 +1484,6 @@
     report : function() {
       this.duration = Number(new Date) - this.start
       hook('reporting', JSpec.options)
-      print('XXXXXX reporter=' + JSpec.options.reporter);
       new (JSpec.options.reporter || JSpec.reporters.DOM)(JSpec, JSpec.options)
     },
 
