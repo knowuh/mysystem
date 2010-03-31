@@ -33,6 +33,9 @@ You can also setup a gemset using rvm
   rvm gemset import mysystem.gems
 </pre></code>
 
+If you are not using RVM, you can roll the dice and try: rake gems:install -- which isn't very verbose, but
+should install tall the gems listed in mysystem.gems
+
 h3. Javascript Dependencies
 
 Based on "WireIt":http://http://javascript.neyric.com/wireit/
