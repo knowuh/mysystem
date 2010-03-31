@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="lib/jspec.css" />
+    <script src="lib/jspec.js"></script>
+    
+    <script type="text/javascript" src="../lib/prototype.js"></script>
+    <!--Include YUI Loader: -->
+    <script type="text/javascript" src="http://yui.yahooapis.com/2.7.0/build/yuiloader/yuiloader-min.js"></script>
+
+    <!-- Combo-handled YUI CSS files: -->
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts-grids/reset-fonts-grids.css&2.7.0/build/base/base-min.css&2.7.0/build/assets/skins/sam/skin.css">
+    <!-- Combo-handled YUI JS files: -->
+    <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/utilities/utilities.js&2.7.0/build/container/container-min.js&2.7.0/build/menu/menu-min.js&2.7.0/build/button/button-min.js&2.7.0/build/cookie/cookie-min.js&2.7.0/build/resize/resize-min.js&2.7.0/build/imagecropper/imagecropper-min.js&2.7.0/build/imageloader/imageloader-min.js&2.7.0/build/selector/selector-min.js&2.7.0/build/layout/layout-min.js&2.7.0/build/stylesheet/stylesheet-min.js"></script>
+
+    <script type="text/javascript" src="../lib/canvastext.js"></script>
+    <script type="text/javascript" src="../lib/uuid.js"></script>
+
+    <!-- WireIt -->
+    <!--[if IE]><script type="text/javascript" src="../lib/excanvas.js"></script><![endif]-->
+    <script type="text/javascript" src="../src/js/wireit/WireIt.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/CanvasElement.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/Wire.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/Terminal.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/util/DD.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/util/DDResize.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/Container.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/ImageContainer.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/Layer.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/util/inputex/FormContainer-beta.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/LayerMap.js"></script>
+    <script type="text/javascript" src="../src/js/wireit/ImageContainer.js"></script>
+
+    <!-- My DataService -->
+    <script type="text/javascript" src="../src/js/ds/RestDS.js"></script>
+    <script type="text/javascript" src="../src/js/ds/GGearsDS.js"></script>
+    <script type="text/javascript" src="../src/js/ds/MocDS.js"></script>            
+    <script type="text/javascript" src="../src/js/ds/CookieDS.js"></script>            
+        
+    <!-- My System -->
+    <script type="text/javascript" src="../src/js/MySystemUtil.js"></script>
+    <script type="text/javascript" src="../src/js/MySystemPropEditor.js"></script>
+    <script type="text/javascript" src="../src/js/MySystemWireLabel.js"></script>
+    <script type="text/javascript" src="../src/js/MySystemContainer.js"></script>
+    <script type="text/javascript" src="../src/js/MySystemData.js"></script>
+    <script type="text/javascript" src="../src/js/MySystemEditor.js"></script>
+    <script type="text/javascript" src="../src/js/MySystem.js"></script>
+
+
+    <!-- My Engine -->
+    <script type="text/javascript" src="../src/engine/mysystem-engine.js"></script>
+    <script type="text/javascript" src="../lib/http.js"></script>
+    <script>
+      function runSuites() {
+        var spec = JSpec;
+        ['spec.core.js','spec.DataService.html','spec.Util.js'].each(function(name) {
+          spec.exec(name);
+        });
+        spec.report();
+      }
+    </script>
+  </head>
+  <body class="jspec" onLoad="runSuites();">
+    <div id="jspec-top"><h2 id="jspec-title">JSpec <em><script>document.write(JSpec.version)</script></em></h2></div>
+    <div id="jspec"></div>
+    <div id="jspec-bottom"></div>
+  </body>
+</html>
