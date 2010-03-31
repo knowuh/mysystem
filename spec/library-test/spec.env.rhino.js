@@ -1,4 +1,4 @@
-describe 'Check env.rhino.js if the name conflict fix has been applied'
+describe 'EnvJs name conflict fix'
 
   it "shouldn't break on name conflict of Element with prototype.js"
     load('spec/support/env.rhino.js')
