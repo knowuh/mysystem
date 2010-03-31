@@ -6,3 +6,5 @@ tmp
 .project
 .DS_Store
 *~
+appspot/*
+vendor/*
