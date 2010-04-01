@@ -14,9 +14,9 @@
   <link rel="stylesheet" type="text/css" href="css/mysystem.css" />
 
   <!-- YUI CSS files: -->
-  <link rel="stylesheet" type="text/css" href="lib/YUI/reset-font-grids.css" />
-  <link rel="stylesheet" type="text/css" href="lib/YUI/base-min.css" />
-  <link rel="stylesheet" type="text/css" href="lib/YUI/sam.css" />
+  <link rel="stylesheet" type="text/css" href="../lib/YUI/reset-font-grids.css" />
+  <link rel="stylesheet" type="text/css" href="../lib/YUI/base-min.css" />
+  <link rel="stylesheet" type="text/css" href="../lib/YUI/sam.css" />
 
 
   <!-- Prototype -->
@@ -24,14 +24,14 @@
 
 
   <!-- YUI JS Combo file: -->
-  <script type="text/javascript" src="lib/YUI/YUI-combo.js"></script>
+  <script type="text/javascript" src="../lib/YUI/YUI-combo.js"></script>
 
 
-  <script type="text/javascript" src="lib/canvastext.js"></script>
-  <script type="text/javascript" src="lib/uuid.js"></script>
+  <script type="text/javascript" src="../lib/canvastext.js"></script>
+  <script type="text/javascript" src="../lib/uuid.js"></script>
 
   <!-- WireIt -->
-  <!--[if IE]><script type="text/javascript" src="lib/excanvas.js"></script><![endif]-->
+  <!--[if IE]><script type="text/javascript" src="../lib/excanvas.js"></script><![endif]-->
   <script type="text/javascript" src="js/wireit/WireIt.js"></script>
   <script type="text/javascript" src="js/wireit/CanvasElement.js"></script>
   <script type="text/javascript" src="js/wireit/Wire.js"></script>
@@ -66,7 +66,7 @@
   <!-- My Engine -->
   <script type="text/javascript" src="engine/mysystem-engine.js"></script>
 
-  <script type="text/javascript" src="lib/http.js"></script>
+  <script type="text/javascript" src="../lib/http.js"></script>
   
 </head>
 
@@ -76,7 +76,7 @@
 
         var mySystem;
         var myDataService;
-        document.observe("dom:loaded", function() {
+        $(document).ready(function() {
           mySystem = new MySystem('prefs.json');
           myDataService = new MocDS(null,null);
           //myDataService = new VleDS(vle);
