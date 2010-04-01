@@ -2,6 +2,7 @@
 
 
 (function() {
+    
     var util = YAHOO.util;
     var lang = YAHOO.lang;
     var Event = util.Event;
@@ -240,7 +241,7 @@
         },
         addLayer: function() {
             this.numLayers = this.numLayers + 1;
-            var newOpts = Object.clone(this.options.layerOptions);
+            var newOpts = clone(this.options.layerOptions,true);
             newOpts.layerNumber = this.numLayers;
             var newLayer = new WireIt.Layer(newOpts);
             // this.addLayerMap(newLayer);
@@ -271,15 +272,16 @@
         },
         setLayer:function(newLayer) {
           // kind of a hack, clean any bad wiring from the layer before we continue:
+          debugger
           this.cleanWiring(newLayer);
           if (this.layer == null) { this.layer = this.rootLayer;}
           var parentDom = this.layer.options.parentEl;
           parentDom.replaceChild(newLayer.el,this.layer.el);
-          this.layer.el.hide();
+          $(this.layer.el).hide();
          
           //this.layer.el.update(this.layer.options.layerNumber);//whats that going to do?
           this.layer = newLayer;
-          this.layer.el.show();
+          $(this.layer.el).show();
           this.setDDLayer(this.layer);   
           this.hidePropEditor();
        },

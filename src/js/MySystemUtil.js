@@ -1,5 +1,23 @@
 (function() {
   
+  clone = function(obj, shallow){
+      debugger
+      if(obj == null || typeof(obj) != 'object' || shallow)
+          return obj;
+      var temp = new obj.constructor();
+      for(var key in obj)
+          temp[key] = clone(obj[key]);
+      return temp;
+  };
+  
+  Object.prototype.update = function(otherObject) {
+    var key;
+    for (key in otherObject) {
+      if (typeof otherObject[key] != "function") {
+        this[key] = clone(otherObject[key],true);
+      }
+    }
+  };
   
   /**
   *
@@ -68,8 +86,8 @@
         layerMap: false,
         enableMouseEvents: true
       };
-      defaults = $H(defaults);
-      this.options = defaults.merge($H(options)).toObject();
+      defaults.update(options);
+      this.options = defaults;
       debug("loaded defaults for wire-it layer");
       debug(this.options.parentEl);
     };

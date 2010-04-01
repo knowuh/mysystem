@@ -109,33 +109,43 @@ MySystemPropEditor.prototype = {
     if(this.fieldLabelMap[field_name]) {
 
       var fields = $('prop_fields');
-      var label = new Element('label', {'for': field_name});
-      label.update(this.fieldLabelMap[field_name].label);
+      // var label = new Element('label', {'for': field_name});
+      var label = $('<label></label>')
+        .attr({'for': field_name})
+        .prepend(this.fieldLabelMap[field_name].label);
       var type = this.fieldLabelMap[field_name].type || 'text';      
-      var style = this.fieldLabelMap[field_name].style
+      var style = this.fieldLabelMap[field_name].style;
       var input;
       if (type =='textarea') {
-        input = new Element('textarea', { 'name': field_name, 'id': field_name});
-        input.insert({'bottom': value});
+        // input = new Element('textarea', { 'name': field_name, 'id': field_name});
+        input = $('<textarea></textarea>')
+          .attr({ 'name': field_name, 'id': field_name})
+          .append(input);
       }
       else {
-        input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
+        // input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
+        input = $('<input></input>')
+          .attr({ 'type': type, 'name': field_name, 'id': field_name, 'value': value});
       }
       if (style) {
-        input.addClassName(style);
+        input.attr({'class': style});
       }
-      var label_td = new Element('td', {'align': 'right', 'class': 'input_label' });
-      label_td.setStyle({'align': 'right'});
-      label_td.setStyle({'text-align': 'right'});
-      label_td.insert({'bottom': label});
+      var label_td = $('<td>,</td>')
+        .attr({'align': 'right', 'class': 'input_label' })
+        .css({'align': 'right','text-align': 'right'})
+        .append(label);
 
-      var input_td = new Element('td', { 'class': 'input_field' });
-      input_td.insert({'bottom': input});
+      // var input_td = new Element('td', { 'class': 'input_field' });
+      var input_td = $('<td></td>')
+        .attr({ 'class': 'input_field' })
+        .append({'bottom': input});
 
-      var table_row = new Element('tr', { 'class': 'input_row'});
-      table_row.insert({'bottom': label_td});
-      table_row.insert({'bottom': input_td});
-      this.formTable.insert({'bottom': table_row});
+      var table_row = $('<tr></tr>')
+        .attr({'class': 'input_row'})
+        .append(label_td)
+        .append(input_td);
+        
+      this.formTable.append(table_row);
     }
   },
   
@@ -145,8 +155,8 @@ MySystemPropEditor.prototype = {
     pallet.update('<h4>Flow Type</h4>');
     var arrow = null;
     for (arrow in arrows) {
-      var color_div = new Element('div', {'class': 'pallet_element' });
-
+      // var color_div = new Element('div', {'class': 'pallet_element' });
+      
       color_div.setStyle({backgroundColor: arrow});
       if(arrows[arrow]) {
         color_div.setStyle({'width' : 'auto'});
@@ -334,15 +344,3 @@ MySystemPropEditor.prototype = {
   }
   
 }
-
-
-
-
-
-
-
-
-
-
-
-
