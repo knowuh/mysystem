@@ -72,20 +72,20 @@ YAHOO.lang.extend(MySystemNote, WireIt.Container, {
   },
   
   updateFields: function() {
-    debug(($H(this.options.fields).inspect()));
     if (this.options.fields){
       this.setContent(this.options.fields.content);
     }
   },
   
   getConfig: function() {
-    var super_options = MySystemNote.superclass.getConfig.call();
     this.options.name = this.title;
     this.options.position[0] = this.el.getStyle('left');
     this.options.position[1] = this.el.getStyle('top');
-    // use prototype merge to respolve options.
-    return $H(super_options).merge($H(this.options));
-
+    // use prototype merge to resolve options.
+    // TODO: this wont work without prototype:
+    // var super_options = MySystemNote.superclass.getConfig.call();
+    // return $H(super_options).merge($H(this.options));
+    return this.options;
   }
 });
 
