@@ -12,7 +12,7 @@
     });
     this.panel.buildWrapper();
     
-    $(iconId).observe('click', function(event) {
+    $(iconId).click(function(event) {
       if (self.collapsed) {
         self.expand();
       }
@@ -31,14 +31,16 @@
     },
     
     collapse: function() {
-      $(this.elemId).setStyle({ height: '32px' });
-      $(this.iconId).writeAttribute('src', 'images/down-arrow.png');
+      $(this.elemId)
+        .css({ height: '32px' })
+        .attr({'src': 'images/down-arrow.png'});
       this.collapsed = true;
     },
     
     expand: function() {
-      $(this.elemId).setStyle({ height: 'auto' });
-      $(this.iconId).writeAttribute('src', 'images/up-arrow.png');
+      $(this.elemId)
+        .css({ height: 'auto' })
+        .attr({'src': 'images/up-arrow.png'});
       this.collapsed = false;
     }
   };

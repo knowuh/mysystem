@@ -8,7 +8,7 @@
 MySystemPropEditor = function(options) {
    this.domID = options.domID || "prop_form";
    this.dom_entity = $(this.domID);
-   this.formName = options.formName || "prop_form_form";
+   this.formName = options.formName || "#prop_form_form";
    this.selected_color = "#000000";
    this.formTable = $('form_table');
    
@@ -22,7 +22,7 @@ MySystemPropEditor = function(options) {
    this.setArrows(hexColors);
   
    var self =  this;
-   this.dom_entity.observe('keydown', function(e){
+   this.dom_entity.keydown(function(e){
      var code;
      var escapeKey = 27;
      var returnKey = 13;
@@ -33,7 +33,7 @@ MySystemPropEditor = function(options) {
      // for submitting form, unless we are in
      // textarea
      if (code == returnKey) {
-       if (! e.element().match('textarea')) {
+       if (! e.target == $('#textarea')) {
          e.stop(); // 
        }
      }
@@ -91,7 +91,7 @@ MySystemPropEditor.prototype = {
   
   setEditorName: function(node) {
     var xtype = node.xtype || node.options.xtype || 'default';
-    var domName = 'prop_name';
+    var domName = '#prop_name';
     var nodeTypeMap = {
       'default'           : 'Poperties',
       'MySystemNote'      : 'Note Info',
@@ -100,7 +100,7 @@ MySystemPropEditor.prototype = {
     };
     var domThing = $(domName);
     if (domThing) {
-      domThing.update(nodeTypeMap[xtype]);
+      domThing.text(nodeTypeMap[xtype]);
     }
   },
   
@@ -151,19 +151,19 @@ MySystemPropEditor.prototype = {
   
   
   setArrows: function(arrows) {
-    var pallet = $('palette');
-    pallet.update('<h4>Flow Type</h4>');
+    var pallet = $('#palette');
+    pallet.html('<h4>Flow Type</h4>');
     var arrow = null;
     for (arrow in arrows) {
       // var color_div = new Element('div', {'class': 'pallet_element' });
-      
-      color_div.setStyle({backgroundColor: arrow});
+      var color_div = $('<div></div>')
+        .attr({'class': 'pallet_element'})
+        .css({backgroundColor: arrow});
       if(arrows[arrow]) {
-        color_div.setStyle({'width' : 'auto'});
-        color_div.setStyle({'color' : 'white'});
-        color_div.update(arrows[arrow]);
+        color_div.css({'width' : 'auto', 'color' : 'white'});
+        color_div.append(arrows[arrow]);
       }
-      pallet.insert({'bottom': color_div});
+      pallet.append(color_div);
     }
   },
   
@@ -211,9 +211,7 @@ MySystemPropEditor.prototype = {
   
   
   deselect: function() {
-    $$('.selected').each( function(elem) {
-       elem.removeClassName('selected');
-     });
+    $('.selected').removeClass('selected');
   },
   
   disable: function() {
@@ -225,7 +223,7 @@ MySystemPropEditor.prototype = {
     if(this.form_observer !=null) {
       this.form_observer.stop();
       this.form_observer = null;
-      $('palette').stopObserving('click');
+      $('#palette').stopObserving('click');
     }
   },
   
@@ -254,16 +252,16 @@ MySystemPropEditor.prototype = {
     if(this.form_observer !=null) {
       this.form_observer.stop();
       this.form_observer = null;
-      $('palette').stopObserving('click');
+      $('#palette').stopObserving('click');
     }
     this.setNode(nnode);
     this.updateFields();
 
     this.selected_color = this.node.options.fields.color || "color2";
-    var selected_palette_item = $(this.selected_color);
+    var selected_palette_item = $('#'+this.selected_color);
     if (selected_palette_item) {
       this.deselect();
-      $(selected_palette_item).addClassName('selected');
+      $(selected_palette_item).attr({'class':'selected'});
     }
 
     
@@ -281,7 +279,7 @@ MySystemPropEditor.prototype = {
     if (n && n.options){
       if (this.node) {
         if ($(this.node_element)) {
-          $(this.node_element).removeClassName('selected');
+          $(this.node_element).removeClass('selected');
         }
         if (this.node.options.selected) {
           this.node.options.selected=false;
@@ -332,13 +330,13 @@ MySystemPropEditor.prototype = {
   
   positionIcon: function() {
     if (this.nodeIsIcon(this.node)) {
-      if($('icon_spot')) {
-        $('icon_spot').update('<img src="' + this.node.options.icon + '" alt="icon" class="icon"/></br>');
+      if($('#icon_spot')) {
+        $('#icon_spot').html('<img src="' + this.node.options.icon + '" alt="icon" class="icon"/></br>');
       }
     }
     else {
       if($('icon_spot')) {
-        $('icon_spot').update('');
+        $('icon_spot').html('');
       }
     }
   }

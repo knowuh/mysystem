@@ -1,7 +1,6 @@
 (function() {
   
   clone = function(obj, shallow){
-      debugger
       if(obj == null || typeof(obj) != 'object' || shallow)
           return obj;
       var temp = new obj.constructor();

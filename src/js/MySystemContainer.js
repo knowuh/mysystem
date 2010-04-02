@@ -24,7 +24,7 @@ MySystemContainer = function(options, layer) {
 
 
    if (this.options.position) {
-     $(this.el).setStyle({
+     $(this.el).css({
        position: 'absolute',
        left: this.options.position[0],
        top: this.options.position[1]
@@ -54,8 +54,9 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   setTitle: function(newTitle) {
     if(newTitle) {
       var this_el = this.el
-      var title_el = $(this_el).down('.title')
-      title_el.absolutize();
+      var title_el = $(this_el).children('.title').first();
+      // TODO: No absolutize in jQuery
+      // title_el.absolutize();
       var wordWrapChars = 30;
       this.title = newTitle.wordWrap(wordWrapChars, "\n");
       this.options.name = this.title;
@@ -64,12 +65,13 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
         title_el = this.createTitle()
         this_el.insert(title_el);
       }
-      title_el.update(this.title);
+      title_el.html(this.title);
       var leftOffset = 0;
-      if (title_el.getWidth() > title_el.up().getWidth()) {
-        leftOffset = (title_el.getWidth() - title_el.up().getWidth())/2;
+      if (title_el.width() > title_el.parent().width()) {
+        leftOffset = (title_el.width() - title_el.parent().width())/2;
       }
-      title_el.clonePosition(title_el.up(), {setTop: false, setLeft:true, setWidth: false, setHeight: false,offsetLeft:leftOffset});
+      debugger
+      title_el.clonePosition(title_el.parent(), {setTop: false, setLeft:true, setWidth: false, setHeight: false,offsetLeft:leftOffset});
     }
   },
   createTitle: function() {
@@ -78,11 +80,11 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   render: function() {
     MySystemContainer.superclass.render.call(this);
     var this_el = this.el
-    var title_el = $(this_el).down('.title') 
+    var title_el = $(this_el).children('.title').first();
     if(!title_el) {
       title_el = this.createTitle();
       this_el.insert(title_el);
-      title_el.update(this.title);
+      title_el.html(this.title);
     }
     
   },

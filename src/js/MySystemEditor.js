@@ -272,7 +272,6 @@
         },
         setLayer:function(newLayer) {
           // kind of a hack, clean any bad wiring from the layer before we continue:
-          debugger
           this.cleanWiring(newLayer);
           if (this.layer == null) { this.layer = this.rootLayer;}
           var parentDom = this.layer.options.parentEl;

@@ -136,7 +136,7 @@
     },
     
     loadAssignmentInfo : function(item) {
-      $('#goal_panel_text').text(item.fields.goal);
+      $('#goal_panel_text').html(item.fields.goal);
     },
     
     /**
