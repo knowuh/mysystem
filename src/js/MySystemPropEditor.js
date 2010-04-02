@@ -141,9 +141,10 @@ MySystemPropEditor.prototype = {
         .append(input_td);
       var self = this;  
       input.focusout(function() {
-        debugger
-        self.node.options.fields[field_name] = input.val() || "(type-here)";
-        self.updateFields();
+        if (self.node) {
+          self.node.options.fields[field_name] = input.val() || "(type-here)";
+          self.node.updateFields();
+        }
       });
       this.formTable.append(table_row);
     }
@@ -155,7 +156,6 @@ MySystemPropEditor.prototype = {
     pallet.html('<h4>Flow Type</h4>');
     var arrow = null;
     for (arrow in arrows) {
-      // var color_div = new Element('div', {'class': 'pallet_element' });
       var color_div = $('<div></div>')
         .attr({'class': 'pallet_element'})
         .css({backgroundColor: arrow});
@@ -184,21 +184,19 @@ MySystemPropEditor.prototype = {
   saveValues: function() {    
     var theForm = $(this.formName);
     for (var name in this.fieldLabelMap) {
-      try {
+      if (this.node) {
         if (this.node.options.fields[name]) {
           // If no value exists, return the (type-here) value
           this.node.options.fields[name] = $('#' + name).val() || "(type-here)"; 
         }
-      }
-      catch(e) {
-        debug("unable to save property " + name + " for " + this.node);
+        if (this.node.options.fields.color) {
+          this.node.options.fields.color = this.selected_color;
+        }
+        this.node.updateFields();
       }
     }
 
-    if (this.node.options.fields.color) {
-      this.node.options.fields.color = this.selected_color;
-    }
-    this.node.updateFields();
+  
   },
   
   
@@ -207,6 +205,7 @@ MySystemPropEditor.prototype = {
   },
   
   disable: function() {
+    this.saveValues();
     this.dom_entity.hide();
     this.deselect();
     this.setNode(null);
@@ -241,12 +240,7 @@ MySystemPropEditor.prototype = {
   
 
   show: function(nnode) {        
-    if(this.form_observer !=null) {
-      // TODO: Form listening in jQuery
-      // this.form_observer.stop();
-      this.form_observer = null;
-      $('#palette').die('click');
-    }
+    
     this.setNode(nnode);
     this.updateFields();
 
@@ -293,6 +287,7 @@ MySystemPropEditor.prototype = {
         var self = this;
         $('palette').click(function (event) {
           self.deselect();
+          debugger
           var element = $(event.target);
           element.addClass('selected');
           self.selected_color = element.attr('id');
@@ -308,8 +303,6 @@ MySystemPropEditor.prototype = {
   
   positionEditor: function() {
     this.dom_entity.show();
-    // TODO cant absolutize!
-    // this.dom_entity.absolutize();
 
     this.dom_entity.position({
       offsetLeft: this.node_element.width()
