@@ -23,7 +23,7 @@
     interceptKeys: function() {
       $(document).keydown(function(e){
         var code;
-        var element = $(e.element());
+        var element = $(e.target);
         if (e.charCode) code = e.charCode;
         else if (e.which) code = e.which;
         if (code == 8 || code == 127) {

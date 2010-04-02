@@ -61,21 +61,20 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
       this.title = newTitle.wordWrap(wordWrapChars, "\n");
       this.options.name = this.title;
       this.options.fields.name = this.title;
-      if(!title_el) {
+      if((!title_el) || title_el.size() < 1) {
         title_el = this.createTitle()
-        this_el.insert(title_el);
+        $(this_el).prepend(title_el);
       }
       title_el.html(this.title);
       var leftOffset = 0;
       if (title_el.width() > title_el.parent().width()) {
         leftOffset = (title_el.width() - title_el.parent().width())/2;
       }
-      debugger
-      title_el.clonePosition(title_el.parent(), {setTop: false, setLeft:true, setWidth: false, setHeight: false,offsetLeft:leftOffset});
+      // title_el.clonePosition(title_el.parent(), {setTop: false, setLeft:true, setWidth: false, setHeight: false,offsetLeft:leftOffset});
     }
   },
   createTitle: function() {
-    return new Element('div', {'class': 'title' });
+    return $('<div></div>').addClass('title');
   },
   render: function() {
     MySystemContainer.superclass.render.call(this);
@@ -83,7 +82,7 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     var title_el = $(this_el).children('.title').first();
     if(!title_el) {
       title_el = this.createTitle();
-      this_el.insert(title_el);
+      $(this_el).prepend(title_el);
       title_el.html(this.title);
     }
     

@@ -124,10 +124,10 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
     */
    remove: function() {
 
-      this.parentEl.removeChild(this.getLabel().up());   
+      // this.parentEl.removeChild(this.getLabel().parent());   
       // Remove the canvas from the dom
-      this.parentEl.removeChild(this.element);
-
+      // this.parentEl.removeChild(this.element);
+      $(this.element).remove();
       // Remove the wire reference from the connected terminals
       if(this.terminal1 && this.terminal1.removeWire) {
          this.terminal1.removeWire(this);
@@ -654,24 +654,26 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
    },
    
    getLabel: function() {
-     var container = this.element.next('.WireIt-Label-Box');
-     if (! container) {
-       container = new Element('div',{'class': 'WireIt-Label-Box'});
-       this.element.insert({'after': container});
-       container.absolutize();
+     var container = $(this.element).next('.WireIt-Label-Box');
+     if ((! container) || container.size() < 1) {
+       container = $('<div></div>').addClass('WireIt-Label-Box');
+       $(this.element).append(container);
+       // TODO: container.absolutize();
      }
-     container.clonePosition(this.element);
-     result = container.down('.WireIt-Label')
-     if (! result) {
-       var result = new Element('div',{'class': 'WireIt-Label'});
-       container.insert({'bottom': result});
+     // TODO: No clonePosition in jQuery
+     container.position($(this.element).position());
+     
+     result = container.children('.WireIt-Label').first();
+     if ((! result) || result.size() < 1) {
+       var result = $('<div></div>').addClass('WireIt-Label');
+       container.append(result);
      }
      return result;
    },
    
    drawText: function() {
-      this.getLabel().update(this.options.fields.name.wordWrap(45));
-      this.getLabel().setStyle({'color': this.options.color});
+      this.getLabel().html(this.options.fields.name.wordWrap(45));
+      this.getLabel().css({'color': this.options.color});
    },
    
    /**

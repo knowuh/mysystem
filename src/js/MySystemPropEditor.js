@@ -6,11 +6,11 @@
  * @param {Object} options
  */
 MySystemPropEditor = function(options) {
-   this.domID = options.domID || "prop_form";
+   this.domID = options.domID || "#prop_form";
    this.dom_entity = $(this.domID);
    this.formName = options.formName || "#prop_form_form";
    this.selected_color = "#000000";
-   this.formTable = $('form_table');
+   this.formTable = $('#form_table');
    
    var hexColors = { 
      '#490A3D' : '', 
@@ -66,25 +66,24 @@ MySystemPropEditor.prototype = {
     
 
     // this.formTable = new Element('table', {'id': 'prop_form_table'});
-
-    $H(this.node.options.fields).each(function (pair) {
-      var field_name = pair.key;
-      var _value = this.node.options.fields[field_name];
-      if(field_name !='color') {
-        this.showField(field_name,_value);
+    var key;
+    var value;
+    for(key in this.node.options.fields) {
+      value = this.node.options.fields[key];
+      if(key !='color') { 
+        this.showField(key,value); 
       }
-    }.bind(this));
-    
-
+    }
+  
     this.setEditorName(this.node);
     
-    $('prop_form_closer').observe('mouseover',function(e) {
-      self.opacity(0.99,'prop_form_closer');
+    $('#prop_form_closer').mouseover( function(e) {
+      $('#prop_form_closer').fadeTo('fast',0.99);
     });
-    $('prop_form_closer').observe('mouseout',function(e) {
-      self.opacity(0.5,'prop_form_closer');
+    $('#prop_form_closer').mouseout(function(e) {
+      $('#prop_form_closer').fadeTo('fast',0.5);
     });
-    $('prop_form_closer').observe('click',function(e) {
+    $('#prop_form_closer').click(function(e) {
       self.disable();
     });
   },
@@ -166,23 +165,14 @@ MySystemPropEditor.prototype = {
       pallet.append(color_div);
     }
   },
-  
-  opacity: function(opacity, dom_id) {
-    var elem = $(dom_id);
-    elem.setStyle({
-      'opacity': opacity,
-      '-moz-opacity': opacity,
-      'filter': 'alpha(opacity=' + (opacity * 100) +')'
-    });
 
-  },
   
   clearFields: function() {
-    if (this.formTable && this.formTable.up()) {
+    if (this.formTable && this.formTable.size() > 0 && this.formTable.parent() && this.formTable.parent().size > 0) {
       this.formTable.remove();
     }
-    this.formTable = new Element('table', {'id': 'form_table'});
-    $(this.formName).insert({'bottom': this.formTable});
+    this.formTable = $('<table><table>').attr({'id': 'form_table'});
+    $(this.formName).append(this.formTable);
   },
   
   
@@ -219,32 +209,32 @@ MySystemPropEditor.prototype = {
     this.deselect();
     this.setNode(null);
     this.deselect();
-    document.stopObserving('mousedown');
+    // $(document).die('mousedown');
     if(this.form_observer !=null) {
       this.form_observer.stop();
       this.form_observer = null;
-      $('#palette').stopObserving('click');
+      $('#palette').die('click');
     }
   },
   
   enableClickAway: function() {
+    var self=this;
     var clickHandler = function(e) {
       var close = true;
-      var clicked = e.element();
-      if (this.node) {
-        if (clicked == this.node_element || clicked.descendantOf(this.node_element)) {
+      var clicked = e.target;
+      if (self.node) {
+        if (clicked == self.node_element) {
           close = false;
         }
       }
-      if ( clicked == this.dom_entity 
-        || clicked.descendantOf(this.dom_entity)) {
+      if ( clicked == self.dom_entity) {
           close = false;
       }
       if (close) {
-       this.disable();
+       self.disable();
       }
     };
-    document.observe('click', clickHandler.bind(this));
+    $(document).click(clickHandler);
   },
   
 
@@ -252,7 +242,7 @@ MySystemPropEditor.prototype = {
     if(this.form_observer !=null) {
       this.form_observer.stop();
       this.form_observer = null;
-      $('#palette').stopObserving('click');
+      $('#palette').die('click');
     }
     this.setNode(nnode);
     this.updateFields();
@@ -269,8 +259,9 @@ MySystemPropEditor.prototype = {
     this.showPalette();
     this.positionIcon();
     this.enableClickAway();
-    this.form_observer = new Form.Observer($(this.formName),0.3,this.saveValues.bind(this));
-    $(this.formName).focusFirstElement();
+    // TODO: Form observing in jQuery
+    // this.form_observer = new Form.Observer($(this.formName),0.3,this.saveValues.bind(this));
+    // $(this.formName).focusFirstElement();
   },
   
   
@@ -287,7 +278,7 @@ MySystemPropEditor.prototype = {
         }
       }
       this.node = n;
-      this.node_element = n.element;
+      this.node_element = $(n.element);
     }
     else {
       this.node = null;
@@ -298,29 +289,29 @@ MySystemPropEditor.prototype = {
   showPalette: function() {
     if (this.node.options.fields.color) {
         $('palette').show();
-        $('palette').observe('click', function (event) {
-          this.deselect();
-          var element = event.element();
-          element.addClassName('selected');
-          this.selected_color = element.identify();
-          this.saveValues();
-        }.bind(this));
+        var self = this;
+        $('palette').click(function (event) {
+          self.deselect();
+          var element = $(event.target);
+          element.addClass('selected');
+          self.selected_color = element.attr('id');
+          self.saveValues();
+        });
         this.node.options.selected=true;
       }
       else {
         $('palette').hide();
-        $(this.node.bodyEl).addClassName('selected');
+        $(this.node.bodyEl).addClass('selected');
       }
   },
   
   positionEditor: function() {
     this.dom_entity.show();
-    this.dom_entity.absolutize();
+    // TODO cant absolutize!
+    // this.dom_entity.absolutize();
 
-    this.dom_entity.clonePosition(this.node_element,{
-      setWidth: false,
-      setHeight: false,
-      offsetLeft: this.node_element.getWidth(),
+    this.dom_entity.position({
+      offsetLeft: this.node_element.width()
     });
   },
   
