@@ -1,25 +1,25 @@
 (function() {
   
-  GoalPanel = function(elemId, iconId) {
+  GoalPanel = function(elem, icon) {
     var self = this;
     
-    this.elemId = elemId;
-    this.iconId = iconId;
-    this.panel = new YAHOO.widget.Panel(this.elemId, {
+    this.elem = elem;
+    this.icon = icon;
+    this.panel = new YAHOO.widget.Panel(this.elem.attr('id'), {
       xy: [580, -10],
       width: '300px',
       close: false
     });
     this.panel.buildWrapper();
     
-    $(iconId).click(function(event) {
+    this.icon.click(function(event) {
       if (self.collapsed) {
         self.expand();
       }
       else {
         self.collapse();
       }
-      event.stop();
+      event.preventDefault();
     });
     
     this.expand();
@@ -31,16 +31,14 @@
     },
     
     collapse: function() {
-      $(this.elemId)
-        .css({ height: '32px' })
-        .attr({'src': 'images/down-arrow.png'});
+      this.elem.css({ height: '32px' })
+      this.icon.attr({'src': 'images/down-arrow.png'});
       this.collapsed = true;
     },
     
     expand: function() {
-      $(this.elemId)
-        .css({ height: 'auto' })
-        .attr({'src': 'images/up-arrow.png'});
+      this.elem.css({ height: 'auto' });
+      this.icon.attr({'src': 'images/up-arrow.png'});
       this.collapsed = false;
     }
   };

@@ -126,7 +126,7 @@
         // this.enableLoadAndSave();
         this.renderButtons();
 
-        this.goalPanel = new GoalPanel('goal_panel', 'goal_panel_icon');
+        this.goalPanel = new GoalPanel($('#goal_panel'), $('#goal_panel_icon'));
         this.goalPanel.render();
     };
 
