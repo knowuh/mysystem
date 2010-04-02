@@ -63,9 +63,6 @@ MySystemPropEditor.prototype = {
   updateFields: function() {
     this.clearFields();
     var self =  this;
-    
-
-    // this.formTable = new Element('table', {'id': 'prop_form_table'});
     var key;
     var value;
     for(key in this.node.options.fields) {
@@ -74,7 +71,7 @@ MySystemPropEditor.prototype = {
         this.showField(key,value); 
       }
     }
-  
+    
     this.setEditorName(this.node);
     
     $('#prop_form_closer').mouseover( function(e) {
@@ -103,15 +100,15 @@ MySystemPropEditor.prototype = {
     }
   },
   
+  
+  
   showField: function(field_name,value) {
     
     if(this.fieldLabelMap[field_name]) {
-
-      var fields = $('prop_fields');
-      // var label = new Element('label', {'for': field_name});
-      var label = $('<label></label>')
+      
+      var domLabel = $('<label></label>')
         .attr({'for': field_name})
-        .prepend(this.fieldLabelMap[field_name].label);
+        .html(this.fieldLabelMap[field_name].label);
       var type = this.fieldLabelMap[field_name].type || 'text';      
       var style = this.fieldLabelMap[field_name].style;
       var input;
@@ -119,31 +116,35 @@ MySystemPropEditor.prototype = {
         // input = new Element('textarea', { 'name': field_name, 'id': field_name});
         input = $('<textarea></textarea>')
           .attr({ 'name': field_name, 'id': field_name})
-          .append(input);
+          .html(value);
       }
       else {
-        // input = new Element('input', { 'type': type, 'name': field_name, 'id': field_name, 'value': value});
         input = $('<input></input>')
           .attr({ 'type': type, 'name': field_name, 'id': field_name, 'value': value});
       }
       if (style) {
         input.attr({'class': style});
       }
-      var label_td = $('<td>,</td>')
-        .attr({'align': 'right', 'class': 'input_label' })
+      var label_td = $('<td></td>')
+        .addClass('input_label')
         .css({'align': 'right','text-align': 'right'})
-        .append(label);
+        .append(domLabel);
 
       // var input_td = new Element('td', { 'class': 'input_field' });
       var input_td = $('<td></td>')
-        .attr({ 'class': 'input_field' })
-        .append({'bottom': input});
+        .addClass('input_field')
+        .append(input);
 
       var table_row = $('<tr></tr>')
-        .attr({'class': 'input_row'})
+        .addClass('input_row')
         .append(label_td)
         .append(input_td);
-        
+      var self = this;  
+      input.focusout(function() {
+        debugger
+        self.node.options.fields[field_name] = input.val() || "(type-here)";
+        self.updateFields();
+      });
       this.formTable.append(table_row);
     }
   },
@@ -168,11 +169,11 @@ MySystemPropEditor.prototype = {
 
   
   clearFields: function() {
-    if (this.formTable && this.formTable.size() > 0 && this.formTable.parent() && this.formTable.parent().size > 0) {
+    if (this.formTable) {
       this.formTable.remove();
     }
-    this.formTable = $('<table><table>').attr({'id': 'form_table'});
-    $(this.formName).append(this.formTable);
+    this.formTable = $('<table></table>').attr({'id': 'form_table'});
+    $(this.formName).html(this.formTable);
   },
   
   
@@ -185,7 +186,8 @@ MySystemPropEditor.prototype = {
     for (var name in this.fieldLabelMap) {
       try {
         if (this.node.options.fields[name]) {
-          this.node.options.fields[name] = theForm[name].getValue()||"(type-here)"; // If no value exists, return the (type-here) value
+          // If no value exists, return the (type-here) value
+          this.node.options.fields[name] = $('#' + name).val() || "(type-here)"; 
         }
       }
       catch(e) {
@@ -221,13 +223,13 @@ MySystemPropEditor.prototype = {
     var self=this;
     var clickHandler = function(e) {
       var close = true;
-      var clicked = e.target;
+      var clicked = $(e.target);
       if (self.node) {
         if (clicked == self.node_element) {
           close = false;
         }
       }
-      if ( clicked == self.dom_entity) {
+      if (self.dom_entity.children(clicked).size() > 1) {
           close = false;
       }
       if (close) {
@@ -240,7 +242,8 @@ MySystemPropEditor.prototype = {
 
   show: function(nnode) {        
     if(this.form_observer !=null) {
-      this.form_observer.stop();
+      // TODO: Form listening in jQuery
+      // this.form_observer.stop();
       this.form_observer = null;
       $('#palette').die('click');
     }
@@ -259,9 +262,7 @@ MySystemPropEditor.prototype = {
     this.showPalette();
     this.positionIcon();
     this.enableClickAway();
-    // TODO: Form observing in jQuery
-    // this.form_observer = new Form.Observer($(this.formName),0.3,this.saveValues.bind(this));
-    // $(this.formName).focusFirstElement();
+    var self = this;
   },
   
   

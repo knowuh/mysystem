@@ -27,7 +27,7 @@
         if (e.charCode) code = e.charCode;
         else if (e.which) code = e.which;
         if (code == 8 || code == 127) {
-          if ((! element.match('input')) && (! element.match('textarea'))) {
+          if ((! element.is('input')) && (! element.is('textarea'))) {
               e.stop();
           } 
         }
