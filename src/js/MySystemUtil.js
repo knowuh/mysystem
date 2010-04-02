@@ -1,22 +1,48 @@
 (function() {
   
-  clone = function(obj, shallow){
-      if(obj == null || typeof(obj) != 'object' || shallow)
+  /*
+   * INPUT:
+   * obj: object to clone
+   * shallow: if true, clone will return a shallow copy
+   * 
+   * OUTPUT:
+   * returns a cloned object
+   */
+  
+  /*
+  clone = function(obj, shallow) {
+      console.log('clone obj=' + obj + ' type=' + typeof obj);
+      if(obj == null || typeof(obj) != 'object') {
           return obj;
+      }
       var temp = new obj.constructor();
-      for(var key in obj)
-          temp[key] = clone(obj[key]);
+      for(var key in obj) {
+          if (shallow) {
+            temp[key] = obj[key];
+          }
+          else {
+            temp[key] = clone(obj[key]);
+          }
+      }
       return temp;
   };
+  */
   
-  Object.prototype.update = function(otherObject) {
-    var key;
-    for (key in otherObject) {
-      if (typeof otherObject[key] != "function") {
-        this[key] = clone(otherObject[key],true);
+  /*
+   * A destructive operation that merges fromObj into toObj with a shallow copy
+   * Attributes of toObj gets overwritten with those of fromObj.
+   * Attributes of toObj that doesn't exist in fromObj remains intact.
+   */
+  
+  /*
+  update = function(toObj, fromObj) {
+    for (var key in fromObj) {
+      if (typeof fromObj[key] != 'function') {
+        toObj[key] = clone(fromObj[key], true);
       }
     }
   };
+  */
   
   /**
   *
@@ -77,7 +103,8 @@
   */
   if (window.WireIt && window.WireIt.Layer) {
     WireIt.Layer.prototype.setOptions = function(options) {
-      var defaults = {
+      // Default options
+      this.options = {
         className: 'WireIt-Layer',
         parentEl: document.body,
         containers: [],
@@ -85,8 +112,9 @@
         layerMap: false,
         enableMouseEvents: true
       };
-      defaults.update(options);
-      this.options = defaults;
+      for (var key in options) {
+        this.options[key] = options[key];
+      }
       debug("loaded defaults for wire-it layer");
       debug(this.options.parentEl);
     };

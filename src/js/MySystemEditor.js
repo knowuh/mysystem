@@ -241,7 +241,10 @@
         },
         addLayer: function() {
             this.numLayers = this.numLayers + 1;
-            var newOpts = clone(this.options.layerOptions,true);
+            var newOpts = {};
+            for (var key in this.options.layerOptions) {
+              newOpts[key] = this.options.layerOptions[key];
+            }
             newOpts.layerNumber = this.numLayers;
             var newLayer = new WireIt.Layer(newOpts);
             // this.addLayerMap(newLayer);
