@@ -139,12 +139,17 @@
             // Unload any older options:
             this.options = {};
             // Load the modules from options
+            
             this.modules = options.modules || ([]);
+            
+            /* modulesByName doesn't seem to be used at all.
+             * Besides, m.name is only defined for notes, not containers
             this.modulesByName = {};
             for (var i = 0; i < this.modules.length; i++) {
                 var m = this.modules[i];
                 this.modulesByName[m.name] = m;
             }
+            */
 
             this.options.languageName = options.languageName || 'anonymousLanguage';
             this.options.smdUrl = options.smdUrl || 'WiringEditor.smd'; // eh?
