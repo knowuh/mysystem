@@ -258,6 +258,8 @@ MySystemPropEditor.prototype = {
     this.showPalette();
     this.positionIcon();
     this.enableClickAway();
+    $("textarea:visible:enabled:first").focus();
+    $("input:visible:enabled:first").focus();
     var self = this;
   },
   
