@@ -118,7 +118,6 @@
         this.layout = new widget.Layout(null, this.options.layoutOptions);
         this.layout.render();
         
-        this.resetLayers();
         // Render module list
         this.buildModulesList();
 
