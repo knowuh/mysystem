@@ -155,9 +155,12 @@ MySystemPropEditor.prototype = {
     var pallet = $('#palette');
     pallet.html('<h4>Flow Type</h4>');
     var arrow = null;
+    var counter=0;
     for (arrow in arrows) {
+      counter++;
+      var id = "color_"+counter;
       var color_div = $('<div></div>')
-        .attr({'class': 'pallet_element'})
+        .attr({'class': 'pallet_element', 'id': id})
         .css({backgroundColor: arrow});
       if(arrows[arrow]) {
         color_div.css({'width' : 'auto', 'color' : 'white'});
@@ -248,7 +251,7 @@ MySystemPropEditor.prototype = {
     var selected_palette_item = $('#'+this.selected_color);
     if (selected_palette_item && selected_palette_item.length > 0) {
       this.deselect();
-      $(selected_palette_item).attr({'class':'selected'});
+      $(selected_palette_item).addClass('selected');
     }
     
     this.positionEditor();

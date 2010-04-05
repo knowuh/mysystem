@@ -741,10 +741,19 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
      this.options.name = this.options.fields.name;
      // try selecting by dom_id 
      if ($(this.options.fields.color)) {
-       // var color = $("#"  + this.options.fields.color).css('background-color').parseColor("#00000");
-       // TODO  FIXME:  Not sure what the magic here is, why did this ever work?
-       // the color pallet divs should have id tags representing the color?
-       // this.options.color = color;
+       var rgbString = $("#"  + this.options.fields.color).css('background-color');
+       var parts = rgbString
+               .match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/)
+       ;
+       // parts now should be ["rgb(0, 70, 255", "0", "70", "255"]
+
+       delete (parts[0]);
+       for (var i = 1; i <= 3; ++i) {
+           parts[i] = parseInt(parts[i]).toString(16);
+           if (parts[i].length == 1) parts[i] = '0' + parts[i];
+       }
+       var hexString = "#"  + parts.join(''); // "#0070ff"
+       this.options.color = hexString;
      }
      this.redraw();
    },
