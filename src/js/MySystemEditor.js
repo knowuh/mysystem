@@ -118,7 +118,6 @@
         this.layout = new widget.Layout(null, this.options.layoutOptions);
         this.layout.render();
         
-        this.resetLayers();
         // Render module list
         this.buildModulesList();
 
@@ -211,10 +210,12 @@
           }
           if (this.layer) {
             this.removeLayer(this.layer);
+            this.layer = null;
           }
           
           if (this.rootLayer) {
             this.removeLayer(this.rootLayer);
+            this.rootLayer = null;
           }
           this.numLayers = 0;
           this.layerStack = [];
@@ -259,7 +260,6 @@
           this.numLayers = this.numLayers - 1;
           // this.removeLayerMap(newLayer);
           newLayer.removeAllContainers();
-          newLayer = null;
           return null;
         },
         changeLayer: function(newLayer) {
@@ -281,7 +281,7 @@
         setLayer:function(newLayer) {
           // kind of a hack, clean any bad wiring from the layer before we continue:
           this.cleanWiring(newLayer);
-          if (this.layer == null) { this.layer = this.rootLayer;}
+          if (!this.layer) { this.layer = this.rootLayer;}
           var parentDom = this.layer.options.parentEl;
           parentDom.replaceChild(newLayer.el,this.layer.el);
           $(this.layer.el).hide();
@@ -289,7 +289,7 @@
           //this.layer.el.update(this.layer.options.layerNumber);//whats that going to do?
           this.layer = newLayer;
           $(this.layer.el).show();
-          this.setDDLayer(this.layer);   
+          this.setDDLayer(this.layer);
           this.hidePropEditor();
        },
         // 
