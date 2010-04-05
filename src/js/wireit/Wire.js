@@ -139,6 +139,7 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
       // Remove references to old terminals
       this.terminal1 = null;
       this.terminal2 = null;
+      this.label_container.remove();
    },
 
    /**
@@ -654,20 +655,39 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
    },
    
    getLabel: function() {
+     
      var container = $(this.element).next('.WireIt-Label-Box');
-     if ((! container) || container.size() < 1) {
-       container = $('<div></div>').addClass('WireIt-Label-Box');
-       $(this.element).append(container);
-       // TODO: container.absolutize();
+     
+     // create a label for this wire.
+     if (! this.label_container) {
+       var parent = $(this.element).parent();
+       container = $('<div></div>').addClass('WireIt-Label-Box')
+        .css({'position': 'absolute', 'display': 'block'});
+       parent.append(container);
+       // save reference to the wire label, so that we can remove it
+       // when the wire is removed.
+       this.label_container = container;
      }
-     // TODO: No clonePosition in jQuery
-     container.position($(this.element).position());
      
      result = container.children('.WireIt-Label').first();
      if ((! result) || result.size() < 1) {
-       var result = $('<div></div>').addClass('WireIt-Label');
+       var result = $('<div>(label me)</div>').addClass('WireIt-Label');
        container.append(result);
      }
+
+     
+     // center the label within the wires canvas di
+     var leftOffset = $(this.element).offset().left;
+     var topOffset = $(this.element).offset().top;
+     var dWidth = ($(this.element).width() - result.width()) / 2;
+     var dHeight = container.height() - $(this.element).height();
+     topOffset = topOffset - (dHeight / 2);
+     container.offset({
+       left: $(this.element).offset().left + dWidth,
+       top: topOffset
+     });
+     
+
      return result;
    },
    
@@ -739,20 +759,24 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
        this.options.fields.width = this.options.width;
      }
      this.options.name = this.options.fields.name;
+     
+     var hexString = this.options.fields.color;
      // try selecting by dom_id 
      if ($(this.options.fields.color)) {
        var rgbString = $("#"  + this.options.fields.color).css('background-color');
-       var parts = rgbString
-               .match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/)
-       ;
-       // parts now should be ["rgb(0, 70, 255", "0", "70", "255"]
-
-       delete (parts[0]);
-       for (var i = 1; i <= 3; ++i) {
-           parts[i] = parseInt(parts[i]).toString(16);
-           if (parts[i].length == 1) parts[i] = '0' + parts[i];
+       if (rgbString) {
+         var parts = rgbString.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+         // parts now should be ["rgb(0, 70, 255", "0", "70", "255"]
+         
+         delete (parts[0]);
+         for (var i = 1; i <= 3; ++i) {
+             parts[i] = parseInt(parts[i]).toString(16);
+             if (parts[i].length == 1) parts[i] = '0' + parts[i];
+        }
+         hexString = "#" + parts.join(''); // "#0070ff"
        }
-       var hexString = "#"  + parts.join(''); // "#0070ff"
+      
+      
        this.options.color = hexString;
      }
      this.redraw();
