@@ -14,7 +14,7 @@ MySystemNote = function(options, layer) {
    this.options.xtype = "MySystemNote";
 
    if (this.options.position) {
-     $(this.el).setStyle({
+     $(this.el).css({
        position: 'absolute',
        left: this.options.position[0],
        top: this.options.position[1]
@@ -47,14 +47,14 @@ YAHOO.lang.extend(MySystemNote, WireIt.Container, {
     if(newContent) {
       // var wordWrapChars = 30;
       // this.options.fields.content = newContent.wordWrap(wordWrapChars, "\n");
-      this.getContentEl().update(this.options.fields.content);
+      this.getContentEl().html(this.options.fields.content);
     }
   },
   createContent: function() {
     return new Element('div', {'class': 'content' });
   },
   getContentEl: function() {
-    var content_el = $(this.el).down('.content') 
+    var content_el = $(this.el).find('.content') 
     if(!content_el) {
       content_el = this.createContent();
       this.el.insert({'bottom': content_el});
@@ -67,7 +67,7 @@ YAHOO.lang.extend(MySystemNote, WireIt.Container, {
     debug("render being called");
     MySystemNote.superclass.render.call(this);
     if (this.options.fields) {
-      this.getContentEl().update(this.options.fields.content);
+      this.getContentEl().html(this.options.fields.content);
     }
   },
   
