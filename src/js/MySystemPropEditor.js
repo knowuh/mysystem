@@ -6,9 +6,9 @@
  * @param {Object} options
  */
 MySystemPropEditor = function(options) {
-   this.domID = options.domID || "#prop_form";
+   this.domID = options.domID || "#property_editor";
    this.dom_entity = $(this.domID);
-   this.formName = options.formName || "#prop_form_form";
+   this.formName = options.formName || "#prop_form";
    this.selected_color = "#000000";
    this.formTable = $('#form_table');
    
@@ -74,13 +74,13 @@ MySystemPropEditor.prototype = {
     
     this.setEditorName(this.node);
     
-    $('#prop_form_closer').mouseover( function(e) {
-      $('#prop_form_closer').fadeTo('fast',0.99);
+    $('#property_editor_closer').mouseover( function(e) {
+      $('#property_editor_closer').fadeTo('fast',0.99);
     });
-    $('#prop_form_closer').mouseout(function(e) {
-      $('#prop_form_closer').fadeTo('fast',0.5);
+    $('#property_editor_closer').mouseout(function(e) {
+      $('#property_editor_closer').fadeTo('fast',0.5);
     });
-    $('#prop_form_closer').click(function(e) {
+    $('#property_editor_closer').click(function(e) {
       self.disable();
     });
   },
@@ -286,7 +286,6 @@ MySystemPropEditor.prototype = {
         var self = this;
         $('#palette').click(function (event) {
           self.deselect();
-          debugger
           var element = $(event.target);
           element.addClass('selected');
           self.selected_color = element.attr('id');

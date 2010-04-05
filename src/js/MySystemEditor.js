@@ -352,7 +352,7 @@
         
 
         hidePropEditor: function() {
-          $('#prop_form').hide();
+          $('#property_editor').hide();
         },
         
         /**
