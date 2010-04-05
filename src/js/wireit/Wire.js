@@ -741,8 +741,10 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
      this.options.name = this.options.fields.name;
      // try selecting by dom_id 
      if ($(this.options.fields.color)) {
-       var color = $(this.options.fields.color).getStyle('background-color').parseColor("#00000");
-       this.options.color = color;
+       // var color = $("#"  + this.options.fields.color).css('background-color').parseColor("#00000");
+       // TODO  FIXME:  Not sure what the magic here is, why did this ever work?
+       // the color pallet divs should have id tags representing the color?
+       // this.options.color = color;
      }
      this.redraw();
    },

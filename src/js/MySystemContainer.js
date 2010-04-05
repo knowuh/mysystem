@@ -70,7 +70,10 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
       if (title_el.width() > title_el.parent().width()) {
         leftOffset = (title_el.width() - title_el.parent().width())/2;
       }
-      // title_el.clonePosition(title_el.parent(), {setTop: false, setLeft:true, setWidth: false, setHeight: false,offsetLeft:leftOffset});
+      title_el.css({
+        'left': -1 * leftOffset, 
+        'bottom': -1 * title_el.parent().height() 
+      });
     }
   },
   createTitle: function() {
