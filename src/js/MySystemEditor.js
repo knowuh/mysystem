@@ -281,7 +281,7 @@
         setLayer:function(newLayer) {
           // kind of a hack, clean any bad wiring from the layer before we continue:
           this.cleanWiring(newLayer);
-          if (this.layer == null) { this.layer = this.rootLayer;}
+          if (!this.layer) { this.layer = this.rootLayer;}
           var parentDom = this.layer.options.parentEl;
           parentDom.replaceChild(newLayer.el,this.layer.el);
           $(this.layer.el).hide();
@@ -289,7 +289,7 @@
           //this.layer.el.update(this.layer.options.layerNumber);//whats that going to do?
           this.layer = newLayer;
           $(this.layer.el).show();
-          this.setDDLayer(this.layer);   
+          this.setDDLayer(this.layer);
           this.hidePropEditor();
        },
         // 
