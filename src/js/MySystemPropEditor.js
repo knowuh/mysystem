@@ -8,7 +8,10 @@
 MySystemPropEditor = function(options) {
    this.domID = options.domID || "#property_editor";
    this.dom_entity = $(this.domID);
+   
    this.formName = options.formName || "#prop_form";
+   this.form_entity = $(this.formName);
+   
    this.selected_color = "#000000";
    this.formTable = $('#form_table');
    
@@ -22,13 +25,16 @@ MySystemPropEditor = function(options) {
    this.setArrows(hexColors);
   
    var self =  this;
-   this.dom_entity.keydown(function(e){
+   this.dom_entity.keydown(function(e) {
      var code;
      var escapeKey = 27;
      var returnKey = 13;
-     if (e.keyCode) code = e.keyCode;
-     else if (e.which) code = e.which;
-     
+     if (e.keyCode) {
+       code = e.keyCode;
+     }
+     else if (e.which) { 
+       code = e.which;
+     }
      // disable default enter key
      // for submitting form, unless we are in
      // textarea
@@ -42,6 +48,7 @@ MySystemPropEditor = function(options) {
        // e.stop();
        self.disable(); 
      }
+     debug('KEY=' + e.which);
    });
    
    // the default labelMap
@@ -142,8 +149,9 @@ MySystemPropEditor.prototype = {
       var self = this;  
       input.focusout(function() {
         if (self.node) {
-          self.node.options.fields[field_name] = input.val() || "(type-here)";
-          self.node.updateFields();
+          var options = {};
+          options[field_name] = (input.val() || '(type-here)');
+          self.node.updateFields(options);
         }
       });
       this.formTable.append(table_row);
@@ -176,7 +184,7 @@ MySystemPropEditor.prototype = {
       this.formTable.remove();
     }
     this.formTable = $('<table></table>').attr({'id': 'form_table'});
-    $(this.formName).html(this.formTable);
+    this.form_entity.html(this.formTable);
   },
   
   
@@ -184,22 +192,15 @@ MySystemPropEditor.prototype = {
   // save the form field values
   // back into our node.
   //
-  saveValues: function() {    
-    var theForm = $(this.formName);
-    for (var name in this.fieldLabelMap) {
-      if (this.node) {
-        if (this.node.options.fields[name]) {
-          // If no value exists, return the (type-here) value
-          this.node.options.fields[name] = $('#' + name).val() || "(type-here)"; 
-        }
-        if (this.node.options.fields.color) {
-          this.node.options.fields.color = this.selected_color;
-        }
-        this.node.updateFields();
+  saveValues: function() {
+    if (this.node) {
+      var options = {};
+      for (var name in this.fieldLabelMap) {
+        options[name] = $('#' + name).val() || "(type-here)";
       }
+      options['selected_color'] = this.selected_color;
+      this.node.updateFields(options);
     }
-
-  
   },
   
   

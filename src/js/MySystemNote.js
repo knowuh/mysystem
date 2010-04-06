@@ -73,9 +73,14 @@ YAHOO.lang.extend(MySystemNote, WireIt.Container, {
     }
   },
   
-  updateFields: function() {
+  updateFields: function(options) {
     if (this.options.fields){
-      this.setContent(this.options.fields.content);
+      if (options) {
+        this.setContent(options.content);
+      }
+      else {
+        this.setContent(this.options.fields.content);
+      }
     }
   },
   
