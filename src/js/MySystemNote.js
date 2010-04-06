@@ -65,7 +65,8 @@ YAHOO.lang.extend(MySystemNote, WireIt.Container, {
     return content_el;
   },
   render: function() {
-    debug("render being called");
+    // called at least once when the component is first dragged 
+    // onto to the drawing area.
     MySystemNote.superclass.render.call(this);
     if (this.options.fields) {
       this.getContentEl().html(this.options.fields.content);
