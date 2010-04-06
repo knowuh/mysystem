@@ -294,7 +294,7 @@ MySystemPropEditor.prototype = {
           self.deselect();
           var element = $(event.target);
           element.addClass('selected');
-          self.selected_color = element.attr('id');
+          self.selected_color = element.css('background-color');
           self.saveValues();
         });
         this.node.options.selected=true;

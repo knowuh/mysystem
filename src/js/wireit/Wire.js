@@ -749,7 +749,18 @@ YAHOO.lang.extend(WireIt.Wire, WireIt.CanvasElement, {
    onWireMove: function(x,y) {
    },
    
-   updateFields: function() {
+   updateFields: function(options) {
+    if (options) {
+       for (var name in options) {
+         if (this.options.fields[name]) {
+           this.options.fields[name] = options.name;
+         }
+       }
+       if (options.selected_color) {
+         this.options.fields.color = options.selected_color;
+       }
+     }
+
      var new_width = parseInt(this.options.fields.width);
      if ((new_width!= NaN) && new_width > 0 && new_width < 50) {
        this.options.width = new_width;
