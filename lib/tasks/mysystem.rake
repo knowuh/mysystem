@@ -28,7 +28,6 @@ end
   js/MySystemEditor.js  
   js/MySystem.js
   js/GoalPanel.js
-  js/GoalPanel.js
 }.map do |path|
   'src/' + path
 end
@@ -52,8 +51,8 @@ end
 
 @print = %w{
   lib/raphael-min.js
-  js/MySystemUtil.js
-  js/MySystemPrint.js
+  src/js/MySystemUtil.js
+  src/js/MySystemPrint.js
 }
 
 @report_file ="#{File.dirname(__FILE__)}/tmp/report.html"
