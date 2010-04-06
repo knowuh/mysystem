@@ -38,8 +38,10 @@ should install tall the gems listed in mysystem.gems
 
 h3. Javascript Dependencies
 
-Based on "WireIt":http://http://javascript.neyric.com/wireit/
+Mysystem is derived from "WireIt":http://http://javascript.neyric.com/wireit/
 Which uses "YUI":http://developer.yahoo.com/yui/
+
+We just switched to JQuery and JQuery UI for our own work.
 
 (note: that currently all dependent libraries are included in this repo, and thats not good....)
 (note: We are working on reducing dependancies on these libraries.)
@@ -53,8 +55,10 @@ to build a dist/ directory.  *Building is not required* You can preview the work
 If you have ruby installed, you should also install a few gems to run the distro rake task
 * @sudo gem install --remote sprockets@
 * @sudo gem sources -a http://gems.opscode.com@
-* @rake@
-* @open ./dist/mysystem.html@*
+* @rake combine:all@
+* @open ./public/mysystem.html@*
+
+Similarly @rake appspot:sinatra_app@ should guide you through updating the sinatra application
 
 h3. Testing
 
