@@ -6,10 +6,8 @@
   
   <link rel="icon" href="res/favicon.ico" type="image/png" />
   <link rel="SHORTCUT ICON" href="res/favicon.ico" type="image/png" />
-
-  <!-- Prototype -->
-  <script type="text/javascript" src="lib/prototype.js"></script>
-
+  
+  
   <!-- Raphael SVG lib: -->
   <script type="text/javascript" src="lib/raphael-min.js"></script>
           
@@ -54,7 +52,7 @@
 
   <script>
       var printer;
-      document.observe("dom:loaded", function() {
+      $(document).ready(function() {
         var loadCallback = function(text,context) {
           var obj = eval(text);
           if (obj) {

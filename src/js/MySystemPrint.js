@@ -3,8 +3,7 @@
   // A bit hackish: If we don't want to load the rest of MySystem,
   // we can create the namespace seperately:
   MySystem = typeof(MySystem) != 'undefined' ? MySystem : function() {};
-  
-  
+
   MySystem.defaultFont = {
     "font-weight": 'bold',
     "font-family": 'helvetica, arial, sans-serif',
@@ -344,7 +343,7 @@
     this.data = _json;
     this.name = "my print";
     this.domId = dom_id;
-    this.container = $(this.domId);
+    this.container = $("#" + this.domId);
     this.scale = typeof(scale_factor) != 'undefined' ? scale_factor : 1;
     this.width = this.container.width;
     this.height = this.container.height;
@@ -448,7 +447,7 @@
   
   
   MySystemPrint.prototype.autoscale = function() {
-    var container = $(this.domId);
+    var container = this.contianer();
     var width = container.getWidth();
     var height = container.getHeight();
     var graphDimensions = this.graphDimensions();
@@ -470,7 +469,7 @@
   };
   
   MySystemPrint.prototype.redraw = function() {
-    var container = $(this.domId);
+    var container = this.container;
     if (typeof container == "undefined" || container == null) {
       clearInterval(this.redrawInterval);
       return;

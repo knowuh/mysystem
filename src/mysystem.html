@@ -19,9 +19,9 @@
   <link rel="stylesheet" type="text/css" href="lib/YUI/sam.css" />
 
 
-  <!-- Prototype -->
-  <script type="text/javascript" src="lib/prototype.js"></script>
-
+  <!-- JQuery -->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  
 
   <!-- YUI JS Combo file: -->
   <script type="text/javascript" src="lib/YUI/YUI-combo.js"></script>
@@ -76,7 +76,7 @@
 
         var mySystem;
         var myDataService;
-        document.observe("dom:loaded", function() {
+        $(document).ready(function() {
           mySystem = new MySystem('prefs.json');
           myDataService = new MocDS(null,null);
           //myDataService = new VleDS(vle);

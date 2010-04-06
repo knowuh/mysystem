@@ -4,7 +4,6 @@ require 'sprockets'
 
 @libs = %w{
   YUI/YUI-combo.js
-  prototype.js
   http.js
   excanvas.js
   canvastext.js
@@ -52,7 +51,6 @@ end
 end
 
 @print = %w{
-  lib/prototype.js
   lib/raphael-min.js
   js/MySystemUtil.js
   js/MySystemPrint.js
