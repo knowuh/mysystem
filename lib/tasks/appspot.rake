@@ -23,7 +23,8 @@ namespace :appspot do
   
   desc "deploy sinarta app"
   task :deploy => [:sinatra_app] do
-    %x(appcfg.rb update #{APPSPOT_DIR})
+    puts "please type 'appcfg.rb update #{APPSPOT_DIR}'"
+    puts "enter your gmail email address and password when prompted"
   end
   
 end
