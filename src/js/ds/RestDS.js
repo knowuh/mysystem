@@ -39,7 +39,6 @@
         xmlhttp.open('PUT', post_to, false);
         xmlhttp.send(this.data);
         this.readKey = this.writeKey;
-        // $('readKey').update("Your Key:" + this.readKey);
         debug("readKey written: " + this.readKey);
     },
     
@@ -65,17 +64,18 @@
       debug("just about to load with " + this.readKey);
   	  if (this.readKey) {
   	    self = this;
-        new Ajax.Request(get_from, {
-          asynchronous: true,
-          method: 'GET',
-          onSuccess: function(rsp) {
+        $.ajax({
+          url: get_from,
+          async: true,
+          type: 'GET',
+          success: function(rsp) {
             var text = rsp.responseText;
-            var _data = eval(text);
+            var _data = JSON.parse(text);
             self.data = _data;
             callback(_data,context,callback);
             debug("returned from load");
           },
-          onFailure: function(req,err) {
+          error: function(req,err) {
             debug("failed!");
           }
         });
