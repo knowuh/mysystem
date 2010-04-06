@@ -8,7 +8,7 @@
 MySystemPropEditor = function(options) {
    this.domID = options.domID || "#property_editor";
    this.dom_entity = $(this.domID);
-   
+   this.dom_entity.draggable( { handle: '#prop_bar' } );
    this.formName = options.formName || "#prop_form";
    this.form_entity = $(this.formName);
    
@@ -312,9 +312,14 @@ MySystemPropEditor.prototype = {
   
   positionEditor: function() {
     this.dom_entity.show();
-
-    this.dom_entity.position({
-      offsetLeft: this.node_element.width()
+    var margin = 4;
+    var top = this.node_element.offset().top + this.node_element.height() - this.dom_entity.height();
+    var left = this.node_element.offset().left - (this.dom_entity.width() + margin);
+    left = left < 1 ? 1 : left;
+    top = top < 1 ? 1 : top;
+    this.dom_entity.offset({
+      left: left,
+      top: top
     });
   },
   
