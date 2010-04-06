@@ -220,6 +220,10 @@ MySystemPropEditor.prototype = {
       this.form_observer = null;
       $('#palette').die('click');
     }
+    if (this.autoSaveTimer) {
+      clearInterval(this.autoSaveTimer);
+      this.autoSaveTimer = null;
+    }
   },
   
   enableClickAway: function() {
@@ -262,6 +266,7 @@ MySystemPropEditor.prototype = {
     $("textarea:visible:enabled:first").focus();
     $("input:visible:enabled:first").focus();
     var self = this;
+    this.autoSaveTimer = setInterval(function() {self.saveValues();}, 300);
   },
   
   
