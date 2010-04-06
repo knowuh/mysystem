@@ -90,8 +90,21 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     }
     
   },
-  updateFields: function() {
-    this.setTitle(this.options.fields.name || this.options.name );
+  updateFields: function(options) {
+    if (options) {
+      for (var name in options) {
+        if (this.options.fields[name]) {
+          this.options.fields[name] = options.name;
+        }
+      }
+      if (this.options.fields.color) {
+        this.options.fields.color = options.selected_color;
+      }
+      this.setTitle(options.name);
+    }
+    else {
+      this.setTitle(this.options.fields.name || this.options.name );
+    }
   },
   
   getConfig: function() {
