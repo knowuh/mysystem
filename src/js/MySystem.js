@@ -48,24 +48,7 @@
     
     loadPreferences: function(filename) {
       var self = this;
-      // debug("calling loadPreferences (with GET) " + filename);
-      // $.get(filename, function(data) {
-      //  self.loadModulesFromJSON(data);
-      //  alert("loaded -- ");
-      // });
-      // 
       self.loadModulesFromJSON($.ajax({ type: "GET", url: filename, async: false }).responseText);
-            // 
-            // new Ajax.Request(filename, {
-            //   asynchronous: false,
-            //   method: 'GET',
-            //   onSuccess: function(rsp) {
-            //     self.loadModulesFromJSON(rsp.responseText);
-            //   },
-            //   onFailure: function(req,err) {
-            //     debug("failed!");
-            //   }
-            // });
     },
     
     loadModulesFromJSON: function(jsonString) {
@@ -119,16 +102,6 @@
         }
         self.loaded = true;
     },
-    // loadModulesFromJSON: function(jsonString) {
-    //   var self = this;
-    //   debug("calling loadModulesFromJSON:" + jsonString);
-    //   var jsonObj = JSON.parse(jsonString);
-    //   var _data = jsonObj.modules;
-    //   debug("data: " + _data);
-    //   self.data = new MySystemData();
-    //   self.data.setData(_data,[],true);
-    //   self.setEditor();
-    // },
       
     loadModules: function(modules) {
       this.data = new MySystemData();
