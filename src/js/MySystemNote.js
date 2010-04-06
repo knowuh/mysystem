@@ -45,19 +45,20 @@ YAHOO.lang.extend(MySystemNote, WireIt.Container, {
   },
   setContent: function(newContent) {
     if(newContent) {
-      // var wordWrapChars = 30;
-      // this.options.fields.content = newContent.wordWrap(wordWrapChars, "\n");
+      var wordWrapChars = 30;
+      this.options.fields.content = newContent.wordWrap(wordWrapChars, "\n");
       this.getContentEl().html(this.options.fields.content);
     }
   },
   createContent: function() {
-    return new Element('div', {'class': 'content' });
+    return $('<div></div>').addClass('content');
   },
+  
   getContentEl: function() {
     var content_el = $(this.el).find('.content') 
-    if(!content_el) {
+    if(! (content_el && content_el.size() > 0)) {
       content_el = this.createContent();
-      this.el.insert({'bottom': content_el});
+      $(this.el).append(content_el);
     }
     this.options.terminals = [];
     this.terminals = [];
