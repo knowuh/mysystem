@@ -27,7 +27,7 @@ namespace :hudson do
   
   desc "run jspec test and output to #{report_path} in junit format"
   task :spec => [:report_setup] do
-    sh "java -jar spec/support/js.jar -opt -1 spec/rhino.js"
+    sh "java -jar spec/support/js.jar -opt -1 spec/rhino-terminal.js"
   end
 
 end
