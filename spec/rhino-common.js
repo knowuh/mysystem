@@ -3,7 +3,6 @@ load('spec/support/env.rhino.js');
 
 
 load('lib/jquery/jquery-1.4.2.min.js');
-load('lib/prototype.js');
 
 load('spec/lib/jspec.js');
 load('spec/lib/jspec.timers.js');
