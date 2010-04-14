@@ -115,10 +115,18 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
       this.options.subsystem_options = this.subSystem.options;
       this.options.subsystem_wiring = this.subSystem.getWiring();
     }
-    this.options.position[0] = this.el.getStyle('left');
-    this.options.position[1] = this.el.getStyle('top');
+    this.options.position[0] = $(this.el).css('left');
+    this.options.position[1] = $(this.el).css('top');
     // use prototype merge to respolve options.
-    return $H(super_options).merge($H(this.options));
+    
+    var options = {};
+    for (var key in super_options) {
+        options[key] = super_options.get(key);
+    }
+    for (var key in this.options) {
+        options[key] = this.options[key];
+    }
+    return options;
   }
 });
 

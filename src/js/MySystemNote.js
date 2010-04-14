@@ -1,5 +1,5 @@
 /**
- * MySystem Container. Has an image. and double_click beahvor.
+ * MySystem Container. Has an image. and double_click bahavior.
  * @class ImageContainer
  * @extends WireIt.Container
  * @constructor
@@ -86,8 +86,8 @@ YAHOO.lang.extend(MySystemNote, WireIt.Container, {
   
   getConfig: function() {
     this.options.name = this.title;
-    this.options.position[0] = this.el.getStyle('left');
-    this.options.position[1] = this.el.getStyle('top');
+    this.options.position[0] = $(this.el).css('left');
+    this.options.position[1] = $(this.el).css('top');
     // use prototype merge to resolve options.
     // TODO: this wont work without prototype:
     // var super_options = MySystemNote.superclass.getConfig.call();
@@ -95,10 +95,3 @@ YAHOO.lang.extend(MySystemNote, WireIt.Container, {
     return this.options;
   }
 });
-
-
-
-
-
-
-
