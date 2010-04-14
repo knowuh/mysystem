@@ -252,11 +252,12 @@
   **/
   MySystem.Node.prototype.terminal = function(name) {
     var returnVal = null;
-    this.terminals.each(function(term){
+    for (var terminal_index in this.terminals) {
+      var term = this.terminals[terminal_index];
       if (term.name == name) {
         returnVal = term;
       }
-    });
+    }
     return returnVal;
   };
   
@@ -269,8 +270,10 @@
     var objs = eval(jsonText);
     var nodes = [];
     var wires = [];
+    var containers = objs[0].containers
     if (objs) {
-      objs[0].containers.each(function(container) {
+      for (var container_index in containers) {
+        var container = containers[container_index];
         var node = new MySystem.Node();
         if (typeof(contentBaseUrl) != 'undefined') {
           node.icon = contentBaseUrl + "/" + container.icon;
@@ -284,7 +287,7 @@
       
         node.terminals = container.terminals;
         nodes.push(node);
-      });
+      }
     }
     return nodes;
   };
@@ -308,9 +311,11 @@
   **/
   MySystem.Wire.importJson = function(jsonText,nodes) {
     var objs = eval(jsonText);
+    var _wires = objs[0].wires;
     var wires = [];
-    if (objs) {
-      objs[0].wires.each(function(w) {
+    if (_wires) {
+      for (var wire_index in _wires) {
+        var w = _wires[wire_index];
         var wire = new MySystem.Wire();
         wire.src = w.src;
         wire.sourceNode = nodes[w.src.moduleId];
@@ -329,7 +334,7 @@
         
         // do the drawing for the wire 
         wires.push(wire);
-      });
+      }
     }
     return wires;
   };
@@ -354,52 +359,57 @@
     this.autoscale();
  
     this.graphics = Raphael(this.domId,this.width,this.height);
+
     var self = this;
 
     // check to see if our current container size changing.
     this.sizeChangeDetector = function() {
-      var width = self.container.getWidth();
-      var height = self.container.getHeight();
-      debug("calling sizeChange detector");
+      var width = self.container.width();
+      var height = self.container.height();
       if (width != self.width || height != self.height) {
         self.redraw();
       }
     };
-    this.redrawInterval = setInterval(self.sizeChangeDetector, 1150);
-
-    this.nodes.each(function(node) {
-      self.drawNode(node);
-    });
-  
-    this.wires.each(function(wire) {
-      self.drawWire(wire);
-    });
+    self.redrawInterval = setInterval(self.sizeChangeDetector, 1150);
     
-    this.container.observe('mouseup', function(e){
+    for (var node_index in self.nodes) {
+      var node = self.nodes[node_index];
+      self.drawNode(node);  
+    }
+    
+    debugger    
+    for (var wire_index in self.wires) {
+      var wire = self.wires[wire_index];
+      self.drawWire(wire);  
+    }
+    
+
+    this.container.mouseup( function(e){
       self.mouse_down = false;
     });
     
-    this.container.observe('mousedown',function(e){
+    this.container.mousedown( function(e){
       self.mouse_down = true;
       self.last_x = e.clientX;
       self.last_y = e.clientY;
     });
     
-    this.container.observe('mousemove', function(e){
+    this.container.mousemove( function(e){
       if (self.mouse_down) {
         var dx = e.clientX - self.last_x;
         var dy = e.clientY- self.last_y;
-        self.nodes.each(function(node) {
+        for (var node_index in self.nodes) {
+          var node = self.nodes[node_index];
           node.rep.offsetX += dx;
           node.rep.offsetY += dy;
           self.redraw();
-        });
+        }
         self.last_x = e.clientX;
         self.last_y = e.clientY;
       }
     });
-    
-    var self = this;
+
+
     this.zoomIn = this.graphics.zoomIn(20,20,18); 
     this.zoomOut = this.graphics.zoomOut(48,20,18); 
     
@@ -435,10 +445,11 @@
   MySystemPrint.prototype.graphDimensions = function() {  
     var maxX = 0;
     var maxY = 0;
-    this.nodes.each(function (node){
+    for (var node_index in this.nodes) {
+      var node = this.nodes[node_index];
       maxX = maxX < node.x ? node.x : maxX;
       maxY = maxY < node.y ? node.y : maxY;
-    });
+    }
     return {
       width: maxX,
       height: maxY
@@ -447,9 +458,9 @@
   
   
   MySystemPrint.prototype.autoscale = function() {
-    var container = this.contianer();
-    var width = container.getWidth();
-    var height = container.getHeight();
+    var container = this.contianer;
+    var width = this.container.width();
+    var height = this.container.height();
     var graphDimensions = this.graphDimensions();
     var self = this;
     var margin = 80;
@@ -474,8 +485,8 @@
       clearInterval(this.redrawInterval);
       return;
     }
-    var width = container.getWidth();
-    var height = container.getHeight();
+    var width = container.width();
+    var height = container.height();
     var self = this;
     if (self.width) {
       var widthRatio = width / self.width;
@@ -488,12 +499,14 @@
     self.width = width;
     self.height = height;
     this.graphics.setSize(width, height);
-    this.nodes.each(function(node) {
+    for (var node_index in this.nodes) {
+      var node = this.nodes[node_index];
       self.graphics.Node(node,self.scale);
-    });
-    this.wires.each(function(wire){
-      self.graphics.wire(wire,self.scale);
-    })
+    }
+    for (var wire_index in this.wires) {
+      var wire = this.wires[wire_index];
+      self.graphics.wire(wire,self.scale);      
+    }
   };
   
   /**

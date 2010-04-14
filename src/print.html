@@ -9,8 +9,10 @@
   
   
   <!-- Raphael SVG lib: -->
-  <script type="text/javascript" src="lib/raphael-min.js"></script>
-          
+  <script type="text/javascript" src="../lib/raphael-min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+            
   <!-- Utitlities -->
   <script type="text/javascript" src="js/MySystemUtil.js"></script>
   <script type="text/javascript" src="js/MySystemPrint.js"></script>  
@@ -53,6 +55,14 @@
   <script>
       var printer;
       $(document).ready(function() {
+        $('#big').click( function(e) {
+          $('#printing_canvas').width(500);
+          $('#printing_canvas').height(500);
+        });
+        $('#little').click( function(e) {
+          $('#printing_canvas').width(200);
+          $('#printing_canvas').height(200);
+        });
         var loadCallback = function(text,context) {
           var obj = eval(text);
           if (obj) {
@@ -63,12 +73,7 @@
         printer = new MySystemPrint(json_data,"printing_canvas");
         var myDataService = new GGearsDS('write','write','mysys');
         myDataService.load(this,loadCallback);
-        $('big').observe('click', function(e) {
-          $('printing_canvas').setStyle('width: 100%; height: 500px;');
-        });
-        $('little').observe('click', function(e) {
-          $('printing_canvas').setStyle('width: 50%; height: 200px;');
-        });
+
       });
   </script>
 
