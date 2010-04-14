@@ -121,7 +121,7 @@ Go to top directory and do  @ruby app.rb@
 Open "http://localhost:4567"
 
 (2) Locally in Google App Engine development environment:
-Go to top directory and do @dev_appserver.rb@
+Go to top directory and do @dev_appserver.rb appspot@
 Open "http://localhost:8080"
 
 (3) From Google App Engine:
