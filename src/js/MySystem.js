@@ -24,8 +24,10 @@
       $(document).keydown(function(e){
         var code;
         var element = $(e.target);
-        if (e.charCode) code = e.charCode;
-        else if (e.which) code = e.which;
+        // defined in MySystemUtils:
+        code = decodeKeyEvent(e);
+        if (e.which) code = e.which;
+        else if (e.charCode) code = e.charCode;
         if (code == 8 || code == 127) {
           if ((! element.is('input')) && (! element.is('textarea'))) {
               e.stop();

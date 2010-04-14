@@ -29,12 +29,8 @@ MySystemPropEditor = function(options) {
      var code;
      var escapeKey = 27;
      var returnKey = 13;
-     if (e.keyCode) {
-       code = e.keyCode;
-     }
-     else if (e.which) { 
-       code = e.which;
-     }
+     // defined in MySystemUtils:
+     code = decodeKeyEvent(e);
      // disable default enter key
      // for submitting form, unless we are in
      // textarea
@@ -48,7 +44,6 @@ MySystemPropEditor = function(options) {
        // e.stop();
        self.disable(); 
      }
-     debug('KEY=' + e.which);
    });
    
    // the default labelMap

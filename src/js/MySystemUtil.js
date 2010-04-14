@@ -1,5 +1,7 @@
 (function() {
   
+  // TOOD: Name-space these functions?
+  
   /*
    * INPUT:
    * obj: object to clone
@@ -52,13 +54,17 @@
   };
 
   
+  // UMN: Should use interval instead(?!)
   periodicallyCall = function(_fun,context,intervalms) {
       setTimeout(function() {
         _fun.call(context);
         periodicallyCall(_fun,context,args,intervalms);
       }, intervalms);
-      
-      
+  };
+  
+  decodeKeyEvent = function(e) {
+    if (e.which) code = e.which;
+    else if (e.charCode) code = e.charCode;
   };
   
   /**
