@@ -8,7 +8,6 @@
     var Event = util.Event;
     var Dom = util.Dom;
     var Connect = util.Connect;
-    var JSON = lang.JSON;
     var widget = YAHOO.widget;
 
     /**
@@ -510,7 +509,8 @@
         onSave: function() {
          if (this.dataService) {
            debug("calling save " + this.dataService);
-           this.dataService.save([this.rootLayer.getWiring()].toJSON());
+           debug('json:' + JSON.stringify([this.rootLayer.getWiring()]));
+           this.dataService.save(JSON.stringify([this.rootLayer.getWiring()]));
            debug("save has returned... ");
          }
          else {
@@ -523,7 +523,7 @@
          */
          onLoad: function() {
            if (this.dataService) {
-             this.dataService.load(this,this.loadCallback);
+             this.dataService.load(this, this.loadCallback);
            }
            else {
              alert("No Data Service defined");
@@ -532,10 +532,20 @@
          
          loadCallback: function(text, context) { 
             debug("json-loading:\n===================================\n" + text);
-            var obj = eval(text);
-            if (obj) {
-              context.resetLayers();
-              context.rootLayer.setWiring(obj[0]);
+            try {
+                var obj = JSON.parse(text);
+                if (obj && obj.length > 0) {
+                    context.resetLayers();
+                    context.rootLayer.setWiring(obj[0]);
+                }
+            }
+            catch (e) {
+                if (e instanceof SyntaxError) {
+                    alert('JSON parse error');
+                }
+                else {
+                    alert('Unknown error in MySystemEditor#loadCallback');
+                }
             }
          },
 

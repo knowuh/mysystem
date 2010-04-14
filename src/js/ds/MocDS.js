@@ -1,7 +1,7 @@
 (function() {
   // A Moc DatService, which does not require a backend at all.
   MocDS = function(one,two){
-    this.data = "";
+    this.data = "[]";
     debug ("new " + this + " created")
   };
 
