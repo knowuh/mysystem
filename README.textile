@@ -1,9 +1,10 @@
 h1. Overview
 
-This project consists of two components: MySystem and the Sinatra app. MySystem is
-the core product that described below in the section "MySystem", and it resides
-in the "public" folder. The whole thing is a sinatra app (called MySystem-Sinatra here on)
-that gets deployed to the Google App Engine. 
+This project consists of two components: MySystem and the Sinatra app. 
+
+MySystem is the core product that described below in the section "MySystem", and it gets built from src/ and other directories into public/.
+
+The whole thing is a sinatra app (called MySystem-Sinatra here on) runnable from the top directory, which gets built to the appspot/ directory and deployed from there to Google App Engine. 
 
 <hr/>
 
@@ -46,19 +47,16 @@ We just switched to JQuery and JQuery UI for our own work.
 (note: that currently all dependent libraries are included in this repo, and thats not good....)
 (note: We are working on reducing dependancies on these libraries.)
 
-h3. Building:
-
-If you need to make a compact and easy to distribute version of MySystem, you can use Rake
-to build a dist/ directory.  *Building is not required* You can preview the work simply by opening
-./mysystem-dev.html in your browser.
+h3. Building for distribution
 
 If you have ruby installed, you should also install a few gems to run the distro rake task
 * @sudo gem install --remote sprockets@
-* @sudo gem sources -a http://gems.opscode.com@
+* @sudo gem sources -a http://gems.opscode.com@ (Not clear as of 04/14/2010 why/whether we need this)
+
+If you need to make a compact and easy to distribute version of MySystem, you can use Rake to build the system into public/ directory. *Building is not required*; You can preview the work simply by opening src/mysystem-dev.html in your browser.
+
 * @rake combine:all@
 * @open ./public/mysystem.html@*
-
-Similarly @rake appspot:sinatra_app@ should guide you through updating the sinatra application
 
 h3. Testing
 
@@ -86,9 +84,8 @@ h3. Todo
 
 h1. MySystem-Sinatra
 
-This is a simple server container / backend for the mysystem pre-prototype demo.
-It uses google app engine, and DataMapper.
-
+This is a simple server container/backend for the MySystem pre-prototype demo.
+It uses Google App-Engine, and DataMapper.
 
 h3. Dependencies
 
@@ -108,3 +105,24 @@ Gems installed by editing Gemfile and running 'appcfg.rb bundle .' are checked i
 # run in developer mode with "dev_appserver.rb ." (intsalled with google-appengine gem)
 # deploy the application with "appcfg.rb update ."
 # the application will be available at http://ccmysystem.appspot.com/mysystem.html
+
+h3. Building
+
+@rake appspot:sinatra_app@ builds a sinatra app deployable to appspot into the appspot/ directory.
+
+h3. Deploying
+
+@rake appspot:deploy@ deploys the app to Google App Engine.
+
+h3. Running
+
+(1) Locally: 
+Go to top directory and do  @ruby app.rb@
+Open "http://localhost:4567"
+
+(2) Locally in Google App Engine development environment:
+Go to top directory and do @dev_appserver.rb@
+Open "http://localhost:8080"
+
+(3) From Google App Engine:
+Open "http://ccmysystem.appspot.com/mysystem.html":http://ccmysystem.appspot.com/mysystem.html
