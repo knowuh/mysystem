@@ -55,8 +55,8 @@ YAHOO.lang.extend(MySystemNote, WireIt.Container, {
   },
   
   getContentEl: function() {
-    var content_el = $(this.el).find('.content') 
-    if(! (content_el && content_el.size() > 0)) {
+    var content_el = $(this.el).find('.content');
+    if (!(content_el && content_el.size() > 0)) {
       content_el = this.createContent();
       $(this.el).append(content_el);
     }

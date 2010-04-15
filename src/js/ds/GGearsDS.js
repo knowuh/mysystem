@@ -54,8 +54,9 @@
       }
     } catch (e) {
       // Safari
-      if ((typeof navigator.mimeTypes != 'undefined')
-           && navigator.mimeTypes["application/x-googlegears"]) {
+      if ((typeof navigator.mimeTypes != 'undefined') &&
+          navigator.mimeTypes["application/x-googlegears"])
+      {
         factory = document.createElement("object");
         factory.style.display = "none";
         factory.width = 0;
@@ -91,8 +92,8 @@
   GGearsDS = function(readKey,writeKey,_db,_table){
     this.data = "";
     this.enableLoadAndSave = true;
-    this.db = _db || "models" 
-    this.table = _table || this.db
+    this.db = _db || "models";
+    this.table = _table || this.db;
     this.setKeys(readKey,writeKey);
   };
 
@@ -115,10 +116,8 @@
       if (google) {
         this.db_connection = google.gears.factory.create("beta.database");
         this.db_connection.open(this.db);
-        this.db_connection.execute (
-                 'create table if not exists ' + this.table +
-                 ' (key string, content text, Timestamp int)'
-        );
+        this.db_connection.execute('create table if not exists ' +
+            this.table + ' (key string, content text, Timestamp int)');
       }
     },
     

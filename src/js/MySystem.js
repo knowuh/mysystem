@@ -1,5 +1,5 @@
 mysystem.MySystem = function(moduleUrl) { 
-  if (moduleUrl != null) { 
+  if (moduleUrl) { 
     this.init( moduleUrl );
   }
   this.interceptKeys();
@@ -60,7 +60,7 @@ mysystem.MySystem.prototype = {
       var self = this;
       try {
 
-        var _data = JSON.parse(jsonString);
+        _data = JSON.parse(jsonString);
 
         // Look for an object named "modules".
         // if present we are being loaded from wise4
@@ -68,13 +68,14 @@ mysystem.MySystem.prototype = {
           _data = _data.modules;
         }
 
-        var modules = [];
-        var labels = null;
+        modules = [];
+        labels = null;
         var item;
         for (var item_index in _data) {
           item = _data[item_index];
-          if (item.xtype == 'MySystemContainer'
-          ||  item.xtype == 'MySystemNote') {
+          if (item.xtype == 'MySystemContainer' ||
+              item.xtype == 'MySystemNote')
+          {
             modules.push(item);
           }
           else if (item.xtype == 'PropEditorFieldLabels') {

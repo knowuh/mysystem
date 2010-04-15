@@ -13,7 +13,7 @@ MySystemContainer = function(options, layer) {
    this.icon = options.icon;
    this.has_sub = options.has_sub || false;
    this.subSystem =  null;
-   if (options.subsystem_options != null) {
+   if (options.subsystem_options) {
      this.subSystem = new WireIt.Layer(options.subsystem_options);
      this.subSystem.setWiring(options.subsystem_wiring);
      // tell the editor about the new layer.
@@ -53,7 +53,7 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   
   setTitle: function(newTitle) {
     if(newTitle) {
-      var this_el = this.el
+      var this_el = this.el;
       var title_el = $(this_el).children('.title').first();
       // TODO: No absolutize in jQuery
       // title_el.absolutize();
@@ -61,8 +61,8 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
       this.title = newTitle.wordWrap(wordWrapChars, "\n");
       this.options.name = this.title;
       this.options.fields.name = this.title;
-      if((!title_el) || title_el.size() < 1) {
-        title_el = this.createTitle()
+      if ((!title_el) || title_el.size() < 1) {
+        title_el = this.createTitle();
         $(this_el).prepend(title_el);
       }
       title_el.html(this.title);
@@ -81,7 +81,7 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
   },
   render: function() {
     MySystemContainer.superclass.render.call(this);
-    var this_el = this.el
+    var this_el = this.el;
     var title_el = $(this_el).children('.title').first();
     if(!title_el) {
       title_el = this.createTitle();
@@ -111,7 +111,7 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     var super_options = MySystemContainer.superclass.getConfig.call();
     this.options.name = this.title;
     this.options.has_sub = this.has_sub;
-    if (this.subSystem != null) {
+    if (this.subSystem !== null) {
       this.options.subsystem_options = this.subSystem.options;
       this.options.subsystem_wiring = this.subSystem.getWiring();
     }
@@ -120,10 +120,11 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     // use prototype merge to respolve options.
     
     var options = {};
-    for (var key in super_options) {
+    var key = null;
+    for (key in super_options) {
         options[key] = super_options.get(key);
     }
-    for (var key in this.options) {
+    for (key in this.options) {
         options[key] = this.options[key];
     }
     return options;

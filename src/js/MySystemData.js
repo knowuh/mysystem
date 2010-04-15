@@ -1,7 +1,7 @@
 (function () {
   MySystemData = function() {
     this.initialize();
-  }
+  };
   
   MySystemData.prototype.initialize = function() {
     this.modules = [];

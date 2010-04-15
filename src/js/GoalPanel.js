@@ -31,7 +31,7 @@
     },
     
     collapse: function() {
-      this.elem.css({ height: '32px' })
+      this.elem.css({ height: '32px' });
       this.icon.attr({'src': 'images/down-arrow.png'});
       this.collapsed = true;
     },

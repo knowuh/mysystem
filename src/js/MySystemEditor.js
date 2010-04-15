@@ -57,6 +57,8 @@
             var del = this.getDragEl();
             var pos = YAHOO.util.Dom.getXY(del);
             var layerPos = YAHOO.util.Dom.getXY(layer.el);
+            var i = 0;
+            
             pos[0] = pos[0] - layerPos[0];
             pos[1] = pos[1] - layerPos[1];
             
@@ -68,12 +70,12 @@
             Copy.engineNode = newEngineNode;
             */
 
-            var Copy = function( par ){
-              for( var i in par._module ){
+            var Copy = function (par) {
+              for (i in par._module) {
                 this[ i ] = par._module[ i ];
               }
               this.fields = {};
-              for( var i in par._module.fields ){
+              for(i in par._module.fields) {
                 this.fields[i] = par._module.fields[ i ];
               }
               debug(this);
@@ -89,7 +91,7 @@
                   inputRate   : par._module.fields.inputRate,
                   efficiency  : energyForm // reference energies object
               });
-            } 
+            };
 
             this._MySysEditor.addModule(new Copy(this), pos );
         }
@@ -242,7 +244,7 @@
         onOpenContextFor: function(type,args) {
             module = args[0];
             if (module.has_sub) {
-              if (module.subSystem == null) {
+              if (module.subSystem === null) {
                 module.subSystem = this.addLayer();
               }
               // this.changeLayer(module.subSystem);
@@ -268,8 +270,9 @@
         },
         changeLayer: function(newLayer) {
              var index = this.layerStack.indexOf(newLayer);
-             if(index < 0) {
+             if (index < 0) {
                // this.addLayerMap(newLayer);
+               debug('FIXME what do we really want to do here?');
              }
              // otherwise we remove all the layers under this one (search the tree?)
              else {
@@ -279,7 +282,7 @@
                // after we have deleted things, we compact it:
                this.layerStack = this.layerStack.compact();
              }
-             this.setLayer(newLayer)
+             this.setLayer(newLayer);
              // this.updateLayerInfo();
         },
         setLayer:function(newLayer) {
@@ -376,14 +379,14 @@
             });
 
             if (module.image) {
-                var div = WireIt.cn('div', {
+                div = WireIt.cn('div', {
                     className: "WiringEditor-icon-module"
                 });
                 div.appendChild(WireIt.cn('img', {
                     src: module.image
                 }));
             } else {
-                var div = WireIt.cn('div', {
+                div = WireIt.cn('div', {
                     className: "WiringEditor-module"
                 });
                 div.appendChild(WireIt.cn('span', null, null, module.name));
@@ -662,11 +665,7 @@
                 name: obj.properties.name,
                 working: obj
             };
-        },
-        
-
-        
-
+        }
     };
 
 })();

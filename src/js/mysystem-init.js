@@ -32,7 +32,7 @@
             debug("saving mystem data before we leave");
             mySystem.save();
             debug("saved!");
-        }
+        };
         //window.onbeforeunload = onExit;
     });
     

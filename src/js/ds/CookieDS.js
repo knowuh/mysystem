@@ -34,7 +34,7 @@
     * write the data
     */
     CookieDS.prototype.save = function(_data) {
-      this.data = _data
+      this.data = _data;
       this.readKey = this.writeKey;
       eraseCookie(this.writeKey);
       createCookie(this.writeKey,_data,this.days);

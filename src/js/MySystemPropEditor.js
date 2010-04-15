@@ -108,39 +108,41 @@ MySystemPropEditor.prototype = {
     
     if(this.fieldLabelMap[field_name]) {
       
-      var domLabel = $('<label></label>')
-        .attr({'for': field_name})
-        .html(this.fieldLabelMap[field_name].label);
-      var type = this.fieldLabelMap[field_name].type || 'text';      
+      var domLabel = $('<label></label>');
+      domLabel.attr({'for': field_name});
+      domLabel.html(this.fieldLabelMap[field_name].label);
+      
+      var type = this.fieldLabelMap[field_name].type || 'text';
       var style = this.fieldLabelMap[field_name].style;
       var input;
       if (type =='textarea') {
         // input = new Element('textarea', { 'name': field_name, 'id': field_name});
-        input = $('<textarea></textarea>')
-          .attr({ 'name': field_name, 'id': field_name})
-          .html(value);
+        input = $('<textarea></textarea>');
+        input.attr({ 'name': field_name, 'id': field_name});
+        input.html(value);
       }
       else {
-        input = $('<input></input>')
-          .attr({ 'type': type, 'name': field_name, 'id': field_name, 'value': value});
+        input = $('<input></input>');
+        input.attr({ 'type': type, 'name': field_name, 'id': field_name, 'value': value});
       }
       if (style) {
         input.attr({'class': style});
       }
-      var label_td = $('<td></td>')
-        .addClass('input_label')
-        .css({'align': 'right','text-align': 'right'})
-        .append(domLabel);
+      var label_td = $('<td></td>');
+      label_td.addClass('input_label');
+      label_td.css({'align': 'right','text-align': 'right'});
+      label_td.append(domLabel);
 
       // var input_td = new Element('td', { 'class': 'input_field' });
-      var input_td = $('<td></td>')
-        .addClass('input_field')
-        .append(input);
+      var input_td = $('<td></td>');
+      input_td.addClass('input_field');
+      input_td.append(input);
 
-      var table_row = $('<tr></tr>')
-        .addClass('input_row')
-        .append(label_td)
-        .append(input_td);
+      var table_row = $('<tr></tr>');
+      table_row.addClass('input_row');
+      table_row.append(label_td);
+      table_row.append(input_td);
+      
       var self = this;  
       input.focusout(function() {
         if (self.node) {
@@ -162,9 +164,11 @@ MySystemPropEditor.prototype = {
     for (arrow in arrows) {
       counter++;
       var id = "color_"+counter;
-      var color_div = $('<div></div>')
-        .attr({'class': 'pallet_element', 'id': id})
-        .css({backgroundColor: arrow});
+      
+      var color_div = $('<div></div>');
+      color_div.attr({'class': 'pallet_element', 'id': id});
+      color_div.css({backgroundColor: arrow});
+      
       if(arrows[arrow]) {
         color_div.css({'width' : 'auto', 'color' : 'white'});
         color_div.append(arrows[arrow]);
@@ -210,7 +214,7 @@ MySystemPropEditor.prototype = {
     this.setNode(null);
     this.deselect();
     // $(document).die('mousedown');
-    if(this.form_observer !=null) {
+    if (this.form_observer) {
       this.form_observer.stop();
       this.form_observer = null;
       $('#palette').die('click');
@@ -335,4 +339,4 @@ MySystemPropEditor.prototype = {
     }
   }
   
-}
+};
