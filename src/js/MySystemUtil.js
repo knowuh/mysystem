@@ -49,9 +49,11 @@
   /**
   *
   */
+  /*
   debug = function(message) {
     window.console && console.log && console.log(message);
   };
+  */
 
   
   // UMN: Should use interval instead(?!)

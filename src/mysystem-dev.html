@@ -2,11 +2,10 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>MySystem</title>
+  <title>MySystem-dev</title>
   
   <link rel="icon" href="res/favicon.ico" type="image/png" />
   <link rel="SHORTCUT ICON" href="res/favicon.ico" type="image/png" />
-
 
   <!-- WireIt CSS -->
   <link rel="stylesheet" type="text/css" href="css/WireIt.css" />
@@ -24,7 +23,6 @@
   
   <!-- YUI JS Combo file: -->
   <script type="text/javascript" src="../lib/YUI/YUI-combo.js"></script>
-
 
   <script type="text/javascript" src="../lib/canvastext.js"></script>
   <script type="text/javascript" src="../lib/uuid.js"></script>
@@ -55,6 +53,7 @@
   <script type="text/javascript" src="js/ds/CookieDS.js"></script>
   
   <!-- My System -->
+  <script type="text/javascript" src="js/mysystem-init.js"></script>
   <script type="text/javascript" src="js/MySystemUtil.js"></script>
   <script type="text/javascript" src="js/MySystemPropEditor.js"></script>
   <script type="text/javascript" src="js/MySystemWireLabel.js"></script>
@@ -68,39 +67,17 @@
   <!-- My Engine -->
   <script type="text/javascript" src="engine/mysystem-engine.js"></script>
   <script type="text/javascript" src="../lib/http.js"></script>
-  
+
+  <script>
+    mysystem.dataService = new MocDS(null,null);
+    //mysystem.dataService = new VleDS(vle);
+    //mysystem.dataService = new RestDS('','');
+    //mysystem.dataService = new GGearsDS('write','write','mysys');
+    //mysystem.dataService = new CookieDS(null,'write');
+  </script>
 </head>
 
 <body class="yui-skin-sam">
-
-  <script>
-
-        var mySystem;
-        var myDataService;
-        $(document).ready(function() {
-          mySystem = new MySystem('prefs.json');
-          myDataService = new MocDS(null,null);
-          //myDataService = new VleDS(vle);
-          //myDataService = new RestDS('','');
-          // myDataService = new GGearsDS('write','write','mysys');
-          //myDataService = new CookieDS(null,'write');
-          mySystem.setDataService(myDataService);
-          if (mySystem.editor) {
-            mySystem.editor.enableLoadAndSave();
-          }
-          mySystem.load();
-
-        });
-        
-        onExit = function () {
-            debug("saving mystem data before we leave");
-            mySystem.save();
-            debug("saved!");
-        }
-      
-        // window.onbeforeunload = onExit;
-
-  </script>
 
   <div id="goal_panel">
     <span id="goal_panel_text"></span>

@@ -15,6 +15,7 @@ end
 
 @my_system = %w{ 
   engine/mysystem-engine.js 
+  js/mysystem-init.js 
   js/MySystemUtil.js  
   js/ds/RestDS.js  
   js/ds/VleDS.js  
