@@ -26,7 +26,7 @@
 		}
 	};
 		
-	MyObject.prototype.kill = function(){}
+	MyObject.prototype.kill = function () {};
 
 	// Node prototype ////////////////////////////////////////////////////////////
 	var Node = function(){};
@@ -43,12 +43,15 @@
 	// todo: remove what is not needed above when done
 	
 	Node.prototype.transform = function(){
+	    var i = 0;
+	    var iNode = 0;
+	    
 		this.cycles ++;
 		
 		// calculate node's transfer efficiency
 		var sumEfficient = 0;
-		for( var i in this.efficiency ){
-			sumEfficient += this.efficiency[ i ];
+		for(i in this.efficiency ){
+			sumEfficient += this.efficiency[i];
 		}
 		var sumLoss = 1 - sumEfficient;
 		
@@ -57,16 +60,16 @@
 		// calculate childrens energy ratio
 		var sumInputRate = 0;
 		var len = this.output.length;
-		for( var i = 0; i < len; i++ ){
-			var iNode = my.node( this.output[ i ] );
+		for (i = 0; i < len; i++) {
+			iNode = my.node( this.output[ i ] );
 			sumInputRate += iNode.inputRate;
 		}
 		var ratio = 1 / sumInputRate;
 
 		// push energy to children
 		var heatLoss = 0;
-		for( var i = 0; i < len; i++ ){
-			var iNode = my.node( this.output[ i ] );
+		for (i = 0; i < len; i++) {
+			iNode = my.node( this.output[ i ] );
 			var energyTransfer = ( ( this.energy * iNode.inputRate ) * iNode.inputRate * ratio ) * sumEfficient;
 			
 			iNode.ratio = 1 / sumInputRate * iNode.inputRate;
@@ -86,14 +89,14 @@
 			this.energyIn = this.energy;
 		}
 		
-	}
+	};
 
 	// System constructor ////////////////////////////////////////////////////////
 	var System = function(){
 
 		this.defaults = {
-			entropy	: .987654321, // un-used thus far
-			arrows	: { width : { max: 30, min: .25 }
+			entropy	: 0.987654321, // un-used thus far
+			arrows	: { width : { max: 30, min: 0.25 }
 								},
 			nodes		: {
 								},
@@ -105,7 +108,7 @@
 
 		// CYCLE: 1 turn or cycle of the engine ....................................
 		this.cycles = 0;
-		this.cycle = function(){
+		this.cycle = function () {
 			this.cycles ++;
 			var sources = this.nodesWith( { type: 'source' } );
 			
@@ -120,58 +123,56 @@
 					this.sumInputEnergy += parseFloat( iSource.energy );
 			}
 			debug('-> cycled <-');
-		}
+		};
 
 		this.newNode = function( props ){
 			var len = this.nodes.length;
 			return this.nodes[ len ] =  ( new Node )
 					.constructor( 'n' + len + '_' )
 					.set( props );
-		}
+		};
 		
 		this.loadNodes = function( file ){
 			JSON = eval( this.AJAX.get( file ).responseText );
 			for( var i in JSON ){
 				this.newNode( JSON[ i ] );
 			}
-		},
+		};
 
 		this.list = function(){
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
-				var n = this.nodes[ i ]
+				var n = this.nodes[ i ];
 				debug([ n.name, n.type, n.heatLoss ]);
 			}
-		},
+		};
 
 		this.reset = function(){
 			debug(' RESETING...  ( cycles = ' + this.cycles + ' )' );
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
-				var n = this.nodes[ i ]
+				var n = this.nodes[ i ];
 				n.energyIn = 0;
 				n.heatLoss = 0;
 				n.cycles = 0;				
 			}
 			this.cycles = 0;
 			debug(' RESET: cycles = ' + this.cycles );
-		},
-
-
+		};
 
 		this.nodesWith = function( props ){
 			var collection = [];
 			var len = this.nodes.length;
 			for( var i = 0; i < len; i++ ){
 				var iNode = this.nodes[ i ];
-				for( var j in props ){
-					if( iNode[ j ] == props[ j ] ){
-						collection[ collection.length ] = iNode;
-					};				
+				for (var j in props) {
+					if (iNode[j] == props[j]) {
+						collection[collection.length] = iNode;
+					}				
 				}
 			}
 			return collection;
-		},
+		};
 
 		// Returns a node by a) it's ID, b) it's Name (return array?), c) it's Index
 		this.node = function( id_or_name ){
@@ -183,7 +184,7 @@
 				}
 			}
 			return false;
-		}		
+		};
 		
 		//-- AJAX ----------------------------------------------------------------//
 		this.AJAX = new Object();
@@ -192,36 +193,36 @@
 			responseText: '',
 			
 			// GET requests
-			get: function( url, async, keyvals ){
-			
-				var async = ( async === 'undefined' ) ? this.defaults.AJAX.async : async ;
+			get: function(url, async_in, keyvals) {
+			    alert('AJAX.get');
+				var async = (typeof async_in === 'undefined') ? this.defaults.AJAX.async : async_in;
 				
 				var Get = new XMLHttpRequest;
 				Get.open( 'GET', url, async );
 				Get.send( keyvals || 'null' );
 
-				if( async ){
+				if (async) {
 					debug("async", this);
 					Get.onreadystatechange = function(){
 						if( Get.readyState == 4 ){
 							this.responseText = Get.responseText;
 							return this;
 						}
-					}
-				} else {
+					};
+				}
+				else {
 					this.responseText = Get.responseText;
 					return this;
 				}
 				
 			}
-						
-		}
-		
+
+		};
 		
 	};
 	
 	// Create an instance of mySystem ////////////////////////////////////////////
-	this.my = new System();
+	//this.my = new System();
 
 })();
 
