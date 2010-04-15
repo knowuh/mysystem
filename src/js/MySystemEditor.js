@@ -521,58 +521,61 @@
         /**
          * @method onLoad
          */
-         onLoad: function() {
-           if (this.dataService) {
-             this.dataService.load(this, this.loadCallback);
-           }
-           else {
-             alert("No Data Service defined");
-           }
-         },
+        onLoad: function() {
+          if (this.dataService) {
+            this.dataService.load(this, this.loadCallback);
+          }
+          else {
+            alert("No Data Service defined");
+          }
+        },
          
-         loadCallback: function(text, context) { 
-            debug("json-loading:\n===================================\n" + text);
-            try {
-                var obj = JSON.parse(text);
-                if (obj && obj.length > 0) {
-                    context.resetLayers();
-                    context.rootLayer.setWiring(obj[0]);
-                }
-            }
-            catch (e) {
-                if (e instanceof SyntaxError) {
-                    alert('JSON parse error');
-                }
-                else {
-                    alert('Unknown error in MySystemEditor#loadCallback');
-                }
-            }
-         },
+        loadCallback: function(rsp, context) {
+          debug("json-loading:\n===================================\n" + rsp);
+             
+          try {
+            var obj = (typeof rsp === 'object') ? rsp : JSON.parse(rsp);
 
-         /**
-         * @method onPrint
-         */
-         onPrint: function() {
-           this.onSave();
-           window.open('print.html');
-         },
+            if (obj && obj.length > 0) {
+              alert(JSON.stringify(obj));
+              context.resetLayers();
+              context.rootLayer.setWiring(obj[0]);
+            }
+          }
+          catch (e) {
+            if (e instanceof SyntaxError) {
+              alert('JSON parse error');
+            }
+            else {
+              alert('Unknown error in MySystemEditor#loadCallback');
+            }
+          }
+        },
+
+        /**
+        * @method onPrint
+        */
+        onPrint: function() {
+          this.onSave();
+          window.open('print.html');
+        },
          
-         /**
+        /**
          * @method onPrint
          */
-         // onShowJson: function(layer_object) {
-         //     var width = this.rootLayer.el.getWidth();
-         //     var height = this.rootLayer.el.getHeight();
-         // 
-         // 
-         //     $('JSON_DATA').update(
-         //       "<p><br><ul><li>width: " + width + 
-         //       "<li> height: " + height +
-         //      "</ul></p><code>" + [this.rootLayer.getWiring()].toJSON() + "</code>");
-         //     this.devPanel.render();
-         //     this.devPanel.show();
-         // 
-         //   },
+        // onShowJson: function(layer_object) {
+        //     var width = this.rootLayer.el.getWidth();
+        //     var height = this.rootLayer.el.getHeight();
+        // 
+        // 
+        //     $('JSON_DATA').update(
+        //       "<p><br><ul><li>width: " + width + 
+        //       "<li> height: " + height +
+        //      "</ul></p><code>" + [this.rootLayer.getWiring()].toJSON() + "</code>");
+        //     this.devPanel.render();
+        //     this.devPanel.show();
+        // 
+        //   },
         //  
         //  
         // /**
@@ -584,8 +587,8 @@
         // },
 
         /**
-        * @method onNew
-        */
+         * @method onNew
+         */
         onNew: function() {
             if (confirm("Are you sure you want to erase your diagram and start fresh?")) {
                 this.layer.removeAllContainers();

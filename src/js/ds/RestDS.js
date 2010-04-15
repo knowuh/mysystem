@@ -1,6 +1,7 @@
 (function(){
+    
   RestDS = function(readKey,writeKey,_post_path){
-    this.data = "";
+    this.data = '[]';
     this.enableLoadAndSave = true;
     this.postPath = _post_path || "/models/";
     this.getPath = this.postPath;
@@ -8,6 +9,7 @@
   };
 
   RestDS.prototype = {
+          
     setKeys: function(read,write) {
       if (read) {
         this.load(this,function(){});// just load data
@@ -20,16 +22,18 @@
         this.writeKey= this.randomString();
       }
     },
+    
     randomString: function() {
-    	var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-    	var string_length = 8;
-    	var randomstring = '';
-    	for (var i=0; i<string_length; i++) {
-    		var rnum = Math.floor(Math.random() * chars.length);
-    		randomstring += chars.substring(rnum,rnum+1);
-    	}
-    	return randomstring;
+      var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+      var string_length = 8;
+      var randomstring = '';
+      for (var i=0; i<string_length; i++) {
+        var rnum = Math.floor(Math.random() * chars.length);
+          randomstring += chars.substring(rnum,rnum+1);
+      }
+      return randomstring;
     },
+    
     // write the data
     save: function(_data) {
         this.writeKey = prompt("Please enter a model name or key: ", this.writeKey);
@@ -69,10 +73,9 @@
           async: true,
           type: 'GET',
           success: function(rsp) {
-            var text = rsp.responseText;
-            var _data = JSON.parse(text);
+            var _data = rsp;
             self.data = _data;
-            callback(_data,context,callback);
+            callback(_data, context, callback);
             debug("returned from load");
           },
           error: function(req,err) {

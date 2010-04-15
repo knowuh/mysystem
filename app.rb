@@ -53,7 +53,7 @@ put '/models/:key' do
   unless myModel
     myModel = MySystemModel.new(:msuuid => params[:key])
   end
-  myModel.content = raw_post || "{}"
-  myModel.save
+  myModel.content = raw_post || "[]"
+  myModel.save!
   "{ key: \"#{myModel.key}\" }"
 end
