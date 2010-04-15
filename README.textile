@@ -60,6 +60,9 @@ If you need to make a compact and easy to distribute version of MySystem, you ca
 
 h3. Testing
 
+JavaScript lint: @rake jslint@ 
+(JavaScript lint must be installed, with jsl in path: "http://www.javascriptlint.com":http://www.javascriptlint.com)
+
 I had installed visionmedia-jspec with @sudo gem install visionmedia-jspec@ 
 but then I copied the spec javascripts and css flies into the tests/ directory.
 
