@@ -55,5 +55,5 @@ put '/models/:key' do
   end
   myModel.content = raw_post || "[]"
   myModel.save!
-  "{ key: \"#{myModel.key}\" }"
+  #"{ key: \"#{myModel.key}\" }"
 end
