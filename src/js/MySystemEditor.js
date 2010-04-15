@@ -1,6 +1,5 @@
 // TODO This is for debugging. REMOVE it later.
 
-
 (function() {
     
     var util = YAHOO.util;
@@ -109,6 +108,11 @@
         this.numLayers = 1;
         this.propEditor = new MySystemPropEditor({});
         
+        // Flag for auto-save to determine if anything important has
+        // changed since last save
+        this.dirty = false;
+        
+        //window.setInterval(this.autoSave, 60 * 1000);
         
         /**
        * @property layout
