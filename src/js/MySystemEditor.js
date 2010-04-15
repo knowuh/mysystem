@@ -540,7 +540,7 @@
             var obj = (typeof rsp === 'object') ? rsp : JSON.parse(rsp);
 
             if (obj && obj.length > 0) {
-              alert(JSON.stringify(obj));
+              //alert('Loaded: ' + JSON.stringify(obj));
               context.resetLayers();
               context.rootLayer.setWiring(obj[0]);
             }
