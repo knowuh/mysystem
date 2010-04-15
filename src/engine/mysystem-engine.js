@@ -127,9 +127,9 @@
 
 		this.newNode = function( props ){
 			var len = this.nodes.length;
-			return this.nodes[ len ] =  ( new Node )
-					.constructor( 'n' + len + '_' )
-					.set( props );
+			var newNode = (new Node).constructor('n' + len + '_').set(props);
+			this.nodes[ len ] = newNode;
+			return newNode;
 		};
 		
 		this.loadNodes = function( file ){
@@ -194,7 +194,7 @@
 			
 			// GET requests
 			get: function(url, async_in, keyvals) {
-			    alert('AJAX.get');
+		        var self = this;
 				var async = (typeof async_in === 'undefined') ? this.defaults.AJAX.async : async_in;
 				
 				var Get = new XMLHttpRequest;
@@ -202,13 +202,14 @@
 				Get.send( keyvals || 'null' );
 
 				if (async) {
-					debug("async", this);
+					debug("async ", this);
 					Get.onreadystatechange = function(){
 						if( Get.readyState == 4 ){
-							this.responseText = Get.responseText;
-							return this;
+							self.responseText = Get.responseText;
+							return self;
 						}
 					};
+					return this; //FIXME: this should be invalid because of async
 				}
 				else {
 					this.responseText = Get.responseText;
