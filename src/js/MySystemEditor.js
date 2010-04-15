@@ -209,12 +209,12 @@
           }
           if (this.layer) {
             this.removeLayer(this.layer);
-            this.layer = null;
+            // this.layer = null;
           }
           
           if (this.rootLayer) {
             this.removeLayer(this.rootLayer);
-            this.rootLayer = null;
+            // this.rootLayer = null;
           }
           this.numLayers = 0;
           this.layerStack = [];
@@ -259,6 +259,7 @@
           this.numLayers = this.numLayers - 1;
           // this.removeLayerMap(newLayer);
           newLayer.removeAllContainers();
+          newLayer=null;
           return null;
         },
         changeLayer: function(newLayer) {
@@ -521,14 +522,16 @@
         /**
          * @method onLoad
          */
-        onLoad: function() {
-          if (this.dataService) {
-            this.dataService.load(this, this.loadCallback);
-          }
-          else {
-            alert("No Data Service defined");
-          }
-        },
+
+         onLoad: function() {
+           var self = this;
+           if (self.dataService) {
+             self.dataService.load(self, self.loadCallback);
+           }
+           else {
+             alert("No Data Service defined");
+           }
+         },
          
         loadCallback: function(rsp, context) {
           debug("json-loading:\n===================================\n" + rsp);

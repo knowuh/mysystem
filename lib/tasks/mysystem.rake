@@ -8,6 +8,7 @@ require 'sprockets'
   excanvas.js
   canvastext.js
   uuid.js
+  json2.js
 }.map do |path|
   'lib/' + path
 end
