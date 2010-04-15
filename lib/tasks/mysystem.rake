@@ -100,3 +100,13 @@ namespace :combine do
     %x(cp ./lib/YUI/*.css ./#{@dist_dir}/css/YUI)
   end
 end
+
+desc "lint JavaScript files (JavaScript Lint (jsl) must be installed)"
+task :jslint do
+  options = '-conf jsl.conf '
+  @my_system.each do |js_file|
+    options << "-process #{js_file} "
+  end
+  puts %x(jsl #{options})
+end
+
