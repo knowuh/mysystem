@@ -222,7 +222,7 @@
 	};
 	
 	// Create an instance of mySystem ////////////////////////////////////////////
-	//this.my = new System();
+	this.my = new System();
 
 })();
 
