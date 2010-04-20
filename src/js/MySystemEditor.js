@@ -1,12 +1,7 @@
-// TODO This is for debugging. REMOVE it later.
-
 (function() {
     
-    var util = YAHOO.util;
-    var lang = YAHOO.lang;
-    var Event = util.Event;
-    var Dom = util.Dom;
-    var Connect = util.Connect;
+    var Event = YAHOO.util.Event;
+    var Dom = YAHOO.util.Dom;
     var widget = YAHOO.widget;
 
     /**
@@ -585,7 +580,8 @@
         },
         
         subscribeToChanges: function () {
-            var callback = function (type, args, self) {
+            var i = 0;
+            var setDirty = function (type, args, self) {
                 self.setDirty(true);
             };
             var events = ['eventAddWire',
@@ -595,10 +591,10 @@
                           'eventContainerDragged',
                           'eventContainerResized'
                          ];
-            for (var i = 0; i < events.length; ++i) {
-                this.layer[events[i]].subscribe(callback, this);
+            for (i = 0; i < events.length; ++i) {
+                this.layer[events[i]].subscribe(setDirty, this);
             }
-            this.propEditor.eventSaveValues.subscribe(callback, this);
+            this.propEditor.eventSaveValues.subscribe(setDirty, this);
         },
 
         startAutoSaving: function () {
