@@ -1,6 +1,4 @@
 (function () {
-
-    
     /**
      * Proxy to handle the drag/dropping from the module list to the layer
      * @class MySystemDragAndDropProxy
