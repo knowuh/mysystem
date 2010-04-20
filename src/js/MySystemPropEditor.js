@@ -1,4 +1,3 @@
-
 /**
  * MySystemPropEditor
  * @class MySystemPropEditor
@@ -50,6 +49,8 @@ MySystemPropEditor = function(options) {
    this.setFieldLabelMap({
      'name': 'label'
    });
+   
+   this.eventSaveValues = new YAHOO.util.CustomEvent('saveValues', this);
 };
 
 
@@ -200,6 +201,7 @@ MySystemPropEditor.prototype = {
       options['selected_color'] = this.selected_color;
       this.node.updateFields(options);
     }
+    this.eventSaveValues.fire(this);
   },
   
   
@@ -246,7 +248,7 @@ MySystemPropEditor.prototype = {
   },
   
 
-  show: function(nnode) {        
+  show: function (nnode) {
     
     this.setNode(nnode);
     this.updateFields();

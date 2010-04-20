@@ -15,19 +15,20 @@ end
 
 @my_system = %w{ 
   engine/mysystem-engine.js 
-  js/mysystem-init.js 
-  js/MySystemUtil.js  
   js/ds/RestDS.js  
   js/ds/VleDS.js  
   js/ds/GGearsDS.js
   js/ds/MocDS.js
   js/ds/CookieDS.js
-  js/MySystemPropEditor.js
-  js/MySystemContainer.js
-  js/MySystemNote.js
-  js/MySystemData.js  
-  js/MySystemEditor.js  
+  js/mysystem-init.js 
   js/MySystem.js
+  js/MySystemContainer.js
+  js/MySystemData.js
+  js/MySystemDragAndDropProxy.js
+  js/MySystemEditor.js
+  js/MySystemNote.js
+  js/MySystemPropEditor.js
+  js/MySystemUtil.js
   js/GoalPanel.js
 }.map do |path|
   'src/' + path

@@ -10,99 +10,11 @@
     var widget = YAHOO.widget;
 
     /**
-   * Proxy to handle the drag/dropping from the module list to the layer
-   * @class MySystemDragAndDropProxy
-   * @constructor
-   * @param {HTMLElement} el
-   * @param {MySystemEditor} WiringEditor
-   */
-    MySystemDragAndDropProxy = function(el, MySysEditor) {
-        this._MySysEditor = MySysEditor;
-        // Init the DDProxy
-        MySystemDragAndDropProxy.superclass.constructor.call(this, el, "module", {
-            dragElId: "moduleProxy"
-        });
-        this.isTarget = false;
-    };
-
-    YAHOO.extend(MySystemDragAndDropProxy, YAHOO.util.DDProxy, {
-
-        /**
-        * copy the html and apply selected classes
-        * @method startDrag
-        */
-        startDrag: function(e) {
-            MySystemDragAndDropProxy.superclass.startDrag.call(this, e);
-            var del = this.getDragEl();
-            var lel = this.getEl();
-            del.innerHTML = lel.innerHTML;
-            del.className = lel.className;
-        },
-
-        /**
-        * Override default behavior of DDProxy
-        * @method endDrag
-        */
-        endDrag: function(e) {},
-
-        /**
-        * Add the module to the WiringEditor on drop on layer
-        * @method onDragDrop
-        */
-        onDragDrop: function(e, ddTargets) {
-
-            // The layer is the only target :
-            var layerTarget = ddTargets[0];
-            var layer = ddTargets[0]._layer;
-            var del = this.getDragEl();
-            var pos = YAHOO.util.Dom.getXY(del);
-            var layerPos = YAHOO.util.Dom.getXY(layer.el);
-            var i = 0;
-            
-            pos[0] = pos[0] - layerPos[0];
-            pos[1] = pos[1] - layerPos[1];
-            
-            
-            /*var Copy = new Object;
-            for( var i in this._module ){
-              Copy[ i ] = this._module[ i ];
-            }
-            Copy.engineNode = newEngineNode;
-            */
-
-            var Copy = function (par) {
-              for (i in par._module) {
-                this[ i ] = par._module[ i ];
-              }
-              this.fields = {};
-              for(i in par._module.fields) {
-                this.fields[i] = par._module.fields[ i ];
-              }
-              debug(this);
-              var energyForm = {};
-              energyForm[ par._module.fields.form ] = par._module.fields.efficiency;            
-
-              this.engineNode = my.newNode({
-                  name        : par._module.name,
-                  module      : par._module,
-                  type        : par._module.etype,
-                  output      : [],
-                  energy      : par._module.fields.energy || 0,
-                  inputRate   : par._module.fields.inputRate,
-                  efficiency  : energyForm // reference energies object
-              });
-            };
-
-            this._MySysEditor.addModule(new Copy(this), pos );
-        }
-    });
-
-/**
- * The MySystemEditor class provides a full page interface 
- * @class WiringEditor
- * @constructor
- * @param {Object} options
- */
+     * The MySystemEditor class provides a full page interface 
+     * @class WiringEditor
+     * @constructor
+     * @param {Object} options
+     */
     MySystemEditor = function(data) {
         // set the default options
         this.setOptions(data);
@@ -112,9 +24,8 @@
         
         // Flag for auto-save to determine if anything important has
         // changed since last save
-        this.dirty = false;
-        
-        //window.setInterval(this.autoSave, 60 * 1000);
+        this._dirty = false;
+        this.startAutoSaving();
         
         /**
        * @property layout
@@ -132,6 +43,8 @@
 
         this.goalPanel = new GoalPanel($('#goal_panel'), $('#goal_panel_icon'));
         this.goalPanel.render();
+        
+        this.subscribeToChanges();
     };
 
     MySystemEditor.prototype = {
@@ -226,13 +139,13 @@
           this.layerStack = [];
           this.rootLayer = this.addLayer();
           this.changeLayer(this.rootLayer);
-         },
+        },
          
         /**
         * Open the properties editor for this container
         *
         **/
-        onOpenPropEditorFor: function(type,args) {
+        onOpenPropEditorFor: function (type,args) {
           module = args[0];
           this.propEditor.show(module);
         },
@@ -241,7 +154,7 @@
         * Open a new layer for this container
         *
         **/
-        onOpenContextFor: function(type,args) {
+        onOpenContextFor: function (type,args) {
             module = args[0];
             if (module.has_sub) {
               if (module.subSystem === null) {
@@ -250,7 +163,8 @@
               // this.changeLayer(module.subSystem);
             }
         },
-        addLayer: function() {
+        
+        addLayer: function () {
             this.numLayers = this.numLayers + 1;
             var newOpts = {};
             for (var key in this.options.layerOptions) {
@@ -260,15 +174,17 @@
             var newLayer = new WireIt.Layer(newOpts);
             // this.addLayerMap(newLayer);
             return newLayer;
-          },
-        removeLayer: function(newLayer) {
+        },
+        
+        removeLayer: function (newLayer) {
           this.numLayers = this.numLayers - 1;
           // this.removeLayerMap(newLayer);
           newLayer.removeAllContainers();
           newLayer=null;
           return null;
         },
-        changeLayer: function(newLayer) {
+        
+        changeLayer: function (newLayer) {
              var index = this.layerStack.indexOf(newLayer);
              if (index < 0) {
                // this.addLayerMap(newLayer);
@@ -285,7 +201,8 @@
              this.setLayer(newLayer);
              // this.updateLayerInfo();
         },
-        setLayer:function(newLayer) {
+        
+        setLayer: function (newLayer) {
           // kind of a hack, clean any bad wiring from the layer before we continue:
           this.cleanWiring(newLayer);
           if (!this.layer) { this.layer = this.rootLayer;}
@@ -298,7 +215,8 @@
           $(this.layer.el).show();
           this.setDDLayer(this.layer);
           this.hidePropEditor();
-       },
+        },
+       
         // 
         // removeLayerMap: function(newLayer) {
         //   try {
@@ -336,7 +254,7 @@
         //   // $('layer_info').update(layerInfo);
         // },
         // 
-        cleanWiring: function(newLayer) {
+        cleanWiring: function (newLayer) {
           var i = 0;
           var size = newLayer.wires.length;
           var wire = null;
@@ -358,7 +276,7 @@
         },
         
 
-        hidePropEditor: function() {
+        hidePropEditor: function () {
           $('#property_editor').hide();
         },
         
@@ -366,12 +284,12 @@
         *
         *
         **/
-        setDDLayer: function(theLayer) {
+        setDDLayer: function (theLayer) {
             this.ddTarget = new YAHOO.util.DDTarget(this.layer.el, "module");
             this.ddTarget._layer = this.layer;
         },
         
-        addModuleChoice: function(module) {           
+        addModuleChoice: function (module) {
           
             var left = Dom.get('left');
             var div = WireIt.cn('div', {
@@ -398,7 +316,7 @@
             else if (module.name) {
               div.appendChild(WireIt.cn('span', null, null, module.name));
             }
-            var ddProxy = new MySystemDragAndDropProxy(div, this);
+            var ddProxy = new mysystem.MySystemDragAndDropProxy(div, this);
             ddProxy._module = module;
             left.appendChild(div);
 
@@ -516,10 +434,8 @@
         */
         onSave: function() {
          if (this.dataService) {
-           debug("calling save " + this.dataService);
-           debug('json:' + JSON.stringify([this.rootLayer.getWiring()]));
            this.dataService.save(JSON.stringify([this.rootLayer.getWiring()]));
-           debug("save has returned... ");
+           debug("save has returned...");
          }
          else {
            alert("No Data Service defined");
@@ -604,6 +520,7 @@
                 this.layer.removeAllContainers();
                 this.resetLayers();
             }
+            this.setDirty(true);
         },
 
         /**
@@ -665,6 +582,49 @@
                 name: obj.properties.name,
                 working: obj
             };
+        },
+        
+        subscribeToChanges: function () {
+            var callback = function (type, args, self) {
+                self.setDirty(true);
+            };
+            var events = ['eventAddWire',
+                          'eventRemoveWire',
+                          'eventAddContainer',
+                          'eventRemoveContainer',
+                          'eventContainerDragged',
+                          'eventContainerResized'
+                         ];
+            for (var i = 0; i < events.length; ++i) {
+                this.layer[events[i]].subscribe(callback, this);
+            }
+            this.propEditor.eventSaveValues.subscribe(callback, this);
+        },
+
+        startAutoSaving: function () {
+            var self = this;
+            this.autoSaveId = setInterval(function () {
+                self.autoSave();
+            }, 60 * 1000);
+        },
+        
+        stopAutoSaving: function () {
+            clearInterval(this.autoSaveId);
+        },
+        
+        autoSave: function () {
+            if (this.isDirty()) {
+                this.onSave();
+                this.setDirty(false);
+            }
+        },
+        
+        setDirty: function (dirty) {
+            this._dirty = dirty;
+        },
+        
+        isDirty: function () {
+            return this._dirty;
         }
     };
 

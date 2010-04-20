@@ -23,11 +23,13 @@
         mySystem.setDataService(mysystem.dataService);
         if (mySystem.editor) {
             mySystem.editor.enableLoadAndSave();
+            $(window).unload(function () {
+                mySystem.editor.autoSave();
+                mySystem.editor.stopAutoSaving();
+            });
         }
         mySystem.load();
         
-        $(window).unload(function() {});
-
         var onExit = function () {
             debug("saving mystem data before we leave");
             mySystem.save();
