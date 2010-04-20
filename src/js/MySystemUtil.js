@@ -64,11 +64,6 @@
       }, intervalms);
   };
   
-  decodeKeyEvent = function(e) {
-    if (e.which) code = e.which;
-    else if (e.charCode) code = e.charCode;
-  };
-  
   /**
   *
   */

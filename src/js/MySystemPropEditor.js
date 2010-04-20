@@ -25,11 +25,10 @@ MySystemPropEditor = function(options) {
   
    var self =  this;
    this.dom_entity.keydown(function(e) {
-     var code;
+     var code = e.which;
      var escapeKey = 27;
      var returnKey = 13;
-     // defined in MySystemUtils:
-     code = decodeKeyEvent(e);
+
      // disable default enter key
      // for submitting form, unless we are in
      // textarea
