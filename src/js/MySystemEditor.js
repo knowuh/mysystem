@@ -35,11 +35,13 @@
         // this.enableLoadAndSave();
         this.renderButtons();
 
-        this.goalPanel = new GoalPanel($('#goal_panel'), $('#goal_panel_icon'));
+        this.goalPanel = new mysystem.MySystemGoalPanel();
         this.goalPanel.render();
         
         this.subscribeToChanges();
     };
+    
+    mysystem.MySystemEditor = MySystemEditor;
 
     MySystemEditor.prototype = {
             
@@ -625,6 +627,4 @@
         }
     };
     
-    mysystem.MySystemEditor = MySystemEditor;
-
 })();

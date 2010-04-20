@@ -15,6 +15,8 @@
         this.isTarget = false;
     };
 
+    mysystem.MySystemDragAndDropProxy = MySystemDragAndDropProxy;
+
     YAHOO.extend(MySystemDragAndDropProxy, YAHOO.util.DDProxy, {
 
         /**
@@ -87,6 +89,4 @@
         }
     });
     
-    mysystem.MySystemDragAndDropProxy = MySystemDragAndDropProxy;
-
 })();

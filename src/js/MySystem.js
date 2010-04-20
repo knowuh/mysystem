@@ -24,6 +24,7 @@ mysystem.MySystem.prototype = {
         if (loaded.arrows) {
             this.editor.propEditor.setArrows(loaded.arrows);
         }
+        this.editor.goalPanel.setContent(loaded.goalText);
     },
   
     setDataService: function (ds) {
@@ -50,7 +51,7 @@ mysystem.MySystem.prototype = {
 
     loadModulesFromJSON: function (jsonString) {
         debug("Calling loadModulesFromJSON:" + jsonString);
-        var retObj = { modules: [], labels: null, arrows: null };
+        var retObj = { modules: [], labels: null, arrows: null, goalText: '' };
         
         try {
             var data = JSON.parse(jsonString);
@@ -77,7 +78,7 @@ mysystem.MySystem.prototype = {
                     retObj.arrows = item.arrows;
                 }
                 else if (item.xtype == 'AssignmentInformation') {
-                    this.loadAssignmentInfo(item);
+                    retObj.goalText = item.fields.goal;
                 }
             }
             this.loaded = true;
@@ -89,10 +90,6 @@ mysystem.MySystem.prototype = {
         finally {
             return retObj;
         }
-    },
-
-    loadAssignmentInfo : function (item) {
-        $('#goal_panel_text').html(item.fields.goal);
     },
 
     /**

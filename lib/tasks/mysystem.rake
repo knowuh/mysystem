@@ -26,10 +26,10 @@ end
   js/MySystemData.js
   js/MySystemDragAndDropProxy.js
   js/MySystemEditor.js
+  js/MySystemGoalPanel.js
   js/MySystemNote.js
   js/MySystemPropEditor.js
   js/MySystemUtil.js
-  js/GoalPanel.js
 }.map do |path|
   'src/' + path
 end
