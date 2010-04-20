@@ -10,10 +10,9 @@
      * @constructor
      * @param {Object} options
      */
-    MySystemEditor = function(data) {
-        // set the default options
-        this.setOptions(data);
-        this._data = data;
+    var MySystemEditor = function (data) {
+        this.setOptions(data); // set the default options
+            
         this.numLayers = 1;
         this.propEditor = new MySystemPropEditor({});
         
@@ -43,16 +42,18 @@
     };
 
     MySystemEditor.prototype = {
+            
+        setDataService: function (dataService) {
+            this.dataService = dataService;
+        },
+        
         /**
         * @method setOptions
         * @param {Object} options
         */
         setOptions: function(options) {
-            // Unload any older options:
-            this.options = {};
-            // Load the modules from options
-            
-            this.modules = options.modules || ([]);
+            this.options = {}; //unload any older options
+            this.modules = options.modules || ([]); //load modules from options
             
             /* modulesByName doesn't seem to be used at all.
              * Besides, m.name is only defined for notes, not containers
@@ -64,7 +65,7 @@
             */
 
             this.options.languageName = options.languageName || 'anonymousLanguage';
-            this.options.smdUrl = options.smdUrl || 'WiringEditor.smd'; // eh?
+            this.options.smdUrl = options.smdUrl || 'WiringEditor.smd'; //FIXME: eh?
             
             // FIXME: This url should be determined by whatever outside authoring system is wrapping the editor
             this.options.dataDir = "/models";
@@ -379,13 +380,14 @@
         * @method enableLoadAndSave
         */
         enableLoadAndSave: function() {
+          var self = this;
           var toolbar = Dom.get('toolbar');
           var loadButton = new widget.Button({
               label: "Load",
               id: "WiringEditor-loadButton",
               container: toolbar
           });
-          loadButton.on("click", this.onLoad, this, true);
+          loadButton.on("click", function() { self.onLoad(); }, this, true);
           
           var saveButton = new widget.Button({
               label: "Save",
@@ -427,28 +429,27 @@
         /**
         * @method onSave
         */
-        onSave: function() {
-         if (this.dataService) {
-           this.dataService.save(JSON.stringify([this.rootLayer.getWiring()]));
-           debug("save has returned...");
-         }
-         else {
-           alert("No Data Service defined");
-         }
+        onSave: function () {
+            if (this.dataService) {
+                this.dataService.save(JSON.stringify([this.rootLayer.getWiring()]));
+                debug("save has returned...");
+            }
+            else {
+                alert("onSave: No Data Service defined");
+            }
         },
 
         /**
          * @method onLoad
          */
 
-         onLoad: function() {
-           var self = this;
-           if (self.dataService) {
-             self.dataService.load(self, self.loadCallback);
-           }
-           else {
-             alert("No Data Service defined");
-           }
+        onLoad: function () {
+            if (this.dataService) {
+                this.dataService.load(this, this.loadCallback);
+            }
+            else {
+                alert("onLoad: No Data Service defined");
+            }
          },
          
         loadCallback: function(rsp, context) {
@@ -623,5 +624,7 @@
             return this._dirty;
         }
     };
+    
+    mysystem.MySystemEditor = MySystemEditor;
 
 })();
