@@ -38,6 +38,8 @@
             debug("saved!");
         };
         //window.onbeforeunload = onExit;
+        
+        return mySystem;
     };
     
 })();
