@@ -13,7 +13,7 @@
     }
     this.debug = console.log;
     
-    $(document).ready(function() {
+    this.mysystem_load = function () {
         if (!mysystem.dataService) {
             alert('Data service is undefined');
             return;
@@ -23,10 +23,12 @@
         mySystem.setDataService(mysystem.dataService);
         if (mySystem.editor) {
             mySystem.editor.enableLoadAndSave();
+            /*
             $(window).unload(function () {
                 mySystem.editor.autoSave();
                 mySystem.editor.stopAutoSaving();
             });
+            */
         }
         mySystem.load();
         
@@ -36,7 +38,7 @@
             debug("saved!");
         };
         //window.onbeforeunload = onExit;
-    });
+    };
     
 })();
 

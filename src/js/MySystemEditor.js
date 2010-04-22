@@ -19,7 +19,7 @@
         // Flag for auto-save to determine if anything important has
         // changed since last save
         this._dirty = false;
-        this.startAutoSaving();
+        //this.startAutoSaving();
         
         /**
        * @property layout
