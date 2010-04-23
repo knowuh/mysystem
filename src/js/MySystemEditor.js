@@ -19,7 +19,11 @@
         // Flag for auto-save to determine if anything important has
         // changed since last save
         this._dirty = false;
-        //this.startAutoSaving();
+        
+        if (mysystem.config.autoSave) {
+            debug('Starting auto save');
+            this.startAutoSaving();
+        }
         
         /**
        * @property layout

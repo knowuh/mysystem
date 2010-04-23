@@ -69,14 +69,27 @@
   <script type="text/javascript" src="../lib/http.js"></script>
 
   <script>
-    mysystem.dataService = new MocDS(null,null);
-    //mysystem.dataService = new VleDS(vle);
-    //mysystem.dataService = new RestDS('','');
-    //mysystem.dataService = new GGearsDS('write','write','mysys');
-    //mysystem.dataService = new CookieDS(null,'write');
+    mysystem.config.dataService = new MocDS(null,null);
+    //mysystem.config.dataService = new VleDS(vle);
+    //mysystem.config.dataService = new RestDS('','');
+    //mysystem.config.dataService = new GGearsDS('write','write','mysys');
+    //mysystem.config.dataService = new CookieDS(null,'write');
+    
+    mysystem.config.jsonURL = 'prefs.json';
+    mysystem.config.enableLoadAndSave = true;
+    mysystem.config.autoSave = true;
     
     $(document).ready(function () {
-      mysystem_load();
+        var mySystem = mysystem.loadMySystem();
+
+        window.onbeforeunload = function () {
+            debug("saving mystem data before we leave");
+            mySystem.save();
+            debug("saved!");
+            if (mysystem.config.autoSave) {
+                mySystem.editor.stopAutoSaving();
+            }
+        };
     });
   </script>
 </head>

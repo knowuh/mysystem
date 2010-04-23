@@ -1,7 +1,17 @@
-(function() {
+(function () {
     // Create a name space for MySystem
-    if (typeof mysystem === 'undefined' || !mysystem) {
+    if (typeof mysystem === 'undefined' || !console) {
         this.mysystem = {};
+    }
+    else {
+        var msg = 'Error: mysystem needs to be a unique globally\n';
+        msg += 'to function as a namespace';
+        alert(msg);
+        return;
+    }
+    
+    if (!mysystem.config) {
+        this.mysystem.config = {};
     }
     
     // In case console.log() is not defined
@@ -11,34 +21,30 @@
     if (!console.log) {
         console.log = function() {};
     }
-    this.debug = console.log;
+    if (typeof debug === 'undefined' || !debug) {
+        this.debug = console.log;
+    }
     
-    this.mysystem_load = function () {
-        if (!mysystem.dataService) {
-            alert('Data service is undefined');
-            return;
+    this.mysystem.loadMySystem = function () {
+        if (!mysystem.config.dataService) {
+            alert('Error: data service is undefined');
+            return null;
         }
-
-        var mySystem = new mysystem.MySystem('prefs.json');
-        mySystem.setDataService(mysystem.dataService);
+        if (!mysystem.config.jsonURL) {
+            alert('Error: jsonURL is undefined');
+            return null;
+        }
+        
+        var mySystem = new mysystem.MySystem(mysystem.config.jsonURL);
+        mySystem.setDataService(mysystem.config.dataService);
+        
         if (mySystem.editor) {
-            mySystem.editor.enableLoadAndSave();
-            /*
-            $(window).unload(function () {
-                mySystem.editor.autoSave();
-                mySystem.editor.stopAutoSaving();
-            });
-            */
+            if (mysystem.config.enableLoadAndSave) {
+                mySystem.editor.enableLoadAndSave();
+            }
         }
+        
         mySystem.load();
-        
-        var onExit = function () {
-            debug("saving mystem data before we leave");
-            mySystem.save();
-            debug("saved!");
-        };
-        //window.onbeforeunload = onExit;
-        
         return mySystem;
     };
     
