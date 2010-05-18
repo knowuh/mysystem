@@ -462,10 +462,19 @@
           debug("json-loading:\n===================================\n" + rsp);
              
           try {
-            var obj = (typeof rsp === 'object') ? rsp : JSON.parse(rsp);
+            var obj = null;
+            
+            if (typeof rsp === 'object') {
+                obj = rsp;
+            }
+            else if (rsp === '') {
+                obj = [];
+            }
+            else {
+                obj = JSON.parse(rsp);
+            }
 
             if (obj && obj.length > 0) {
-              //alert('Loaded: ' + JSON.stringify(obj));
               context.resetLayers();
               context.rootLayer.setWiring(obj[0]);
             }

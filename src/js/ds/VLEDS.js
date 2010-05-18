@@ -1,7 +1,7 @@
 (function() {
   // Very simple proxy for the VLE
   VleDS = function(_vle){
-    this.data = "";
+    this.data = [];
     this.vle = _vle;
     this.vleNode=_vle.getCurrentNode();
     this.enableLoadAndSave = false;
