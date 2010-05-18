@@ -1,0 +1,32 @@
+#!/bin/sh
+
+## Usage example:
+##   bin/compareWise ../vlewrapper .
+
+if [ $# -ne 2 ]; then
+  echo "Usage: `basename $0` {vlewrapper_root_dir} {mysystem_root_dir}"
+  exit 1
+fi
+
+root_dir1=$1
+root_dir2=$2
+
+files="\
+  mysystem_complete.js \
+  mysystem_print.js \
+  css/mysystem.css \
+  css/WireIt.css \
+  css/WireItEditor.css \
+  images/down-arrow.png \
+  images/up-arrow.png \
+  mysystem.html \
+"
+
+dir1=$root_dir1/WebContent/vle/node/mysystem
+dir2=$root_dir2/public
+ 
+for f in $files; do
+  echo "Comparing ${f}"
+  #diff -q $dir1/$f $dir2/$f
+  diff $dir1/$f $dir2/$f
+done
