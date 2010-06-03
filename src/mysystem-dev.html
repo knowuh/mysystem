@@ -1,140 +1,150 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>MySystem-dev</title>
-  
-  <link rel="icon" href="res/favicon.ico" type="image/png" />
-  <link rel="SHORTCUT ICON" href="res/favicon.ico" type="image/png" />
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!-- BEGIN TITLE -->
+    <title>MySystem-dev</title>
+    <!-- END TITLE -->
 
-  <!-- WireIt CSS -->
-  <link rel="stylesheet" type="text/css" href="css/WireIt.css" />
-  <link rel="stylesheet" type="text/css" href="css/WireItEditor.css" />
-  <link rel="stylesheet" type="text/css" href="css/mysystem.css" />
+    <link rel="icon" href="res/favicon.ico" type="image/png" />
+    <link rel="SHORTCUT ICON" href="res/favicon.ico" type="image/png" />
 
-  <!-- YUI CSS files: -->
-  <link rel="stylesheet" type="text/css" href="../lib/YUI/reset-font-grids.css" />
-  <link rel="stylesheet" type="text/css" href="../lib/YUI/base-min.css" />
-  <link rel="stylesheet" type="text/css" href="../lib/YUI/sam.css" />
+    <!-- YUI CSS files: -->
+    <link rel="stylesheet" type="text/css" href="../lib/YUI/reset-font-grids.css" />
+    <link rel="stylesheet" type="text/css" href="../lib/YUI/base-min.css" />
+    <link rel="stylesheet" type="text/css" href="../lib/YUI/sam.css" />
 
-  <!-- JQuery -->
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
-  
-  <!-- YUI JS Combo file: -->
-  <script type="text/javascript" src="../lib/YUI/YUI-combo.js"></script>
+    <!-- WireIt CSS -->
+    <link rel="stylesheet" type="text/css" href="css/WireIt.css" />
+    <link rel="stylesheet" type="text/css" href="css/WireItEditor.css" />
+    <link rel="stylesheet" type="text/css" href="css/mysystem.css" />
 
-  <script type="text/javascript" src="../lib/canvastext.js"></script>
-  <script type="text/javascript" src="../lib/uuid.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
 
-  <!-- WireIt -->
-  <!--[if IE]><script type="text/javascript" src="../lib/excanvas.js"></script><![endif]-->
-  <script type="text/javascript" src="js/wireit/WireIt.js"></script>
-  <script type="text/javascript" src="js/wireit/CanvasElement.js"></script>
-  <script type="text/javascript" src="js/wireit/Wire.js"></script>
-  <script type="text/javascript" src="js/wireit/Terminal.js"></script>
-  <script type="text/javascript" src="js/wireit/util/DD.js"></script>
-  <script type="text/javascript" src="js/wireit/util/DDResize.js"></script>
-  <script type="text/javascript" src="js/wireit/Container.js"></script>
-  <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
-  <script type="text/javascript" src="js/wireit/Layer.js"></script>
-  <script type="text/javascript" src="js/wireit/util/inputex/FormContainer-beta.js"></script>
-  <script type="text/javascript" src="js/wireit/LayerMap.js"></script>
-  <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
-  
-  <!-- JSON -->
-  <script type="text/javascript" src="../lib/json2.js"></script>
+    <!-- BEGIN JAVASCRIPT -->
+    <!-- All files in this BEGIN-END block will be concatenated to one script
+         by the rake task when deployed
+    -->
 
-  <!-- Data service adaptors -->
-  <script type="text/javascript" src="js/ds/RestDS.js"></script>
-  <script type="text/javascript" src="js/ds/MocDS.js"></script>
-  <script type="text/javascript" src="js/ds/GGearsDS.js"></script>
-  <script type="text/javascript" src="js/ds/VleDS.js"></script>
-  <script type="text/javascript" src="js/ds/CookieDS.js"></script>
-  
-  <!-- My System -->
-  <script type="text/javascript" src="js/mysystem-init.js"></script>
-  <script type="text/javascript" src="js/MySystem.js"></script>
-  <script type="text/javascript" src="js/MySystemContainer.js"></script>
-  <script type="text/javascript" src="js/MySystemData.js"></script>
-  <script type="text/javascript" src="js/MySystemDragAndDropProxy.js"></script>
-  <script type="text/javascript" src="js/MySystemEditor.js"></script>
-  <script type="text/javascript" src="js/MySystemGoalPanel.js"></script>
-  <script type="text/javascript" src="js/MySystemNote.js"></script>
-  <script type="text/javascript" src="js/MySystemPropEditor.js"></script>
-  <script type="text/javascript" src="js/MySystemUtil.js"></script>
+    <!-- YUI JS Combo file: -->
+    <script type="text/javascript" src="../lib/YUI/YUI-combo.js"></script>
 
-  <!-- My Engine -->
-  <script type="text/javascript" src="engine/mysystem-engine.js"></script>
-  <script type="text/javascript" src="../lib/http.js"></script>
+    <script type="text/javascript" src="../lib/canvastext.js"></script>
+    <script type="text/javascript" src="../lib/uuid.js"></script>
 
-  <script>
-    mysystem.config.dataService = new MocDS(null,null);
-    //mysystem.config.dataService = new VleDS(vle);
-    //mysystem.config.dataService = new RestDS('','');
-    //mysystem.config.dataService = new GGearsDS('write','write','mysys');
-    //mysystem.config.dataService = new CookieDS(null,'write');
-    
-    mysystem.config.jsonURL = 'prefs.json';
-    mysystem.config.enableLoadAndSave = true;
-    mysystem.config.autoSave = true;
-    
-    $(document).ready(function () {
-        var mySystem = mysystem.loadMySystem();
+    <!-- WireIt -->
+    <!--[if IE]><script type="text/javascript" src="../lib/excanvas.js"></script><![endif]-->
+    <script type="text/javascript" src="js/wireit/WireIt.js"></script>
+    <script type="text/javascript" src="js/wireit/CanvasElement.js"></script>
+    <script type="text/javascript" src="js/wireit/Wire.js"></script>
+    <script type="text/javascript" src="js/wireit/Terminal.js"></script>
+    <script type="text/javascript" src="js/wireit/util/DD.js"></script>
+    <script type="text/javascript" src="js/wireit/util/DDResize.js"></script>
+    <script type="text/javascript" src="js/wireit/Container.js"></script>
+    <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
+    <script type="text/javascript" src="js/wireit/Layer.js"></script>
+    <script type="text/javascript" src="js/wireit/util/inputex/FormContainer-beta.js"></script>
+    <script type="text/javascript" src="js/wireit/LayerMap.js"></script>
+    <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
 
-        window.onbeforeunload = function () {
-            debug("saving mystem data before we leave");
-            mySystem.save();
-            debug("saved!");
-            if (mysystem.config.autoSave) {
-                mySystem.editor.stopAutoSaving();
-            }
-        };
-    });
-  </script>
-</head>
+    <!-- JSON -->
+    <script type="text/javascript" src="../lib/json2.js"></script>
 
-<body class="yui-skin-sam">
+    <!-- Data service adaptors -->
+    <script type="text/javascript" src="js/ds/RestDS.js"></script>
+    <script type="text/javascript" src="js/ds/MocDS.js"></script>
+    <script type="text/javascript" src="js/ds/GGearsDS.js"></script>
+    <script type="text/javascript" src="js/ds/VleDS.js"></script>
+    <script type="text/javascript" src="js/ds/CookieDS.js"></script>
 
-  <div id="goal_panel">
-    <span id="goal_panel_text"></span>
-    <img id="goal_panel_icon"/>
-  </div>
+    <!-- My System -->
+    <script type="text/javascript" src="js/mysystem-init.js"></script>
+    <script type="text/javascript" src="js/MySystem.js"></script>
+    <script type="text/javascript" src="js/MySystemContainer.js"></script>
+    <script type="text/javascript" src="js/MySystemData.js"></script>
+    <script type="text/javascript" src="js/MySystemDragAndDropProxy.js"></script>
+    <script type="text/javascript" src="js/MySystemEditor.js"></script>
+    <script type="text/javascript" src="js/MySystemGoalPanel.js"></script>
+    <script type="text/javascript" src="js/MySystemNote.js"></script>
+    <script type="text/javascript" src="js/MySystemPropEditor.js"></script>
+    <script type="text/javascript" src="js/MySystemUtil.js"></script>
 
-  <div id="editing_window">
-    <div id="top">
-      <div class="logo">MySystem</div>
-      <div id="toolbar"></div>
-      <div class="topright">
+    <!-- My Engine -->
+    <script type="text/javascript" src="engine/mysystem-engine.js"></script>
+    <script type="text/javascript" src="../lib/http.js"></script>
+
+    <!-- END JAVASCRIPT -->
+
+    <script>
+      <!-- BEGIN DATASERVICE -->
+      mysystem.config.dataService = new MocDS(null,null);
+      //mysystem.config.dataService = new VleDS(vle);
+      //mysystem.config.dataService = new RestDS('','');
+      //mysystem.config.dataService = new GGearsDS('write','write','mysys');
+      //mysystem.config.dataService = new CookieDS(null,'write');
+      <!-- END DATASERVICE -->
+
+      mysystem.config.jsonURL = 'prefs.json';
+      mysystem.config.enableLoadAndSave = true;
+      mysystem.config.autoSave = true;
+
+      $(document).ready(function () {
+          var mySystem = mysystem.loadMySystem();
+
+          window.onbeforeunload = function () {
+              debug("saving mystem data before we leave");
+              mySystem.save();
+              debug("saved!");
+              if (mysystem.config.autoSave) {
+                  mySystem.editor.stopAutoSaving();
+              }
+          };
+      });
+    </script>
+  </head>
+
+  <body class="yui-skin-sam">
+
+    <div id="goal_panel">
+      <span id="goal_panel_text"></span>
+      <img id="goal_panel_icon"/>
+    </div>
+
+    <div id="editing_window">
+      <div id="top">
+        <div class="logo">MySystem</div>
+        <div id="toolbar"></div>
+        <div class="topright">
+        </div>
+      </div>
+
+      <div id="left"></div>
+
+      <div id="center">
+        <div id="property_editor">
+          <div id="prop_bar">
+            <div id="property_editor_closer"></div>
+            <h4><span id="prop_name"></span></h4>
+          </div>
+          <div id="icon_spot"></div>
+
+          <form id="prop_form" name="prop_form">
+          </form>
+          <div id="palette"></div>
+        </div>      
+      </div>
+
+    </div> <!-- editing window end -->
+
+    <div id="print_window" style="display:none;width:100%;height:100%;z-index:100;">
+      Nothing to see here.  Move along.
+      <div class="hd">Printing Canvas (beta)</div>
+      <div class="bd" style="text-align: left;">
+        <canvas id="printing_canvas" width="300" height="300"></canvas>
       </div>
     </div>
 
-    <div id="left">
-    </div>
-
-    <div id="center">
-      <div id="property_editor">
-        <div id="prop_bar">
-          <div id="property_editor_closer"></div>
-          <h4><span id="prop_name"></span></h4>
-        </div>
-        <div id="icon_spot"></div>
-
-        <form id="prop_form" name="prop_form">
-        </form>
-        <div id="palette"></div>
-      </div>      
-    </div>
-  
-  </div> <!-- editing window end -->
-
-  <div id="print_window" style="display:none;width:100%;height:100%;z-index:100;">
-    Nothing to see here.  Move along.
-    <div class="hd">Printing Canvas (beta)</div>
-    <div class="bd" style="text-align: left;">
-      <canvas id="printing_canvas" width="300" height "300"></canvas>
-    </div>
-  </div>
-
-</body>
+  </body>
 </html>
