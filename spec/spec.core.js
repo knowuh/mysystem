@@ -1,6 +1,6 @@
 describe 'MySystem'
   before
-    mySystem = new MySystem();
+    mySystem = new mysystem.MySystem();
   end
 
   it 'return value of MySystem should not be null'

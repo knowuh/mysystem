@@ -42,13 +42,14 @@ load('src/js/ds/CookieDS.js');
 //load('src/js/ds/DSService.js');
 
 // My System
+load('src/js/mysystem-init.js');
+load('src/js/MySystem.js');
 load('src/js/MySystemUtil.js');
 load('src/js/MySystemPropEditor.js');
 //load('src/js/MySystemWireLabel.js');
 load('src/js/MySystemContainer.js');
 load('src/js/MySystemData.js');
 load('src/js/MySystemEditor.js');
-load('src/js/MySystem.js');
 
 // My Engine
 load('src/engine/mysystem-engine.js');
