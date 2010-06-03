@@ -29,7 +29,7 @@ body {
 #toolbar {
    position: absolute;
    top: 7px;
-   left: 280px;
+   left: 180px;
 }
 
 #toolbar .yui-button {
@@ -71,6 +71,10 @@ body {
 
 #WiringEditor-newButton button {
  background:transparent url(../images/icons/add.png) no-repeat scroll 10% 50%;
+}
+
+#WiringEditor-bgButton button {
+ background:transparent url(../images/icons/bullet_go.png) no-repeat scroll 10% 50%;
 }
 
 #WiringEditor-loadButton button {

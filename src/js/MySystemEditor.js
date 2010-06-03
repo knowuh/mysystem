@@ -370,6 +370,12 @@
             });
             newButton.on("click", this.onNew, this, true);
 
+            var bgButton = new widget.Button({
+                label: "Background",
+                id: "WiringEditor-bgButton",
+                container: toolbar
+            });
+            bgButton.on("click", this.onBackground, this, true);
 
             //
             // We do not use a help button anymore.
@@ -487,6 +493,7 @@
               alert('Unknown error in MySystemEditor#loadCallback');
             }
           }
+          setTimeout(context.loadBackgroundImage(), 100);
         },
 
         /**
@@ -526,18 +533,24 @@
         /**
          * @method onNew
          */
-        onNew: function() {
+        onNew: function () {
             if (confirm("Are you sure you want to erase your diagram and start fresh?")) {
                 this.layer.removeAllContainers();
                 this.resetLayers();
             }
             this.setDirty(true);
         },
+        
+        onBackground: function (event, self) {
+            var url = prompt('Enter URL for background image', self.backgroundImageURL);
+            self.setBackgroundImageURL(url);
+            self.loadBackgroundImage();
+        },
 
         /**
         * @method onDelete
         */
-        onDelete: function() {
+        onDelete: function () {
             if (confirm("Are you sure you want to delete this wiring??")) {
                 var value = this.getValue();
                 this.service.deleteWiring({
@@ -639,8 +652,13 @@
             return this._dirty;
         },
         
-        setBackgroundImage: function (url) {
-            $(this.rootLayer.el).css({ 'background-image': 'url('+ url + ')', 
+        setBackgroundImageURL: function (url) {
+            this.backgroundImageURL = url;
+        },
+        
+        loadBackgroundImage: function () {
+            console.log('MySystemEditor#loadBackgroundImage: url=' + this.backgroundImageURL);
+            $(this.rootLayer.el).css({ 'background-image': 'url('+ this.backgroundImageURL + ')', 
                 'background-size': '100%',
                 'background-repeat': 'repeat' });
         }

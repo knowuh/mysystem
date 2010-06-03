@@ -25,7 +25,8 @@ mysystem.MySystem.prototype = {
             this.editor.propEditor.setArrows(loaded.arrows);
         }
         if (loaded.bgURL) {
-            this.editor.setBackgroundImage(loaded.bgURL);
+            this.editor.setBackgroundImageURL(loaded.bgURL);
+            this.editor.loadBackgroundImage();
         }
         this.editor.goalPanel.setContent(loaded.goalText);
     },
