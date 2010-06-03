@@ -24,6 +24,9 @@ mysystem.MySystem.prototype = {
         if (loaded.arrows) {
             this.editor.propEditor.setArrows(loaded.arrows);
         }
+        if (loaded.bgURL) {
+            this.editor.setBackgroundImage(loaded.bgURL);
+        }
         this.editor.goalPanel.setContent(loaded.goalText);
     },
   
@@ -66,19 +69,22 @@ mysystem.MySystem.prototype = {
             
             for (var item_index in data) {
                 item = data[item_index];
-                if (item.xtype == 'MySystemContainer' ||
-                    item.xtype == 'MySystemNote')
+                if (item.xtype === 'MySystemContainer' ||
+                    item.xtype === 'MySystemNote')
                 {
                     retObj.modules.push(item);
                 }
-                else if (item.xtype == 'PropEditorFieldLabels') {
+                else if (item.xtype === 'PropEditorFieldLabels') {
                     retObj.labels = item.labels;
                 }
-                else if (item.xtype == 'PropEditorArrows') {
+                else if (item.xtype === 'PropEditorArrows') {
                     retObj.arrows = item.arrows;
                 }
-                else if (item.xtype == 'AssignmentInformation') {
+                else if (item.xtype === 'AssignmentInformation') {
                     retObj.goalText = item.fields.goal;
+                }
+                else if (item.xtype === 'resource' && item.name === 'background_image') {
+                    retObj.bgURL = item.url;
                 }
             }
             this.loaded = true;

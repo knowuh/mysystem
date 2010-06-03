@@ -1,4 +1,4 @@
-(function() {
+(function () {
     
     var Event = YAHOO.util.Event;
     var Dom = YAHOO.util.Dom;
@@ -637,6 +637,12 @@
         
         isDirty: function () {
             return this._dirty;
+        },
+        
+        setBackgroundImage: function (url) {
+            $(this.rootLayer.el).css({ 'background-image': 'url('+ url + ')', 
+                'background-size': '100%',
+                'background-repeat': 'repeat' });
         }
     };
     

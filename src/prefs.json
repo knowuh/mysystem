@@ -1,5 +1,9 @@
 [
-
+  {
+    "xtype": "resource",
+    "name": "background_image",
+    "url": "http://37signals.com/svn/images/dutch_windmill.jpg"
+  },
   {
     "xtype": "AssignmentInformation",
     "fields": 
