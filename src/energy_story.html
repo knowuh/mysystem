@@ -1,0 +1,179 @@
+<html>
+
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    
+    <style type="text/css" media="screen">
+      body {
+        font-family:            sans-serif;
+        color:                  #774F38;
+        font-size:              14px;
+      }
+      textarea {
+        border:                 none;
+        font-family:            sans-serif;
+        color:                  #774F38;
+        font-size:              18px;
+        background-color:       #ECE5CE;
+        vertical-align:         top;
+        width:                  90%;
+      }
+      #energy_story {
+        width:                  500px;
+        height:                 200px;
+        margin:                 20px;
+        padding:                20px;
+        background-color:       #C5E0DC;
+        border-color:           #E08E79;
+        border                  1px solid;
+        overflow:               auto;
+      }
+      #energy_story_content th{
+        color:
+      }
+      .story_part {
+        margin:                 2em:
+        padding:                2em;
+      }
+      li.story_row {
+        padding-top:            8px;
+        font-size:              18px;
+      }
+      .action, .number {
+        display:                inline-block;
+        width:                  16px;
+        height:                 16px;;
+      }
+      .remove {
+        background-image:       url('images/icons/delete.png')
+      }
+      .add {
+        background-image:       url('images/icons/add.png')
+      }
+      .hover {
+        background-color:       #F1D4AF;
+      }
+      .editable {
+        background-color:       red;
+      }
+      .selected {
+        border-bottom:          2px solid #E08E79;
+      }
+      .hidden {
+        display:                none;
+        width:                  1px;
+        height:                 1px;
+      }
+    </style>
+
+    <script type="text/javascript" charset="utf-8">
+        (function($) {
+           
+          $.fn.make_editable = function(settings) {
+             var config = {'foo': 'bar'};
+             if (settings) $.extend(config, settings);
+             this.each(function() {
+                var text = $(this).text().trim();
+                var text_length = text.length
+                var old_stuff = $(this);
+                var new_stuff = $('<textarea name="tmp">' + text + '</textarea>');
+                $(new_stuff).insertAfter(old_stuff).trigger("focus");
+                $(old_stuff).addClass("hidden");
+                $(new_stuff).mouseout(function() {
+                    var value = $(new_stuff).val();
+                    $(new_stuff).remove();
+                    $(old_stuff).text(value);
+                    $(old_stuff).removeClass("hidden");
+                });
+             });
+             return this;
+          };
+
+          $.fn.make_dynamic = function(settings) {
+            var config = {};
+            if (settings) $.extend(config,settings);
+            this.each(function() {
+              var story_part = $(this).find(".story_part");
+                
+              $(this).hover(function () {
+                  $(this).find(".number").addClass("remove");
+                  $(this).find(".action").addClass("remove");
+                  $(this).find(".remove").click(function() {
+                    $(this).closest("li.story_row").remove();
+                  });
+                },function () {
+                  $(this).find(".number").removeClass("remove");
+                  $(this).find(".action").removeClass("remove").unbind("click");
+              });
+
+              $(story_part).hover(function() {
+                  $(story_part).addClass("hover");
+                }, function() {
+                  $(story_part).removeClass("hover");
+              });
+                
+              $(story_part).dblclick(function() {
+                $(story_part).make_editable();
+              });
+
+              $(story_part).click(function() {
+                $(".selected").removeClass("selected");
+                $(story_part).addClass("selected");
+              });
+              
+           });
+          return this;
+        };
+
+      })(jQuery);
+      
+      
+      $(document).ready(function() {
+          $(".story_row").make_dynamic();
+          $(".add").click(function() {
+            var toAdd=$('#storehouse').find('.story_row');
+            toAdd.clone().make_dynamic().appendTo('#energy_list');
+          });
+          
+        });
+        
+    </script>
+
+  </head>
+  <body>
+    <div id="energy_story">
+      <div id="energy_story_nav_menu">
+        <div id="back_button"></div>
+        <div id="location"></div>
+        <div id="next_button"></div>
+      </div>
+      <div id="energy_story_content">
+         <div><span style="padding: 10px;">add a part to this story</span><div class="action add"></div>
+         <ol id="energy_list"> 
+            <li id="story_part_1" class="story_row">
+              <span class="story_part">first story part</span>
+              <div class="action"></div>
+            </li>
+            <li id="story_part_2" class="story_row">
+              <span class="story_part">second story part</span>
+              <div class="action"></div>
+            </li>
+            <li id="story_part_3" class="story_row">
+              <span class="story_part">third story part</span>
+              <div class="action"></div>
+            </li>
+            <li class="story_row">
+              <span class="story_part">fourth story part</span>
+              <div class="action"></div>
+            </li>
+          </ol>
+      </div>
+    </div>
+    <div id="storehouse" style="display: none;">
+      <li class="story_row">
+      	<span class="story_part">(then what happens?)</span>
+      	<div class="action"></div>
+      </li>
+    </div>
+  </body>
+</html>
