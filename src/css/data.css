@@ -1,0 +1,18 @@
+.code {
+  white-space:          pre-wrap;
+  display:              block;
+  font-family:          Monospace;
+  font-size:            11px;
+}
+#data{
+  width:                300px;
+  background-color:     #BBB;
+  min-height:           100px;
+  overflow:             hidden;
+  padding:              1em;
+  border:               2px solid #E08E79;
+  right:                1em;
+  top:                  1em;
+  position:             absolute;
+  z-index:              -10;
+}

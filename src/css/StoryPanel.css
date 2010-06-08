@@ -1,9 +1,9 @@
-body {
+.energy_story {
   font-family:            sans-serif;
   color:                  #774F38;
-  font-size:              14px;
+  font-size:              12px;
 }
-textarea {
+.story textarea {
   border:                 none;
   font-family:            sans-serif;
   color:                  #774F38;
@@ -12,10 +12,12 @@ textarea {
   vertical-align:         top;
   width:                  90%;
 }
-li.story_row {
+
+.story li.story_row {
   padding-top:            8px;
   font-size:              18px;
 }
+
 .template {
   display:              none;
 }
@@ -37,31 +39,33 @@ li.story_row {
 .story_container {
   width:                  500px;
   height:                 200px;
+  z-index:                1000;
+  position:               absolute;
 }
 .story_part {
   margin:                 2em:
   padding:                2em;
   cursor:                 pointer;
 }
-.action, .number {
+.story_action {
   display:                inline-block;
   width:                  16px;
   height:                 16px;
   cursor:                 pointer;
 }
-.delete{
-  background-image:       url('images/icons/delete.png')
+.story_delete {
+  background-image:       url('../images/icons/delete.png')
 }
-.add {
-  background-image:       url('images/icons/add.png')
+.story_add {
+  background-image:       url('../images/icons/add.png')
 }
-.hover {
+.story_hover {
   background-color:       #F1D4AF;
 }
-.editable {
+.story_editable {
   background-color:       red;
 }
-.selected {
+.story_selected {
   background-color:       #F1D4AF;
   border-bottom:          2px solid #E08E79;
 }
@@ -70,3 +74,4 @@ li.story_row {
   width:                  1px;
   height:                 1px;
 }
+
