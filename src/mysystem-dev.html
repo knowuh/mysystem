@@ -50,7 +50,7 @@
     <script type="text/javascript" src="js/wireit/ImageContainer.js"></script>
 
     <!-- JSON -->
-    <script type="text/javascript" src="../lib/json2.js"></script>
+    <script src="../lib/json2-min.js" type="text/javascript" charset="utf-8"></script>
 
     <!-- Data service adaptors -->
     <script type="text/javascript" src="js/ds/RestDS.js"></script>
@@ -74,6 +74,13 @@
     <!-- My Engine -->
     <script type="text/javascript" src="engine/mysystem-engine.js"></script>
     <script type="text/javascript" src="../lib/http.js"></script>
+    
+    <!-- Energy Story Experiment -->
+    <script src="js/StoryPart.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/StoryPanel.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/StoryPanel.css" type="text/css" media="screen" charset="utf-8">
+    <!-- only needed for debugging json -->
+    <link rel="stylesheet" href="css/data.css" type="text/css" media="screen" charset="utf-8">
 
     <!-- END JAVASCRIPT -->
 
@@ -91,8 +98,9 @@
       mysystem.config.autoSave = true;
 
       $(document).ready(function () {
+          var eStory = new Story.StoryPanel({dstSelector: "#story_content"});
+          var eStory = new Story.StoryPanel({dstSelector: "#center>.WireIt-Layer"});
           var mySystem = mysystem.loadMySystem();
-
           window.onbeforeunload = function () {
               debug("saving mystem data before we leave");
               mySystem.save();
@@ -123,6 +131,7 @@
       <div id="left"></div>
 
       <div id="center">
+        
         <div id="property_editor">
           <div id="prop_bar">
             <div id="property_editor_closer"></div>
@@ -133,17 +142,37 @@
           <form id="prop_form" name="prop_form">
           </form>
           <div id="palette"></div>
-        </div>      
+        </div>
+
+      <div class="energy_story" id="story_content"></div> 
       </div>
 
     </div> <!-- editing window end -->
 
+    
     <div id="print_window" style="display:none;width:100%;height:100%;z-index:100;">
       Nothing to see here.  Move along.
       <div class="hd">Printing Canvas (beta)</div>
       <div class="bd" style="text-align: left;">
         <canvas id="printing_canvas" width="300" height="300"></canvas>
       </div>
+    </div>
+    
+    <!-- dom elements for copying contained in invisible storehouse -->
+    <div id="templates" class="template">
+      <div class="story_container">
+          <div class="drag_handle">story panel</div>
+          <div class="story">
+              <span style="padding: 10px;">add a part to this story</span>
+              <div class="story_action story_add"></div>
+            <ol class="story_parts"> </ol>
+          </div>
+      </div>
+      
+      <li class="story_row">
+      	<span class="story_part">(then what happens?)</span>
+      	<div class="story_action"></div>
+      </li>
     </div>
 
   </body>
