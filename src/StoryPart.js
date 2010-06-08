@@ -1,9 +1,11 @@
 (function() {
 
+ /*********************************/
   Array.prototype.removeAt = function (index) {
     if (this.length > index && index >= 0) this.splice(index,1);
   };
 
+ /*********************************/
   Array.prototype.removeObject = function(object) {
     var objIndex = this.indexOf(object);
     if (objIndex > -1) {
@@ -11,6 +13,7 @@
     };
   };
 
+ /*********************************/
   Array.prototype.indexOf = function(object) {
     var obj;
     for (var i = 0; i < this.length; i++) {
@@ -22,6 +25,7 @@
     return -1;
   };
 
+ /*********************************/
   Array.prototype.addUnique = function(object) {
     var objIndex = this.indexOf(object);
     if (objIndex < 0) {
@@ -53,20 +57,21 @@
  
  /*********************************/
  Story.StoryPart.prototype.select = function() {
-   var domItem
-     for (var i = 0; i < this.data.domElements.length; i++) {
-       domItem = this.data.domElements[i];
-       domItem.addClass(this.config.selectedClass);
-     };
+   var domItem;
+   for (var i = 0; i < this.data.domElements.length; i++) {
+     domItem = this.data.domElements[i];
+     domItem.addClass(this.config.selectedClass);
+   };
  };
 
  /*********************************/
  Story.StoryPart.prototype.deselect = function() {
-   var domItem
-     for (var i = 0; i < this.data.domElements.length; i++) {
-       domItem = this.data.domElements[i];
-       domItem.removeClass(this.config.selectedClass);
-     };
+   var domItem;
+   alert("de selected: " + this.getText());
+   for (var i = 0; i < this.data.domElements.length; i++) {
+     domItem = this.data.domElements[i];
+     domItem.removeClass(this.config.selectedClass);
+   };
  };
 
  /*********************************/
@@ -81,6 +86,7 @@
 
  /*********************************/
  Story.StoryPart.prototype.setText = function(_text) {
+   alert(_text);
    this.data.text = _text;
  };
  
