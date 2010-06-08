@@ -493,7 +493,7 @@
               alert('Unknown error in MySystemEditor#loadCallback');
             }
           }
-          setTimeout(context.loadBackgroundImage(), 100);
+          //setTimeout(context.loadBackgroundImage(), 100);
         },
 
         /**
