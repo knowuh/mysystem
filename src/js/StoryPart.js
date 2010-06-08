@@ -86,7 +86,6 @@
 
  /*********************************/
  Story.StoryPart.prototype.setText = function(_text) {
-   alert(_text);
    this.data.text = _text;
  };
  
