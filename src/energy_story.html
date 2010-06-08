@@ -3,200 +3,34 @@
   <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
-    <style type="text/css" media="screen">
-      body {
-        font-family:            sans-serif;
-        color:                  #774F38;
-        font-size:              14px;
-      }
-      textarea {
-        border:                 none;
-        font-family:            sans-serif;
-        color:                  #774F38;
-        font-size:              18px;
-        background-color:       #ECE5CE;
-        vertical-align:         top;
-        width:                  90%;
-      }
-      #es_container {
-        width:                  500px;
-        height:                 200px;
-      }
-      #es_drag_handle{
-        background-color:       #E08E79;
-        height:                 20px;
-      }
-      #energy_story {
-        padding:                20px;
-        background-color:       #C5E0DC;
-        border-color:           #E08E79;
-        border                  1px solid;
-        overflow:               auto;
-      }
-      #energy_story_content th{
-        color:
-      }
-      .story_part {
-        margin:                 2em:
-        padding:                2em;
-      }
-      li.story_row {
-        padding-top:            8px;
-        font-size:              18px;
-      }
-      .action, .number {
-        display:                inline-block;
-        width:                  16px;
-        height:                 16px;;
-      }
-      .delete{
-        background-image:       url('images/icons/delete.png')
-      }
-      .add {
-        background-image:       url('images/icons/add.png')
-      }
-      .hover {
-        background-color:       #F1D4AF;
-      }
-      .editable {
-        background-color:       red;
-      }
-      .selected {
-        border-bottom:          2px solid #E08E79;
-      }
-      .hidden {
-        display:                none;
-        width:                  1px;
-        height:                 1px;
-      }
-    </style>
-
+    <script src="storyPart.js" type="text/javascript" charset="utf-8"></script>
+    <script src="storyPanel.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="storyPanel.css" type="text/css" media="screen" charset="utf-8">
     <script type="text/javascript" charset="utf-8">
-        (function($) {
-           
-          $.fn.editable = function(settings) {
-             var config = {'foo': 'bar'};
-             if (settings) $.extend(config, settings);
-             this.each(function() {
-               $(this).dblclick(function() {
-                  var text = $(this).text().trim();
-                  var text_length = text.length
-                  var old_stuff = $(this);
-                  var new_stuff = $('<textarea name="tmp">' + text + '</textarea>');
-                  $(new_stuff).insertAfter(old_stuff).trigger("focus");
-                  $(old_stuff).addClass("hidden");
-                  $(new_stuff).mouseout(function() {
-                      var value = $(new_stuff).val();
-                      $(new_stuff).remove();
-                      $(old_stuff).text(value);
-                      $(old_stuff).removeClass("hidden");
-                  });
-                });
-             });
-             return this;
-          };
-          
-          $.fn.selectable = function(settings) {
-            var config = {selected_class: "selected"};
-            if (settings) $.extend(config,settings);
-            config.selector = '.' + config.selected_class;
-            this.each(function() {
-              $(this).click(function() {
-                $(config.selector).removeClass(config.selected_class);
-                $(this).addClass(config.selected_class);
-              });
-            });
-            return this;
-          };
-          
-          $.fn.deleteable = function(settings) {
-            var config = {button: ".action", target: "li"};
-            if (settings) $.extend(config,settings);
-            this.each(function() {
-              $(this).hover(function () {
-                  $(this).find(config.button).addClass("delete");
-                  $(this).find(".delete").click(function() {
-                    $(this).closest(config.target).remove();
-                  });
-                },function () {
-                  $(this).find(config.button).removeClass("delete").unbind("click");
-              });
-            
-            });
-            return this;
-          };
-          
-          $.fn.hover_class = function(settings) {
-            var config = {h_class: "hover"};
-            if (settings) $.extend(config,settings);
-            this.each(function() {
-                $(this).hover(function() {
-                  $(this).addClass(config.h_class);
-                  }, function() {
-                  $(this).removeClass(config.h_class);
-                });
-            }); 
-          };
-          
-          $.fn.make_story_item = function(settings) {
-            var config = {
-              storySelector:    ".story_part",
-              dstSelector:      "#energy_list",
-              text:             "(enter more of your story here)"
-            };
-            if (settings) $.extend(config,settings);
-            this.each(function() {
-              var toAdd = $(this).clone();
-              var toAppendTo = $(config.dstSelector);
-              toAdd.appendTo(toAppendTo);
-              var story_part = $(toAdd).find(config.storySelector);
-              $(story_part).text(config.text);
-              
-              $(toAdd).deleteable();
-              $(story_part).hover_class();
-              $(story_part).editable();
-              $(story_part).selectable();
-            });
-            return this;
-          };
-
-          $.fn.init_energy_stories = function() {
-            $('#storehouse>.story_row').make_story_item({text: "first ..."});
-            $('#storehouse>.story_row').make_story_item({text: "then ..."});
-            $('#storehouse>.story_row').make_story_item({text: "and finally ..."});
-            $(".add").click(function() {  
-              $('#storehouse>.story_row').make_story_item();
-            }); 
-          };
-
-      })(jQuery);
       
       
       $(document).ready(function() {
-        $('#energy_story').init_energy_stories();
-        $('#es_container').draggable({handle: "#es_drag_handle"});
+        var eStory = new Story.StoryPanel();
+        $('.story_container').draggable({handle: ".drag_handle"});
       });
         
     </script>
 
   </head>
-  <body>
-    <div id="es_container">
-        <div id="es_drag_handle"></div>
-        <div id="energy_story">
-          <div id="energy_story_nav_menu">
-            <div id="back_button"></div>
-            <div id="location"></div>
-            <div id="next_button"></div>
+  <body id="body">
+    <div id="main_content"></div>
+
+    <!-- dom elements for copying contained in invisible storehouse -->
+    <div id="templates" class="template">
+      <div class="story_container">
+          <div class="drag_handle">story panel</div>
+          <div class="story">
+              <span style="padding: 10px;">add a part to this story</span>
+              <div class="action add"></div>
+            <ol class="story_parts"> </ol>
           </div>
-          <div id="energy_story_content">
-             <div><span style="padding: 10px;">add a part to this story</span><div class="action add"></div>
-             <ol id="energy_list"> 
-              </ol>
-          </div>
-        </div>
-    </div>
-    <div id="storehouse" style="display: none;">
+      </div>
+      
       <li class="story_row">
       	<span class="story_part">(then what happens?)</span>
       	<div class="action"></div>

@@ -1,0 +1,72 @@
+body {
+  font-family:            sans-serif;
+  color:                  #774F38;
+  font-size:              14px;
+}
+textarea {
+  border:                 none;
+  font-family:            sans-serif;
+  color:                  #774F38;
+  font-size:              18px;
+  background-color:       #ECE5CE;
+  vertical-align:         top;
+  width:                  90%;
+}
+li.story_row {
+  padding-top:            8px;
+  font-size:              18px;
+}
+.template {
+  display:              none;
+}
+.story {
+  padding:                20px;
+  background-color:       #C5E0DC;
+  border-color:           #E08E79;
+  border                  1px solid;
+  overflow:               auto;
+}
+.drag_handle{
+  background-color:       #E08E79;
+  min-height:             20px;
+  padding-top:            0.25em;
+  padding-left:           1em;
+  text-align:             center;
+  cursor:                 move;
+}
+.story_container {
+  width:                  500px;
+  height:                 200px;
+}
+.story_part {
+  margin:                 2em:
+  padding:                2em;
+  cursor:                 pointer;
+}
+.action, .number {
+  display:                inline-block;
+  width:                  16px;
+  height:                 16px;
+  cursor:                 pointer;
+}
+.delete{
+  background-image:       url('images/icons/delete.png')
+}
+.add {
+  background-image:       url('images/icons/add.png')
+}
+.hover {
+  background-color:       #F1D4AF;
+}
+.editable {
+  background-color:       red;
+}
+.selected {
+  background-color:       #F1D4AF;
+  border-bottom:          2px solid #E08E79;
+}
+.hidden {
+  display:                none;
+  width:                  1px;
+  height:                 1px;
+}
