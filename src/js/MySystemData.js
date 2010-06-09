@@ -47,10 +47,7 @@
   MySystemData.defaultTerminals = function() {
     return [{
          "wireConfig": {
-           "drawingMethod": "bezierArrows",
-           "fields": {
-               "name": "flow"
-           }
+           "drawingMethod": "bezierArrows"
          },
          "name": "Terminal1",
          "direction": [0, -1],
@@ -64,10 +61,7 @@
          }
      },{
          "wireConfig": {
-             "drawingMethod": "bezierArrows",
-             "fields": {
-                 "name": "flow"
-             }
+             "drawingMethod": "bezierArrows"
          },
          "name": "Terminal2",
          "direction": [0, 1],
