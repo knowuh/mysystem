@@ -1,0 +1,77 @@
+.energy_story {
+  font-family:            sans-serif;
+  color:                  #774F38;
+  font-size:              12px;
+}
+.story textarea {
+  border:                 none;
+  font-family:            sans-serif;
+  color:                  #774F38;
+  font-size:              18px;
+  background-color:       #ECE5CE;
+  vertical-align:         top;
+  width:                  90%;
+}
+
+.story li.story_row {
+  padding-top:            8px;
+  font-size:              18px;
+}
+
+.template {
+  display:              none;
+}
+.story {
+  padding:                20px;
+  background-color:       #C5E0DC;
+  border-color:           #E08E79;
+  border                  1px solid;
+  overflow:               auto;
+}
+.drag_handle{
+  background-color:       #E08E79;
+  min-height:             20px;
+  padding-top:            0.25em;
+  padding-left:           1em;
+  text-align:             center;
+  cursor:                 move;
+}
+.story_container {
+  width:                  500px;
+  height:                 200px;
+  z-index:                1000;
+  position:               absolute;
+}
+.story_part {
+  margin:                 2em:
+  padding:                2em;
+  cursor:                 pointer;
+}
+.story_action {
+  display:                inline-block;
+  width:                  16px;
+  height:                 16px;
+  cursor:                 pointer;
+}
+.story_delete {
+  background-image:       url('../images/icons/delete.png')
+}
+.story_add {
+  background-image:       url('../images/icons/add.png')
+}
+.story_hover {
+  background-color:       #F1D4AF;
+}
+.story_editable {
+  background-color:       red;
+}
+.story_selected {
+  background-color:       #F1D4AF;
+  border-bottom:          2px solid #E08E79;
+}
+.hidden {
+  display:                none;
+  width:                  1px;
+  height:                 1px;
+}
+
