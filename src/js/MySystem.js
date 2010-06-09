@@ -39,6 +39,9 @@ mysystem.MySystem.prototype = {
     },
 
     interceptKeys: function () {
+        var isCtrl = false;
+        var ctrlKey = 17;
+        
         $(document).keydown(function (e) {
             var code = e.which;
             var element = $(e.target);
@@ -50,11 +53,27 @@ mysystem.MySystem.prototype = {
                     e.preventDefault();
                 }
             }
+            if (code == ctrlKey) {
+                isCtrl = true;
+            }
+            //alert(code + ' <--> ' + String.charCodeAt('r'));
+            if (isCtrl && code == String.charCodeAt('R')) {
+                var pre = $('<pre></pre>');
+                pre.text(mysystem.mySystem.editor.getStateTable());
+                $('#dialog').html(pre).dialog();
+            }
+        });
+        
+        $(document).keyup(function (e) {
+            var code = e.which;
+            if (code == ctrlKey) {
+                isCtrl = false;
+            }
         });
     },
 
     loadModulesFromJSON: function (jsonString) {
-        debug("Calling loadModulesFromJSON:" + jsonString);
+        //debug("Calling loadModulesFromJSON:" + jsonString);
         var retObj = { modules: [], labels: null, arrows: null, goalText: '' };
         
         try {

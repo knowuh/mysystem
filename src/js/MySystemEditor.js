@@ -493,7 +493,7 @@
               alert('Unknown error in MySystemEditor#loadCallback');
             }
           }
-          setTimeout(context.loadBackgroundImage(), 100);
+          setTimeout('mysystem.mySystem.editor.loadBackgroundImage(mysystem.mySystem.editor)', 100);
         },
 
         /**
@@ -656,11 +656,19 @@
             this.backgroundImageURL = url;
         },
         
-        loadBackgroundImage: function () {
-            console.log('MySystemEditor#loadBackgroundImage: url=' + this.backgroundImageURL);
-            $(this.rootLayer.el).css({ 'background-image': 'url('+ this.backgroundImageURL + ')', 
+        loadBackgroundImage: function (editor) {
+            if (!editor) {
+                editor = this;
+            }
+            console.log('MySystemEditor#loadBackgroundImage: url=' + editor.backgroundImageURL);
+            $(editor.rootLayer.el).css({ 'background-image': 'url('+ editor.backgroundImageURL + ')', 
                 'background-size': '100%',
                 'background-repeat': 'repeat' });
+        },
+        
+        getStateTable: function () {
+            var reporter = new mysystem.MySystemReporter(this);
+            return reporter.getCSV();
         }
     };
     

@@ -36,6 +36,7 @@
         }
         
         var mySystem = new mysystem.MySystem(mysystem.config.jsonURL);
+        mysystem.mySystem = mySystem;
         mySystem.setDataService(mysystem.config.dataService);
         
         if (mySystem.editor) {
