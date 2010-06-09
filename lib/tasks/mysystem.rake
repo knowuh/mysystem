@@ -29,6 +29,7 @@ end
   js/MySystemGoalPanel.js
   js/MySystemNote.js
   js/MySystemPropEditor.js
+  js/MySystemReporter.js
   js/MySystemUtil.js
 }.map do |path|
   'src/' + path
@@ -88,15 +89,20 @@ namespace :combine do
     %x(rm -rf ./#{@dist_dir})
     %x(mkdir -p ./#{@dist_dir}/lib)
     %x(mkdir -p ./#{@dist_dir}/css/YUI)
+    %x(mkdir -p ./#{@dist_dir}/css/jquery/ui-lightness)
   
     simple_sprocket(@libs + @wire_it + @my_system, "#{@dist_dir}/mysystem_complete.js")
     simple_sprocket(@print, "#{@dist_dir}/mysystem_print.js")
     %x(cp src/print-for-dist.html #{@dist_dir}/print.html)
     %x(cp -r lib/excanvas.js #{@dist_dir}/lib)
+    %x(cp lib/jquery/jquery-1.4.2.min.js #{@dist_dir}/lib)
+    %x(cp lib/jquery/jquery-ui-1.8.custom.min.js #{@dist_dir}/lib)
+
     %x(cp src/*.json #{@dist_dir})
     %x(cp -r src/images #{@dist_dir})
     %x(cp -r src/css/* #{@dist_dir}/css)
     %x(cp ./lib/YUI/*.css ./#{@dist_dir}/css/YUI)
+    %x(cp -r ./lib/jquery/css/ui-lightness #{@dist_dir}/css/jquery)
     create_mysystem_html
   end
 end
@@ -136,6 +142,8 @@ HERE
     s.sub!(/#{begin_js}(.*)#{end_js}/mi, new_js)
     s.sub!(/#{begin_ds}(.*)#{end_ds}/mi, new_ds)
     s.gsub!('../lib/YUI', 'css/YUI')
+    s.gsub!('../lib/jquery/css', 'css/jquery')
+    s.gsub!('../lib/jquery', 'lib')
     open("#{@dist_dir}/mysystem.html", 'w') do |out_file|
       out_file.write(s)
     end
