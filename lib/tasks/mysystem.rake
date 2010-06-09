@@ -31,6 +31,8 @@ end
   js/MySystemPropEditor.js
   js/MySystemReporter.js
   js/MySystemUtil.js
+  js/StoryPanel.js
+  js/StoryPart.js
 }.map do |path|
   'src/' + path
 end
