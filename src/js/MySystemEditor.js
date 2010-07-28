@@ -264,7 +264,7 @@
           var removed = 0;
           for (i=0; i <size; i++) {
             wire = newLayer.wires[i];
-            if((!(wire.terminal1)) ||!(wire.terminal2)) {
+            if((!wire.terminal1) || (!wire.terminal2)) {
               newLayer.wires[i] = null;
               removed +=1;
             }
