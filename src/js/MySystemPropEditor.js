@@ -123,16 +123,20 @@ MySystemPropEditor.prototype = {
         input.attr({ 'name': field_name, 'id': field_name});
         input.html(value);
       }
+
       else {
         input = $('<input></input>');
         input.attr({ 'type': type, 'name': field_name, 'id': field_name, 'value': value});
+        if (type === 'checkbox' && value === true) {
+          input.attr({'checked': true});
+        }
       }
       if (style) {
         input.attr({'class': style});
       }
       var label_td = $('<td></td>');
       label_td.addClass('input_label');
-      label_td.css({'align': 'right','text-align': 'right'});
+      label_td.css({'align': 'left','text-align': 'left'});
       label_td.append(domLabel);
 
       // var input_td = new Element('td', { 'class': 'input_field' });
@@ -196,8 +200,15 @@ MySystemPropEditor.prototype = {
   saveValues: function() {
     if (this.node) {
       var options = {};
+      var value = null;
       for (var name in this.fieldLabelMap) {
-        options[name] = $('#' + name).val() || "(type-here)";
+        if (this.fieldLabelMap[name]['type'] == 'checkbox') {
+          value = $('#' + name).is(':checked') ? true : false;
+        }
+        else {
+          value = $('#' + name).val() || "(type-here)";
+        }
+        options[name] = value;
       }
       options['selected_color'] = this.selected_color;
       this.node.updateFields(options);
