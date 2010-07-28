@@ -75,7 +75,7 @@ label {
 
 input {
   border: 1px solid  #DDDDAA;
-  float: right;
+  float: left;
 }
 
 .inputBox {
@@ -131,7 +131,7 @@ div.title {
  display: none;
  z-index: 1000;  
  position: fixed; 
- width: 240px;
+ width: 300px;
  right: 50%;
  padding: 0px;
  margin: 0px;
