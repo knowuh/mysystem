@@ -111,7 +111,7 @@ mysystem.MySystem.prototype = {
             this.loaded = true;
         }
         catch(exception) {
-            alert('Unable to load/read file: ' + filename);
+            alert('Unable to parse json string: ' + jsonString);
             alert(exception);
         }
         finally {
