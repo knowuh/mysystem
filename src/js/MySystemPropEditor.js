@@ -1,3 +1,5 @@
+/*global MySystemPropEditor YAHOO*/
+
 /**
  * MySystemPropEditor
  * @class MySystemPropEditor

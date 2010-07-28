@@ -1,3 +1,4 @@
+/*global debug mysystem WireIt YAHOO MySystemPropEditor MySystemContainer */
 (function () {
     
     var Event = YAHOO.util.Event;

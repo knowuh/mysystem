@@ -1,3 +1,5 @@
+/*global MySystemContainer, WireIt, YAHOO */
+
 /**
  * MySystem Container. Has an image. and double_click beahvor.
  * @class ImageContainer

@@ -1,3 +1,5 @@
+/*global mysystem MySystemData*/
+
 mysystem.MySystem = function (jsonUrl) {
     this.loaded = false;
     this.datasService = null;
