@@ -491,7 +491,9 @@
               alert('Unknown error in MySystemEditor#loadCallback');
             }
           }
-          setTimeout('mysystem.mySystem.editor.loadBackgroundImage(mysystem.mySystem.editor)', 100);
+          setTimeout(function() {
+            mysystem.mySystem.editor.loadBackgroundImage(mysystem.mySystem.editor);
+          }, 100);
         },
 
         /**
