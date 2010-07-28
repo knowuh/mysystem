@@ -270,11 +270,8 @@
             }
           }
           if (removed > 0) {
-            debug("removed " + removed + " wires");
-            debug("array size pre: " + size);
             // WireIt.compact(newLayer.wires);
             newLayer.wires = newLayer.wires.compact();
-            debug("array size post: " + newLayer.wires.length);
           }
         },
         
