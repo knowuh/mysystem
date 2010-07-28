@@ -194,4 +194,18 @@ div.title {
   border: 2px solid #3366CC; !important;
 }
 
+.energy_badge {
+  position: absolute;
+  display:  block;
+  width: 16px;
+  height: 16px;
+  background-color: #C5E0DC;
+  right: -25px;
+  opacity: 1.0;
+  border: 1px solid black;
+}
+.energy_badge:hover {
+  background-color: #E08E79;
+  opacity: 1.0;
+}
 
