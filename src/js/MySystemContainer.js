@@ -78,9 +78,56 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
       });
     }
   },
+  
+  setBadges: function() {
+    var badgeNames = ['energy_make', 'energy_transform', 'energy_store'];
+    var badgeHeight = 16,
+        badgeWidth = 16;
+    var i = 0,
+        ii = 0;
+    var badgeDomNode = null;
+    
+    for (i = 0, ii = badgeNames.length; i < ii; i++) {
+      badgeDomNode = this.findOrCreateBadge(badgeNames[i], this.el);
+      badgeDomNode.attr({
+        src: ('images/icons/' + badgeNames[i] + '.png')
+        //src: ('images/icons/shield.png')
+      });
+
+      badgeDomNode.show().css({
+        'opacity': 0.25,
+        'top': (20 * i)
+      });
+      if (this.options.fields && this.options.fields[badgeNames[i]]) {
+        badgeDomNode.show().css({
+          'opacity': 1
+        });
+      }
+    }
+  },
+  
+  findOrCreateBadge: function(name,domNode) {
+    var className = "energy_badge";
+    var returnBadge = $(domNode).children('.' + name);
+    var thisNode = this;
+    if (returnBadge[0]) {
+      return $(returnBadge[0]);
+    }
+    returnBadge = $('<img width="16" hieght="16"></img>').addClass(className).addClass(name);
+    $(domNode).append(returnBadge);
+    $(returnBadge).click( function(e) {
+      thisNode.options.fields[name] = (thisNode.options.fields[name] === true ? false : true);
+      thisNode.setBadges();
+    }); 
+    $(returnBadge).dblclick( function(e) {e.stopPropagation(); return true;});
+    
+    return returnBadge;
+  },
+  
   createTitle: function() {
     return $('<div></div>').addClass('title');
   },
+  
   render: function() {
     MySystemContainer.superclass.render.call(this);
     var this_el = this.el;
@@ -90,13 +137,14 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
       $(this_el).prepend(title_el);
       title_el.html(this.title);
     }
-    
+    this.setBadges();
   },
+  
   updateFields: function(options) {
     if (options) {
       for (var name in options) {
-        if (this.options.fields[name]) {
-          this.options.fields[name] = options.name;
+        if (this.options.fields[name] || this.options.fields[name] === false) {
+          this.options.fields[name] = options[name];
         }
       }
       if (this.options.fields.color) {
@@ -107,6 +155,7 @@ YAHOO.lang.extend(MySystemContainer, WireIt.ImageContainer, {
     else {
       this.setTitle(this.options.fields.name || this.options.name );
     }
+    this.setBadges();
   },
   
   getConfig: function() {
