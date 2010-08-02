@@ -59,56 +59,81 @@
                     }
   },
   
+  
+
+  
   {
-    "icon"        : "./images/At-Concord-Fall/Genecon_tn.png",
-    "image"       : "./images/At-Concord-Fall/Genecon_tn.png",
+    "icon"        :   "./images/cleardemo/atmosphere.png",
+    "image"       :   "./images/cleardemo/atmosphere.png",
     "xtype"       : "MySystemContainer",
     "etype"       : "source",
     "fields"      : {
-                      "name"        : "Generator",
+                      "name"        : "Atmosphere",
                       "efficiency"  : 1
                     }
   },    
   {
-    "icon"        : "./images/At-Concord-Fall/clay_red_tn.png",
-    "image"       : "./images/At-Concord-Fall/clay_red_tn.png",
+    "icon"        : "./images/cleardemo/clouds.png",
+    "image"       : "./images/cleardemo/clouds.png",
     "xtype"       : "MySystemContainer",
     "etype"       : "source",
     "fields"      : {
-                      "name"        : "Clay",
+                      "name"        : "Clouds",
                       "energy"      : 100,
                       "efficiency"  : 1
                     }
   },    
   {
-    "icon"        : "./images/At-Concord-Fall/hand_tn.png",
-    "image"       : "./images/At-Concord-Fall/hand_tn.png",
+    "icon"        : "./images/cleardemo/earth.png",
+    "image"       : "./images/cleardemo/earth.png",
     "xtype"       : "MySystemContainer",
     "etype"       : "source",
     "fields"      : {
-                      "name"        : "Hand",  
+                      "name"        : "Earth",  
                       "energy"      : 100,
                       "efficiency"  : 1
                     }
   },    
   {
-    "icon"        : "./images/At-Concord-Fall/lightbulb_tn.png",
-    "image"       : "./images/At-Concord-Fall/lightbulb_tn.png",
+    "icon"        : "./images/cleardemo/ggases.png",
+    "image"       : "./images/cleardemo/ggases.png",
     "xtype"       : "MySystemContainer",
     "etype"       : "source",
     "fields"      : {
-                      "name"        : "Lightbulb",
+                      "name"        : "Gasses",
                       "energy"      : 100,
                       "efficiency"  : 1
                     }
   },
   {
-    "icon"        : "./images/world-transp.png",
-    "image"       : "./images/world-transp.png",
+    "icon"        : "./images/cleardemo/lowalbedo.png",
+    "image"       : "./images/cleardemo/lowalbedo.png",
     "xtype"       : "MySystemContainer",
     "etype"       : "source",
     "fields"      : {
-                      "name"        : "World",
+                      "name"        : "Low Albedo",
+                      "energy"      : 100,
+                      "efficiency"  : 1
+                    }
+  },
+  {
+    "icon"        : "./images/cleardemo/space.png",
+    "image"       : "./images/cleardemo/space.png",
+    "xtype"       : "MySystemContainer",
+    "etype"       : "source",
+    "fields"      : {
+                      "name"        : "Space",
+                      "energy"      : 100,
+                      "efficiency"  : 1
+                    }
+  },
+  {
+    "icon"        : "./images/cleardemo/sun.png",
+    "image"       : "./images/cleardemo/sun.png",
+    "xtype"       : "MySystemContainer",
+    "etype"       : "source",
+    "fields"      : {
+                      "name"        : "Sun",
                       "energy"      : 100,
                       "efficiency"  : 1
                     }
