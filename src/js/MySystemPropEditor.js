@@ -31,14 +31,14 @@ MySystemPropEditor = function(options) {
      var escapeKey = 27;
      var returnKey = 13;
 
-     // disable default enter key
-     // for submitting form, unless we are in
-     // textarea
-     if (code == returnKey) {
-       if (! e.target == $('#textarea')) {
-         e.stop(); // 
-       }
-     }
+      // disable default enter key
+      // for submitting form, unless we are in
+      // textarea
+      if (code == returnKey) {
+        if (!(e.target == $('#textarea'))) { // was   if ( !e.target == $('#textarea')) {
+          e.preventDefault();                // was e.stop
+        }
+      }
      // escape key will close the window:
      if (code == escapeKey) {
        // e.stop();
